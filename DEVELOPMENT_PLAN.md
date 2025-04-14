@@ -19,7 +19,7 @@
 - [x] SETUP-2: Configure state management with Zustand - _Commit: `chore(store): setup Zustand store structure`_
 - [x] SETUP-3: Plan component structure - _Commit: `docs(architecture): add component structure documentation`_
 - [x] SETUP-4: Set up routing - _Commit: `chore(router): setup basic routing structure`_
-- [ ] SETUP-5: Create PR `chore/initial-setup` → `dev`
+- [x] SETUP-5: Create PR `chore/initial-setup` → `dev`
 
 ## Phase: Core Implementation (TDD)
 
