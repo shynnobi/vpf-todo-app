@@ -1,10 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
-import { ThemeProvider } from '@context/theme/ThemeProvider';
 
 import './index.css';
 
+import { ThemeProvider } from '@/context/theme/ThemeProvider';
 import { router } from '@/lib/router';
 
 const rootElement = document.getElementById('root');
