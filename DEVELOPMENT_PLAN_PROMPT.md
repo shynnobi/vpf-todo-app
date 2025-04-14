@@ -78,44 +78,16 @@ Format the output as a Markdown file ready to be added to the project repository
 5. Commit updates to the plan file to maintain a record of progress
 6. **Important**: When completing a task, inform the AI with a message like "I've completed FEAT-2" or "Task AUTH-3 is done", and the AI will update the DEVELOPMENT_PLAN.md file by checking the corresponding box
 
-## Task ID Structure Examples
+## Task ID Prefixes
 
-The plan should use appropriate task ID prefixes based on your specific project requirements. Here are examples that can be adapted:
+Generate task ID prefixes that meaningfully represent the features and functionality of your specific project. Choose prefixes that:
 
-### For Any Project Type:
+- Clearly indicate the feature or functional area
+- Are short but descriptive (2-5 characters is ideal)
+- Follow a consistent naming convention
+- Reflect user-facing features rather than technical components
 
-| Prefix | Category                      | Example |
-| ------ | ----------------------------- | ------- |
-| EPIC   | Epic Definition & Roadmapping | EPIC-2  |
-| FOUND  | Foundation & Architecture     | FOUND-1 |
-| CORE   | Core Business Logic           | CORE-3  |
-| INT    | Integration                   | INT-2   |
-| UI     | User Interface Elements       | UI-1    |
-| A11Y   | Accessibility Features        | A11Y-3  |
-| PERF   | Performance Optimization      | PERF-2  |
-| SEC    | Security Features             | SEC-1   |
-| DOC    | Documentation                 | DOC-2   |
-| MVP    | MVP Milestone                 | MVP-3   |
-
-### Web/Mobile Apps:
-
-| Prefix | Category                | Example |
-| ------ | ----------------------- | ------- |
-| AUTH   | Authentication Features | AUTH-1  |
-| DASH   | Dashboard Functionality | DASH-2  |
-| PROF   | User Profile Features   | PROF-3  |
-| NOTIF  | Notification System     | NOTIF-1 |
-
-### Data-Focused Apps:
-
-| Prefix | Category                 | Example  |
-| ------ | ------------------------ | -------- |
-| DATA   | Data Processing Features | DATA-2   |
-| VIZ    | Data Visualization       | VIZ-3    |
-| SYNC   | Data Synchronization     | SYNC-1   |
-| REPORT | Reporting Functionality  | REPORT-2 |
-
-Adapt and extend these prefixes based on your specific project features and requirements.
+The AI assistant can help suggest appropriate prefixes based on your project's specific features and requirements.
 
 ## Why MVP Feature-Slice Approach?
 
