@@ -2,7 +2,7 @@
 
 Use this prompt at the beginning of a new project to generate a structured development plan with MVP focus, TDD and Git workflow integration.
 
-````
+```
 As a technical software architect specializing in TDD and Agile/MVP methodologies, create a comprehensive development plan for a new project with the following specifications:
 
 Project name: [PROJECT_NAME]
@@ -29,13 +29,13 @@ Please structure the development plan following an MVP-first, feature-slice appr
 6. Clearly marked milestones with version tags for each functional increment
 7. Checkbox format for progress tracking ([  ])
 
-The plan should begin with an Epic Definition & Roadmapping phase that includes:
-- User stories in "As a user, I want to..., So that..." format
-- User flow diagrams using Mermaid.js syntax (```mermaid flowchart TD```)
-- MVP scope definition and feature prioritization
-- Technical constraints and requirements documentation
+Structure the implementation phases to deliver complete user functionality:
 
-Then structure the main implementation phases to deliver complete user functionality:
+0. Epic Definition & Roadmapping
+   - Define user stories in "As a user, I want to..., So that..." format
+   - Create user flow diagrams using Mermaid.js syntax
+   - Define MVP scope and feature prioritization
+   - Identify technical constraints and requirements
 
 1. MVP Foundation & Core Functionality
    - Minimal data model with only essential entities and attributes
@@ -67,7 +67,7 @@ Then structure the main implementation phases to deliver complete user functiona
    - Final testing and quality assurance
 
 Format the output as a Markdown file ready to be added to the project repository.
-````
+```
 
 ## Usage Instructions
 
