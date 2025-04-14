@@ -4,6 +4,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vitest/config';
+import type { PluginOption } from 'vite';
 
 // Determine the current directory so the project
 // can be use wether from a Docker container or from the local machine
@@ -12,7 +13,7 @@ const __dirname = dirname(__filename);
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	plugins: [react(), visualizer(), tailwindcss()],
+	plugins: [react(), visualizer() as PluginOption, tailwindcss()],
 	server: {
 		host: '0.0.0.0',
 		port: 5173,
