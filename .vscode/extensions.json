@@ -1,9 +1,11 @@
 {
 	"recommendations": [
+		"bierner.markdown-mermaid",
 		"dbaeumer.vscode-eslint",
 		"esbenp.prettier-vscode",
 		"antfu.vite",
 		"ms-playwright.playwright",
-		"bradlc.vscode-tailwindcss"
+		"bradlc.vscode-tailwindcss",
+		"yoavbls.pretty-ts-errors"
 	]
 }
