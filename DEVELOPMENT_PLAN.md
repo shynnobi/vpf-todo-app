@@ -8,7 +8,7 @@
 
 - [x] 1.1.1. Define data model - _Commit: `chore(model): define Todo interface`_
 - [x] 1.1.2. Configure state management with Zustand - _Commit: `chore(store): setup Zustand store structure`_
-- [ ] 1.1.3. Plan component structure - _Commit: `docs(architecture): add component structure documentation`_
+- [x] 1.1.3. Plan component structure - _Commit: `docs(architecture): add component structure documentation`_
 - [ ] 1.1.4. Set up routing - _Commit: `chore(router): setup basic routing structure`_
 - [ ] 1.1.5. **PR**: _Create PR `chore/initial-setup` → `dev`_
 
