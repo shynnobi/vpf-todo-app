@@ -2,7 +2,7 @@
 
 Use this prompt at the beginning of a new project to generate a structured development plan with TDD and Git workflow integration.
 
-```
+````
 As a technical software architect specializing in TDD and Git workflow best practices, create a comprehensive development plan for a new project with the following specifications:
 
 Project name: [PROJECT_NAME]
@@ -28,7 +28,13 @@ Please structure the development plan with the following elements:
 5. Clearly marked milestones with version tags
 6. Checkbox format for progress tracking ([  ])
 
-The plan should cover:
+The plan should begin with a Discovery & Requirements phase that includes:
+- User stories in "As a user, I want to..., So that..." format
+- User flow diagrams using Mermaid.js syntax (```mermaid flowchart TD```)
+- MVP scope definition and feature prioritization
+- Technical constraints and requirements documentation
+
+Then cover the main implementation phases:
 - Initial architecture and setup (SETUP-*)
 - Core data model implementation (MODEL-*)
 - Component/module development following TDD (COMP-*)
@@ -40,7 +46,7 @@ The plan should cover:
 - Documentation requirements (DOC-*)
 
 Format the output as a Markdown file ready to be added to the project repository.
-```
+````
 
 ## Usage Instructions
 
@@ -57,6 +63,7 @@ The plan uses categorical task IDs rather than sequential numbering to allow for
 
 | Prefix | Category                   | Example |
 | ------ | -------------------------- | ------- |
+| REQ    | Requirements & Discovery   | REQ-2   |
 | SETUP  | Initial setup/architecture | SETUP-2 |
 | MODEL  | Data model implementation  | MODEL-1 |
 | COMP   | UI Component development   | COMP-3  |
@@ -68,3 +75,18 @@ The plan uses categorical task IDs rather than sequential numbering to allow for
 | DOC    | Documentation              | DOC-2   |
 | MS     | Milestone                  | MS1-3   |
 | \*-PR  | Pull Request task          | FEAT-PR |
+
+## Visual Documentation with Mermaid
+
+User flows and other diagrams should be created using Mermaid.js syntax within markdown files. For example:
+
+```mermaid
+flowchart TD
+    A[Landing Page] --> B{Has Items?}
+    B -->|Yes| C[Show List]
+    B -->|No| D[Show Empty State]
+    C --> E[Select Item]
+    D --> F[Add New Item]
+```
+
+This approach allows diagrams to render directly in GitHub and other markdown viewers with Mermaid support, while remaining simple text files for version control.
