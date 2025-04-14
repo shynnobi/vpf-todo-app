@@ -27,7 +27,6 @@ export default defineConfig({
 			{ find: '@/context', replacement: resolve(__dirname, 'src/context') },
 			{ find: '@/pages', replacement: resolve(__dirname, 'src/pages') },
 			{ find: '@/lib', replacement: resolve(__dirname, 'src/lib') },
-			{ find: '@/shared', replacement: resolve(__dirname, 'src/shared') },
 			{ find: '@/utils', replacement: resolve(__dirname, 'src/utils') },
 			{ find: '@/types', replacement: resolve(__dirname, 'src/types') },
 		],
