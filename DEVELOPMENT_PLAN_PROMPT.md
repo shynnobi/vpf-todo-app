@@ -28,7 +28,7 @@ Please structure the development plan with the following elements:
 5. Clearly marked milestones with version tags
 6. Checkbox format for progress tracking ([  ])
 
-The plan should begin with a Discovery & Requirements phase that includes:
+The plan should begin with an Epic Definition & Roadmapping phase that includes:
 - User stories in "As a user, I want to..., So that..." format
 - User flow diagrams using Mermaid.js syntax (```mermaid flowchart TD```)
 - MVP scope definition and feature prioritization
@@ -61,20 +61,20 @@ Format the output as a Markdown file ready to be added to the project repository
 
 The plan uses categorical task IDs rather than sequential numbering to allow for easy insertion of new tasks:
 
-| Prefix | Category                   | Example |
-| ------ | -------------------------- | ------- |
-| REQ    | Requirements & Discovery   | REQ-2   |
-| SETUP  | Initial setup/architecture | SETUP-2 |
-| MODEL  | Data model implementation  | MODEL-1 |
-| COMP   | UI Component development   | COMP-3  |
-| INT    | Integration                | INT-2   |
-| UI     | UI enhancements            | UI-1    |
-| ERR    | Error handling             | ERR-3   |
-| PERF   | Performance optimization   | PERF-2  |
-| TEST   | Testing                    | TEST-1  |
-| DOC    | Documentation              | DOC-2   |
-| MS     | Milestone                  | MS1-3   |
-| \*-PR  | Pull Request task          | FEAT-PR |
+| Prefix | Category                      | Example |
+| ------ | ----------------------------- | ------- |
+| EPIC   | Epic Definition & Roadmapping | EPIC-2  |
+| SETUP  | Initial setup/architecture    | SETUP-2 |
+| MODEL  | Data model implementation     | MODEL-1 |
+| COMP   | UI Component development      | COMP-3  |
+| INT    | Integration                   | INT-2   |
+| UI     | UI enhancements               | UI-1    |
+| ERR    | Error handling                | ERR-3   |
+| PERF   | Performance optimization      | PERF-2  |
+| TEST   | Testing                       | TEST-1  |
+| DOC    | Documentation                 | DOC-2   |
+| MS     | Milestone                     | MS1-3   |
+| \*-PR  | Pull Request task             | FEAT-PR |
 
 ## Visual Documentation with Mermaid
 

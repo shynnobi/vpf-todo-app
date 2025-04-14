@@ -2,14 +2,14 @@
 
 > **Note**: To mark tasks as complete, inform the AI about the task ID (e.g., "SETUP-1 is completed" or "I've finished FEAT-3").
 
-## Phase: Discovery & Requirements
+## Phase: Epic Definition & Roadmapping
 
 **Branch: `chore/initial-setup`**
 
-- [x] REQ-1: Define user stories and acceptance criteria - _Commit: `docs(requirements): add user stories and requirements documentation`_
-- [x] REQ-2: Create user flow diagrams - _Commit: `docs(requirements): add user stories and requirements documentation`_
-- [x] REQ-3: Define MVP scope and feature prioritization - _Commit: `docs(requirements): add user stories and requirements documentation`_
-- [x] REQ-4: Identify technical constraints and requirements - _Commit: `docs(requirements): add user stories and requirements documentation`_
+- [x] EPIC-1: Define user stories and acceptance criteria - _Commit: `docs(requirements): add user stories and requirements documentation`_
+- [x] EPIC-2: Create user flow diagrams - _Commit: `docs(requirements): add user stories and requirements documentation`_
+- [x] EPIC-3: Define MVP scope and feature prioritization - _Commit: `docs(requirements): add user stories and requirements documentation`_
+- [x] EPIC-4: Identify technical constraints and requirements - _Commit: `docs(requirements): add user stories and requirements documentation`_
 
 ## Phase: Initial Setup & Architecture
 
