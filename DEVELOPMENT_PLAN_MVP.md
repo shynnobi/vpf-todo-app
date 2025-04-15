@@ -29,9 +29,9 @@
 
 **Branch: `mvp/list-todos-feature`**
 
-- [ ] LIST-1: Write tests for "List Todos" feature
-- [ ] LIST-2: Implement minimal TodoList component
-- [ ] LIST-3: Implement store integration for listing todos
+- [x] LIST-1: Write tests for "List Todos" feature
+- [x] LIST-2: Implement minimal TodoList component
+- [x] LIST-3: Implement store integration for listing todos
 - [ ] LIST-4: Create PR `mvp/list-todos-feature` → `dev`
 
 **Branch: `mvp/complete-todo-feature`**
