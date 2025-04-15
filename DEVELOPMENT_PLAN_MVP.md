@@ -18,7 +18,7 @@
 - [x] FOUND-1: Define minimal Todo model (id, title, completed only)
 - [x] FOUND-2: Write tests for basic store operations (add/complete)
 - [x] FOUND-3: Implement basic store operations
-- [ ] FOUND-4: Create PR `mvp/core-foundation` → `dev`
+- [x] FOUND-4: Create PR `mvp/core-foundation` → `dev`
 
 **Branch: `mvp/add-todo-feature`**
 
