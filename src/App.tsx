@@ -1,7 +1,8 @@
 import { type ReactElement } from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { ThemeToggle } from '@components/ThemeToggle';
-import { ReactQueryProvider } from '@lib/react-query/provider';
+
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { ReactQueryProvider } from '@/lib/react-query/provider';
 
 /**
  * Main application layout component

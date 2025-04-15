@@ -33,10 +33,10 @@ Path aliases are configured for cleaner imports and better code organization:
 
 ```typescript
 // Instead of this:
-import { Button } from '../../../components/ui/Button';
+import { Button } from '@/components/ui/Button';
 
 // Use this:
-import { Button } from '@components/ui/Button';
+import { Button } from '@/components/ui/Button';
 ```
 
 ### Available Aliases
