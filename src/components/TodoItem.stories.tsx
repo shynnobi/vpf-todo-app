@@ -7,7 +7,7 @@ import { TodoItem } from './TodoItem';
 
 // Interactive decorator that manages todo state
 const InteractiveTodoDecorator: Decorator = (_Story, context) => {
-	// Extraire les propriétés typées du contexte
+	// Extract typed properties from context
 	const todo = { ...(context.args.todo as { id: string; title: string; completed: boolean }) };
 	const [completed, setCompleted] = useState(todo.completed);
 
