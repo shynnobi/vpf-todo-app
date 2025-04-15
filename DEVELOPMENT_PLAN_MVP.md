@@ -25,7 +25,7 @@
 - [x] ADD-1: Write tests for "Add Todo" feature
 - [x] ADD-2: Implement minimal AddTodo form component
 - [x] ADD-3: Implement store integration for adding todos
-- [ ] ADD-4: Create PR `mvp/add-todo-feature` → `dev`
+- [x] ADD-4: Create PR `mvp/add-todo-feature` → `dev`
 
 **Branch: `mvp/list-todos-feature`**
 
