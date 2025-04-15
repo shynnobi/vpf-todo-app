@@ -1,6 +1,34 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import type { Decorator } from '@storybook/react';
+import { fn } from '@storybook/test';
 
 import { TodoItem } from './TodoItem';
+
+// Interactive decorator that manages todo state
+const InteractiveTodoDecorator: Decorator = (_Story, context) => {
+	// Extraire les propriétés typées du contexte
+	const todo = { ...(context.args.todo as { id: string; title: string; completed: boolean }) };
+	const [completed, setCompleted] = useState(todo.completed);
+
+	// Create an interactive version of the todo
+	const interactiveTodo = {
+		...todo,
+		completed: completed,
+	};
+
+	// Handler that updates local state
+	const handleToggle = (id: string) => {
+		setCompleted(!completed);
+		(context.args.onToggle as (id: string) => void)(id);
+	};
+
+	return (
+		<ul className="w-80 border rounded-md p-2">
+			<TodoItem todo={interactiveTodo} onToggle={handleToggle} />
+		</ul>
+	);
+};
 
 const meta = {
 	title: 'Todo/TodoItem',
@@ -9,13 +37,10 @@ const meta = {
 		layout: 'centered',
 	},
 	tags: ['autodocs'],
-	decorators: [
-		Story => (
-			<ul className="w-80 border rounded-md p-2">
-				<Story />
-			</ul>
-		),
-	],
+	// Default args that will be applied to all stories
+	args: {
+		onToggle: fn((id: string) => console.log(`Toggle todo with ID: ${id}`)),
+	},
 } satisfies Meta<typeof TodoItem>;
 
 export default meta;
@@ -28,10 +53,8 @@ export const Incomplete: Story = {
 			title: 'Learn React',
 			completed: false,
 		},
-		onToggle: (id: string) => {
-			console.log(`Toggle todo with ID: ${id}`);
-		},
 	},
+	decorators: [InteractiveTodoDecorator],
 };
 
 export const Completed: Story = {
@@ -41,10 +64,8 @@ export const Completed: Story = {
 			title: 'Build a todo app',
 			completed: true,
 		},
-		onToggle: (id: string) => {
-			console.log(`Toggle todo with ID: ${id}`);
-		},
 	},
+	decorators: [InteractiveTodoDecorator],
 };
 
 export const LongTitle: Story = {
@@ -55,8 +76,6 @@ export const LongTitle: Story = {
 				'This is a very long todo title that should wrap gracefully within the container and still look good',
 			completed: false,
 		},
-		onToggle: (id: string) => {
-			console.log(`Toggle todo with ID: ${id}`);
-		},
 	},
+	decorators: [InteractiveTodoDecorator],
 };
