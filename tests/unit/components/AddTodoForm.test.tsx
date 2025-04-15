@@ -4,12 +4,12 @@ import { describe, expect, it, vi } from 'vitest';
 import { AddTodoForm } from '@/components/AddTodoForm';
 
 /**
- * Behavioral tests for the AddTodoForm component.
+ * Unit tests for the AddTodoForm component.
  *
- * These tests follow the BDD (Behavior-Driven Development) approach using
- * Given-When-Then (Gherkin) format to clearly define expected behaviors.
+ * Tests the rendering and interactions of the form used to add new todos.
+ * Following the BDD approach with Given-When-Then format.
  */
-describe('AddTodoForm Component - Behavioral Tests', () => {
+describe('AddTodoForm Component', () => {
 	describe('Initial Rendering', () => {
 		it('should render a form with input and submit button', () => {
 			// Given: The component is rendered

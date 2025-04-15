@@ -5,12 +5,16 @@ import { describe, expect, it } from 'vitest';
 import App from '@/App';
 
 /**
- * Minimal test to verify the application renders without crashing
- * This serves as a basic smoke test for the application
+ * Unit tests for the App component.
+ *
+ * Basic smoke test to verify the application renders without crashing.
+ * Following the BDD approach with Given-When-Then format.
  */
-describe('App', () => {
+describe('App Component', () => {
 	it('renders without crashing', () => {
-		// This test simply verifies that the App component mounts without throwing any errors
+		// Given: The App component with its required router wrapper
+		// When: The component is rendered
+		// Then: No errors should be thrown during rendering
 		expect(() =>
 			render(
 				<BrowserRouter>
