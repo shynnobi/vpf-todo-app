@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 // Layouts
 import App from '@/App';
+import { TodoContainer } from '@/components/TodoContainer';
 
 /**
  * Application router configuration
@@ -14,6 +15,10 @@ export const router = createBrowserRouter([
 			{
 				index: true,
 				element: <Navigate to="/todos" replace />,
+			},
+			{
+				path: 'todos',
+				element: <TodoContainer />,
 			},
 			{
 				path: '*',
