@@ -7,8 +7,13 @@ import { useTodoStore } from '@/store/todoStore';
 /**
  * Integration tests for the TodoContainer component.
  *
- * Tests the integration between the form and the store
- * following the BDD approach.
+ * Tests the interactions between multiple components and the store:
+ * - AddTodoForm component
+ * - TodoList component
+ * - TodoItem components
+ * - TodoStore state management
+ *
+ * Following the BDD approach with Given-When-Then format.
  */
 describe('TodoContainer Component - Integration Tests', () => {
 	// Reset the store before each test
@@ -46,8 +51,13 @@ describe('TodoContainer Component - Integration Tests', () => {
 			// Then: The todo count should be updated
 			expect(screen.getByText('1 task total')).toBeInTheDocument();
 
-			// And: The empty state should be replaced with a message about todos
-			expect(screen.getByText(/You have 1 todos/i)).toBeInTheDocument();
+			// And: The todo should be visible in the list
+			expect(screen.getByText('Test Todo')).toBeInTheDocument();
+
+			// And: A checkbox should be present
+			const checkbox = screen.getByRole('checkbox');
+			expect(checkbox).toBeInTheDocument();
+			expect(checkbox).not.toBeChecked();
 		});
 
 		it('should be able to add multiple todos', () => {
@@ -68,6 +78,40 @@ describe('TodoContainer Component - Integration Tests', () => {
 
 			// Then: The todo count should reflect the number of todos
 			expect(screen.getByText('2 tasks total')).toBeInTheDocument();
+
+			// And: Both todos should be visible in the list
+			expect(screen.getByText('First Todo')).toBeInTheDocument();
+			expect(screen.getByText('Second Todo')).toBeInTheDocument();
+
+			// And: Two checkboxes should be present
+			const checkboxes = screen.getAllByRole('checkbox');
+			expect(checkboxes).toHaveLength(2);
+		});
+	});
+
+	describe('Todo Interaction', () => {
+		it('should toggle todo completion when checkbox is clicked', () => {
+			// Given: The component is rendered with a todo
+			render(<TodoContainer />);
+
+			// And: A todo is added
+			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			fireEvent.change(inputElement, { target: { value: 'Toggle Test Todo' } });
+
+			const addButton = screen.getByRole('button', { name: /add/i });
+			fireEvent.click(addButton);
+
+			// When: The checkbox is clicked
+			const checkbox = screen.getByRole('checkbox');
+			expect(checkbox).not.toBeChecked();
+			fireEvent.click(checkbox);
+
+			// Then: The todo should be marked as completed
+			expect(checkbox).toBeChecked();
+
+			// And: The todo text should have the completed style
+			const todoText = screen.getByText('Toggle Test Todo');
+			expect(todoText).toHaveClass('line-through');
 		});
 	});
 });
