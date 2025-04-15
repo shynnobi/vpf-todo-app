@@ -4,12 +4,12 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { useTodoStore } from '@/store/todoStore';
 
 /**
- * Behavioral tests for the Todo store.
+ * Unit tests for the Todo store.
  *
- * These tests follow the BDD (Behavior-Driven Development) approach using
- * Given-When-Then (Gherkin) format to clearly define expected behaviors.
+ * Tests the state management functionality of the todo store.
+ * Following the BDD approach with Given-When-Then format.
  */
-describe('Todo Store - Behavioral Tests', () => {
+describe('Todo Store', () => {
 	// Reset the store before each test
 	beforeEach(() => {
 		// We still use setState here, but only for test setup
