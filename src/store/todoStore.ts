@@ -2,8 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { TodoState } from '@/types/storeTypes';
-import { Todo } from '@/types/todoTypes';
+import { CreateTodoParams, Todo, TodoState } from '@/types/todoTypes';
 
 // Fallback for environments without localStorage
 const inMemoryStorage = {
@@ -20,7 +19,7 @@ export const useTodoStore = create<TodoState>()(
 		(set, get) => ({
 			todos: [],
 
-			addTodo: params => {
+			addTodo: (params: CreateTodoParams): Todo => {
 				const newTodo: Todo = {
 					id: uuidv4(),
 					title: params.title,
@@ -28,31 +27,40 @@ export const useTodoStore = create<TodoState>()(
 				};
 
 				set(state => ({
-					todos: [newTodo, ...state.todos],
+					todos: [...state.todos, newTodo],
 				}));
 
 				return newTodo;
 			},
 
-			toggleTodo: id => {
-				const { todos } = get();
-				const todoIndex = todos.findIndex(todo => todo.id === id);
+			toggleTodo: (id: string): Todo | null => {
+				const todo = get().todos.find(t => t.id === id);
 
-				if (todoIndex === -1) {
+				if (!todo) {
 					return null;
 				}
 
-				const newTodos = [...todos];
-				newTodos[todoIndex] = {
-					...newTodos[todoIndex],
-					completed: !newTodos[todoIndex].completed,
-				};
+				const updatedTodo = { ...todo, completed: !todo.completed };
 
-				set({
-					todos: newTodos,
-				});
+				set(state => ({
+					todos: state.todos.map(t => (t.id === id ? updatedTodo : t)),
+				}));
 
-				return newTodos[todoIndex];
+				return updatedTodo;
+			},
+
+			deleteTodo: (id: string): Todo | null => {
+				const todo = get().todos.find(t => t.id === id);
+
+				if (!todo) {
+					return null;
+				}
+
+				set(state => ({
+					todos: state.todos.filter(t => t.id !== id),
+				}));
+
+				return todo;
 			},
 
 			reset: () => {
