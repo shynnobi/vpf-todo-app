@@ -46,14 +46,14 @@
 - [x] ASMBLY-1: Create a container component (e.g., `TodoContainer`) that integrates `AddTodoForm` and `TodoList`.
 - [x] ASMBLY-2: Render the container component within `App.tsx`.
 - [x] ASMBLY-3: Write basic integration tests for the assembled UI.
-- [ ] ASMBLY-4: Create PR `feat/app-assembly` → `dev`.
+- [x] ASMBLY-4: Create PR `feat/app-assembly` → `dev`.
 
 **First Usable Version (v0.1.1-core-assembled)**
 
 - [x] MVP-1: Verify core functionality PRs are merged
 - [x] MVP-2: All tests pass for core features
 - [x] MVP-3: Create tag `v0.1.0-core` _(Initial core tag created)_
-- [ ] MVP-4: Create tag `v0.1.1-core-assembled`
+- [x] MVP-4: Create tag `v0.1.1-core-assembled`
 
 ## Phase 2: Essential Enhancements
 

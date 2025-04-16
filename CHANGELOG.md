@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [0.1.1-core-assembled] - 2025-04-16
+
+### Added
+
+- Assembled core components (`AddTodoForm`, `TodoList`, `TodoItem`) into a functional UI using `TodoContainer`.
+- Integrated the main application UI into the router.
+
 ## [0.1.0-core] - 2025-04-16
 
 ### Added
