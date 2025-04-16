@@ -6,13 +6,13 @@ import { useTodoStore } from '@/store/todoStore';
  * Container component that orchestrates the Todo application UI.
  */
 export function TodoContainer() {
-	const { todos, addTodo, toggleTodo } = useTodoStore();
+	const { todos, addTodo, toggleTodo, deleteTodo } = useTodoStore();
 
 	return (
 		<div className="max-w-xl mx-auto p-4">
 			<h1 className="text-2xl font-bold text-center mb-6">Todo App</h1>
 			<AddTodoForm onAddTodo={addTodo} />
-			<TodoList todos={todos} onToggleTodo={toggleTodo} />
+			<TodoList todos={todos} onToggleTodo={toggleTodo} onDeleteTodo={deleteTodo} />
 			<p className="text-center text-sm text-gray-500 mt-4">{todos.length} tasks total</p>
 		</div>
 	);

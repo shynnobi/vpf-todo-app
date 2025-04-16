@@ -21,7 +21,7 @@ describe('TodoList Component', () => {
 		it('should render a list of todos', () => {
 			// Given: A list of todos
 			// When: The component is rendered with the todos
-			render(<TodoList todos={mockTodos} onToggleTodo={() => {}} />);
+			render(<TodoList todos={mockTodos} onToggleTodo={() => {}} onDeleteTodo={() => {}} />);
 
 			// Then: It should display all todo items
 			expect(screen.getByText('Learn React')).toBeInTheDocument();
@@ -32,7 +32,7 @@ describe('TodoList Component', () => {
 		it('should render an empty message when no todos exist', () => {
 			// Given: No todos
 			// When: The component is rendered with an empty array
-			render(<TodoList todos={[]} onToggleTodo={() => {}} />);
+			render(<TodoList todos={[]} onToggleTodo={() => {}} onDeleteTodo={() => {}} />);
 
 			// Then: It should display an empty message
 			expect(screen.getByText(/no todos to display/i)).toBeInTheDocument();
@@ -41,7 +41,7 @@ describe('TodoList Component', () => {
 		it('should display completion status for each todo', () => {
 			// Given: A list of todos with different completion statuses
 			// When: The component is rendered
-			render(<TodoList todos={mockTodos} onToggleTodo={() => {}} />);
+			render(<TodoList todos={mockTodos} onToggleTodo={() => {}} onDeleteTodo={() => {}} />);
 
 			// Then: Each todo should show its completion status
 			const checkboxes = screen.getAllByRole('checkbox');
@@ -56,7 +56,7 @@ describe('TodoList Component', () => {
 		it('should call onToggleTodo with correct id when a todo is clicked', () => {
 			// Given: A spy function and the component is rendered
 			const mockToggleTodo = vi.fn();
-			render(<TodoList todos={mockTodos} onToggleTodo={mockToggleTodo} />);
+			render(<TodoList todos={mockTodos} onToggleTodo={mockToggleTodo} onDeleteTodo={() => {}} />);
 
 			// When: A todo's checkbox is clicked
 			const checkboxes = screen.getAllByRole('checkbox');
@@ -65,12 +65,25 @@ describe('TodoList Component', () => {
 			// Then: onToggleTodo should be called with the correct todo id
 			expect(mockToggleTodo).toHaveBeenCalledWith('1');
 		});
+
+		it('should call onDeleteTodo with correct id when a delete button is clicked', () => {
+			// Given: A spy function and the component is rendered
+			const mockDeleteTodo = vi.fn();
+			render(<TodoList todos={mockTodos} onToggleTodo={() => {}} onDeleteTodo={mockDeleteTodo} />);
+
+			// When: A todo's delete button is clicked
+			const deleteButtons = screen.getAllByRole('button', { name: /delete todo/i });
+			fireEvent.click(deleteButtons[0]);
+
+			// Then: onDeleteTodo should be called with the correct todo id
+			expect(mockDeleteTodo).toHaveBeenCalledWith('1');
+		});
 	});
 
 	describe('Accessibility', () => {
 		it('should have proper ARIA attributes for accessibility', () => {
 			// Given: The component is rendered with todos
-			render(<TodoList todos={mockTodos} onToggleTodo={() => {}} />);
+			render(<TodoList todos={mockTodos} onToggleTodo={() => {}} onDeleteTodo={() => {}} />);
 
 			// Then: The list should have proper accessibility attributes
 			const list = screen.getByRole('list');
