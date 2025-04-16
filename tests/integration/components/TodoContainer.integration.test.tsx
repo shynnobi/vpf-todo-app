@@ -29,7 +29,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			render(<TodoContainer />);
 
 			// Then: It should display the empty state message
-			expect(screen.getByText(/No todos yet/i)).toBeInTheDocument();
+			expect(screen.getByText(/No todos to display/i)).toBeInTheDocument();
 
 			// And: The todo count should be 0
 			expect(screen.getByText('0 tasks total')).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			fireEvent.click(addButton);
 
 			// Then: The todo count should be updated
-			expect(screen.getByText('1 task total')).toBeInTheDocument();
+			expect(screen.getByText('1 tasks total')).toBeInTheDocument();
 
 			// And: The todo should be visible in the list
 			expect(screen.getByText('Test Todo')).toBeInTheDocument();
