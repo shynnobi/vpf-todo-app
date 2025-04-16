@@ -1,11 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from '@context/theme/ThemeProvider';
+import { RouterProvider } from 'react-router-dom';
 
 import './index.css';
 
-import App from '@/App';
+import { ThemeProvider } from '@/context/theme/ThemeProvider';
+import { router } from '@/lib/router';
 
 const rootElement = document.getElementById('root');
 
@@ -15,10 +15,8 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
 	<StrictMode>
-		<BrowserRouter>
-			<ThemeProvider storageKey="vite-ui-theme">
-				<App />
-			</ThemeProvider>
-		</BrowserRouter>
+		<ThemeProvider storageKey="vite-ui-theme">
+			<RouterProvider router={router} />
+		</ThemeProvider>
 	</StrictMode>
 );
