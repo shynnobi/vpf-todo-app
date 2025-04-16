@@ -36,15 +36,15 @@
 
 **Branch: `mvp/complete-todo-feature`**
 
-- [ ] COMP-1: Write tests for "Complete Todo" feature
-- [ ] COMP-2: Implement completion toggle in TodoItem
-- [ ] COMP-3: Implement store integration for toggling completion
-- [ ] COMP-4: Create PR `mvp/complete-todo-feature` → `dev`
+- [x] COMP-1: Write tests for "Complete Todo" feature
+- [x] COMP-2: Implement completion toggle in TodoItem
+- [x] COMP-3: Implement store integration for toggling completion
+- [ ] COMP-4: Create PR `mvp/complete-todo-feature` → `dev` _(Branch not needed, feature implemented earlier)_
 
 **First Usable Version (v0.1.0)**
 
-- [ ] MVP-1: Verify core functionality PRs are merged
-- [ ] MVP-2: All tests pass for core features
+- [x] MVP-1: Verify core functionality PRs are merged
+- [x] MVP-2: All tests pass for core features
 - [ ] MVP-3: Create tag `v0.1.0-core`
 
 ## Phase 2: Essential Enhancements
