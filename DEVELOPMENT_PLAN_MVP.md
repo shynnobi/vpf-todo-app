@@ -59,9 +59,9 @@
 
 **Branch: `feat/persistence`**
 
-- [ ] PERS-1: Write tests for localStorage persistence
-- [ ] PERS-2: Implement saving/loading from localStorage
-- [ ] PERS-3: Create PR `feat/persistence` → `dev`
+- [x] PERS-1: Write tests for localStorage persistence
+- [x] PERS-2: Implement saving/loading from localStorage
+- [x] PERS-3: Create PR `feat/persistence` → `dev`
 
 **Branch: `feat/todo-deletion`**
 
