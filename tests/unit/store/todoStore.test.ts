@@ -1,141 +1,160 @@
-import { act, renderHook } from '@testing-library/react';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { useTodoStore } from '@/store/todoStore';
+import { Todo } from '@/types/todoTypes';
+
+// Define the storage key for potential manual cleanup if needed
+const STORAGE_KEY = 'todo-storage';
 
 /**
- * Unit tests for the Todo store.
- *
- * Tests the state management functionality of the todo store.
- * Following the BDD approach with Given-When-Then format.
+ * Helper functions to abstract the implementation details for behavior-focused testing.
  */
-describe('Todo Store', () => {
-	// Reset the store before each test
+const TodoStoreTestHelpers = {
+	// Get current state for assertions
+	getTodos: () => useTodoStore.getState().todos,
+	getTodosCount: () => useTodoStore.getState().todos.length,
+
+	// Actions that mimic user behavior
+	addTodo: (title: string, completed = false) =>
+		useTodoStore.getState().addTodo({ title, completed }),
+	toggleTodoCompletion: (id: string) => useTodoStore.getState().toggleTodo(id),
+	resetStore: () => useTodoStore.getState().reset(),
+
+	// Storage cleanup
+	cleanupStorage: () => {
+		if (typeof window !== 'undefined') {
+			window.localStorage.removeItem(STORAGE_KEY);
+		}
+	},
+};
+
+/**
+ * BDD style tests for the Todo store.
+ * Tests are written from the perspective of behavior, not implementation.
+ */
+describe('Todo Store - Behavior', () => {
+	// Reset the store state before each test
 	beforeEach(() => {
-		// We still use setState here, but only for test setup
-		useTodoStore.setState({ todos: [], todosCount: 0 });
+		TodoStoreTestHelpers.cleanupStorage();
+		TodoStoreTestHelpers.resetStore();
 	});
 
-	describe('Todo Management', () => {
-		it('should allow adding a new todo', () => {
-			// Given: a component using the todo store
-			const { result } = renderHook(() => useTodoStore());
-
-			// When: the component adds a new todo
-			act(() => {
-				result.current.addTodo({ title: 'Buy milk' });
-			});
-
-			// Then: the todo should be added to the store with correct default values
-			expect(result.current.todos.length).toBe(1);
-			expect(result.current.todos[0].title).toBe('Buy milk');
-			expect(result.current.todos[0].completed).toBe(false);
-		});
-
-		it('should allow creating an already completed todo', () => {
-			// Given: a component using the todo store
-			const { result } = renderHook(() => useTodoStore());
-
-			// When: the component adds a todo with completed=true
-			act(() => {
-				result.current.addTodo({ title: 'Already done task', completed: true });
-			});
-
-			// Then: the todo should be added with completed status set to true
-			expect(result.current.todos[0].completed).toBe(true);
-		});
-
-		it('should increment the todo counter when adding todos', () => {
-			// Given: a component using the todo store with initial empty state
-			const { result } = renderHook(() => useTodoStore());
-			expect(result.current.todosCount).toBe(0);
-
-			// When: the component adds one todo
-			act(() => {
-				result.current.addTodo({ title: 'First todo' });
-			});
-
-			// Then: the counter should be incremented to 1
-			expect(result.current.todosCount).toBe(1);
-
-			// When: the component adds another todo
-			act(() => {
-				result.current.addTodo({ title: 'Second todo' });
-			});
-
-			// Then: the counter should be incremented to 2
-			expect(result.current.todosCount).toBe(2);
-		});
+	// Clean up localStorage after each test
+	afterEach(() => {
+		TodoStoreTestHelpers.cleanupStorage();
 	});
 
-	describe('Todo Modification', () => {
-		it('should allow toggling the completion state of a todo', () => {
-			// Given: a component with a todo in the store
-			const { result } = renderHook(() => useTodoStore());
-			act(() => {
-				result.current.addTodo({ title: 'Todo to toggle' });
-			});
-			const todoId = result.current.todos[0].id;
-			expect(result.current.todos[0].completed).toBe(false);
+	describe('Adding Todos', () => {
+		it('Given the store is empty, When a new todo is added, Then it should appear in the store with default values', () => {
+			// Given
+			expect(TodoStoreTestHelpers.getTodos()).toEqual([]);
 
-			// When: the component toggles the todo's completed status
-			act(() => {
-				result.current.toggleTodo(todoId);
-			});
+			// When
+			const newTodo = TodoStoreTestHelpers.addTodo('Buy groceries');
 
-			// Then: the todo should be marked as completed
-			expect(result.current.todos[0].completed).toBe(true);
-
-			// When: the component toggles the todo's status again
-			act(() => {
-				result.current.toggleTodo(todoId);
-			});
-
-			// Then: the todo should be marked as not completed
-			expect(result.current.todos[0].completed).toBe(false);
+			// Then
+			const todos = TodoStoreTestHelpers.getTodos();
+			expect(todos).toHaveLength(1);
+			expect(todos[0].title).toBe('Buy groceries');
+			expect(todos[0].completed).toBe(false);
+			expect(todos[0]).toEqual(newTodo);
+			expect(TodoStoreTestHelpers.getTodosCount()).toBe(1);
 		});
 
-		it('should not modify the state when attempting to toggle a non-existent todo', () => {
-			// Given: a store with an existing todo
-			const { result } = renderHook(() => useTodoStore());
-			act(() => {
-				result.current.addTodo({ title: 'An existing todo' });
-			});
-			const todosBefore = [...result.current.todos];
+		it('Given the store is empty, When a todo is added as completed, Then it should be stored with completed=true', () => {
+			// Given
+			expect(TodoStoreTestHelpers.getTodos()).toEqual([]);
 
-			// When: attempting to toggle a todo with a non-existent ID
-			let returnValue;
-			act(() => {
-				returnValue = result.current.toggleTodo('non-existent-id');
-			});
+			// When
+			TodoStoreTestHelpers.addTodo('Task already done', true);
 
-			// Then: the function should return null
-			expect(returnValue).toBeNull();
+			// Then
+			const todos = TodoStoreTestHelpers.getTodos();
+			expect(todos).toHaveLength(1);
+			expect(todos[0].title).toBe('Task already done');
+			expect(todos[0].completed).toBe(true);
+			expect(TodoStoreTestHelpers.getTodosCount()).toBe(1);
+		});
 
-			// And: the state should remain unchanged
-			expect(result.current.todos).toEqual(todosBefore);
+		it('Given the store has todos, When more todos are added, Then the count should update accordingly', () => {
+			// Given
+			expect(TodoStoreTestHelpers.getTodos()).toEqual([]);
+
+			// When adding first todo
+			TodoStoreTestHelpers.addTodo('First task');
+
+			// Then
+			expect(TodoStoreTestHelpers.getTodosCount()).toBe(1);
+
+			// When adding second todo
+			TodoStoreTestHelpers.addTodo('Second task');
+
+			// Then
+			expect(TodoStoreTestHelpers.getTodosCount()).toBe(2);
 		});
 	});
 
-	describe('Reset Functionality', () => {
-		it('should allow completely resetting the state', () => {
-			// Given: a store with multiple todos
-			const { result } = renderHook(() => useTodoStore());
-			act(() => {
-				result.current.addTodo({ title: 'Todo 1' });
-				result.current.addTodo({ title: 'Todo 2' });
-			});
-			expect(result.current.todos.length).toBe(2);
-			expect(result.current.todosCount).toBe(2);
+	describe('Toggling Todo Status', () => {
+		let initialTodo: Todo;
 
-			// When: the reset function is called
-			act(() => {
-				result.current.reset();
-			});
+		// Setup: Add a todo before each test in this block
+		beforeEach(() => {
+			initialTodo = TodoStoreTestHelpers.addTodo('Todo to toggle');
+			expect(TodoStoreTestHelpers.getTodos()).toHaveLength(1);
+			expect(TodoStoreTestHelpers.getTodos()[0].completed).toBe(false);
+		});
 
-			// Then: the store should be reset to its initial empty state
-			expect(result.current.todos.length).toBe(0);
-			expect(result.current.todosCount).toBe(0);
+		it('Given a todo exists, When its status is toggled, Then the completed status should be inverted', () => {
+			// Given
+			const todoId = initialTodo.id;
+			const initialCount = TodoStoreTestHelpers.getTodosCount();
+
+			// When toggling the first time
+			const toggledTodo = TodoStoreTestHelpers.toggleTodoCompletion(todoId);
+
+			// Then
+			expect(TodoStoreTestHelpers.getTodos()[0].completed).toBe(true);
+			expect(toggledTodo?.completed).toBe(true);
+			expect(TodoStoreTestHelpers.getTodosCount()).toBe(initialCount);
+
+			// When toggling again
+			const toggledAgainTodo = TodoStoreTestHelpers.toggleTodoCompletion(todoId);
+
+			// Then
+			expect(TodoStoreTestHelpers.getTodos()[0].completed).toBe(false);
+			expect(toggledAgainTodo?.completed).toBe(false);
+			expect(TodoStoreTestHelpers.getTodosCount()).toBe(initialCount);
+		});
+
+		it('Given a todo exists, When toggling with a non-existent ID, Then nothing should change and null should be returned', () => {
+			// Given
+			const todosBefore = [...TodoStoreTestHelpers.getTodos()];
+			const countBefore = TodoStoreTestHelpers.getTodosCount();
+
+			// When
+			const result = TodoStoreTestHelpers.toggleTodoCompletion('non-existent-id');
+
+			// Then
+			expect(result).toBeNull();
+			expect(TodoStoreTestHelpers.getTodos()).toEqual(todosBefore);
+			expect(TodoStoreTestHelpers.getTodosCount()).toBe(countBefore);
+		});
+	});
+
+	describe('Resetting the Store', () => {
+		it('Given the store has todos, When reset is called, Then the store should be empty', () => {
+			// Given
+			TodoStoreTestHelpers.addTodo('Todo 1');
+			TodoStoreTestHelpers.addTodo('Todo 2');
+			expect(TodoStoreTestHelpers.getTodos()).toHaveLength(2);
+			expect(TodoStoreTestHelpers.getTodosCount()).toBe(2);
+
+			// When
+			TodoStoreTestHelpers.resetStore();
+
+			// Then
+			expect(TodoStoreTestHelpers.getTodos()).toEqual([]);
+			expect(TodoStoreTestHelpers.getTodosCount()).toBe(0);
 		});
 	});
 });
