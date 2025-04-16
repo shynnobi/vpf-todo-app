@@ -1,4 +1,5 @@
 import { AddTodoForm } from '@/components/AddTodoForm';
+import { TodoList } from '@/components/TodoList';
 import { useTodoStore } from '@/store/todoStore';
 import { CreateTodoParams } from '@/types/todoTypes';
 
@@ -7,10 +8,14 @@ import { CreateTodoParams } from '@/types/todoTypes';
  * Integrates the TodoStore with UI components
  */
 export function TodoContainer() {
-	const { addTodo, todos, todosCount } = useTodoStore();
+	const { addTodo, toggleTodo, todos, todosCount } = useTodoStore();
 
 	const handleAddTodo = (todoParams: CreateTodoParams) => {
 		addTodo(todoParams);
+	};
+
+	const handleToggleTodo = (id: string) => {
+		toggleTodo(id);
 	};
 
 	return (
@@ -24,14 +29,11 @@ export function TodoContainer() {
 
 			<AddTodoForm onAddTodo={handleAddTodo} />
 
-			{/* Placeholder for TodoList which will be implemented in the next feature */}
-			<div className="border rounded-md p-4">
+			<div className="border rounded-md p-4 mt-4">
 				{todos.length === 0 ? (
 					<p className="text-center text-gray-500">No todos yet. Add one above!</p>
 				) : (
-					<p className="text-center text-gray-500">
-						You have {todosCount} todos. List component coming soon!
-					</p>
+					<TodoList todos={todos} onToggleTodo={handleToggleTodo} />
 				)}
 			</div>
 		</div>
