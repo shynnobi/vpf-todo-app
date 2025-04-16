@@ -45,7 +45,7 @@
 
 - [x] MVP-1: Verify core functionality PRs are merged
 - [x] MVP-2: All tests pass for core features
-- [ ] MVP-3: Create tag `v0.1.0-core`
+- [x] MVP-3: Create tag `v0.1.0-core`
 
 ## Phase 2: Essential Enhancements
 
