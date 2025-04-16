@@ -23,9 +23,18 @@ const InteractiveTodoListDecorator: Decorator = (_Story, context) => {
 		(context.args.onToggleTodo as ReturnType<typeof fn>)(id);
 	};
 
+	// Handler that deletes a todo
+	const handleDeleteTodo = (id: string) => {
+		// Update todos state
+		setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+
+		// Call the original callback function for logging
+		(context.args.onDeleteTodo as ReturnType<typeof fn>)(id);
+	};
+
 	return (
 		<div className="w-80 border rounded-md p-4">
-			<TodoList todos={todos} onToggleTodo={handleToggleTodo} />
+			<TodoList todos={todos} onToggleTodo={handleToggleTodo} onDeleteTodo={handleDeleteTodo} />
 		</div>
 	);
 };
@@ -40,6 +49,7 @@ const meta = {
 	// Default args that will be applied to all stories
 	args: {
 		onToggleTodo: fn((id: string) => console.log(`Toggle todo with ID: ${id}`)),
+		onDeleteTodo: fn((id: string) => console.log(`Delete todo with ID: ${id}`)),
 	},
 } satisfies Meta<typeof TodoList>;
 
