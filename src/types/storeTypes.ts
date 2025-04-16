@@ -10,11 +10,6 @@ export interface TodoState {
 	todos: Todo[];
 
 	/**
-	 * Total number of todos
-	 */
-	todosCount: number;
-
-	/**
 	 * Adds a new todo to the store
 	 * @param params Todo creation parameters
 	 * @returns The newly created todo

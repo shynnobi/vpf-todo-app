@@ -1,24 +1,31 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { TodoContainer } from '@/components/TodoContainer';
 import { useTodoStore } from '@/store/todoStore';
 
+// Helper to get the storage key if needed, though direct interaction is avoided
+const STORAGE_KEY = 'todo-storage';
+
 /**
- * Integration tests for the TodoContainer component.
- *
- * Tests the interactions between multiple components and the store:
- * - AddTodoForm component
- * - TodoList component
- * - TodoItem components
- * - TodoStore state management
- *
- * Following the BDD approach with Given-When-Then format.
+ * Integration tests for the TodoContainer component following BDD approach.
  */
 describe('TodoContainer Component - Integration Tests', () => {
-	// Reset the store before each test
+	// Reset the store and clear localStorage before each test for isolation
 	beforeEach(() => {
-		useTodoStore.getState().reset();
+		// Reset Zustand store state
+		useTodoStore.setState(useTodoStore.getInitialState(), true);
+		// Clear localStorage to ensure no leakage between tests
+		if (typeof window !== 'undefined') {
+			window.localStorage.removeItem(STORAGE_KEY);
+		}
+	});
+
+	// Optional: Clean up after each test as well
+	afterEach(() => {
+		if (typeof window !== 'undefined') {
+			window.localStorage.removeItem(STORAGE_KEY);
+		}
 	});
 
 	describe('Initial Rendering', () => {
@@ -112,6 +119,44 @@ describe('TodoContainer Component - Integration Tests', () => {
 			// And: The todo text should have the completed style
 			const todoText = screen.getByText('Toggle Test Todo');
 			expect(todoText).toHaveClass('line-through');
+		});
+	});
+
+	describe('Persistence Integration', () => {
+		it('should load persisted todos when the component remounts', async () => {
+			// First render
+			const { unmount } = render(<TodoContainer />);
+
+			// Add a todo
+			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			fireEvent.change(inputElement, { target: { value: 'Persisted Task' } });
+
+			const addButton = screen.getByRole('button', { name: /add/i });
+			fireEvent.click(addButton);
+
+			// Verify todo is added
+			await waitFor(() => {
+				expect(screen.getByText('Persisted Task')).toBeInTheDocument();
+			});
+			await waitFor(() => {
+				expect(screen.getByText('1 tasks total')).toBeInTheDocument();
+			});
+
+			// Unmount and remount to test persistence
+			unmount();
+			render(<TodoContainer />);
+
+			// Verify todo persists after remount
+			await waitFor(() => {
+				expect(screen.getByText('Persisted Task')).toBeInTheDocument();
+			});
+			await waitFor(() => {
+				expect(screen.getByText('1 tasks total')).toBeInTheDocument();
+			});
+
+			// Input should be empty after remount
+			const inputAfterRemount = screen.getByPlaceholderText(/add a new todo/i) as HTMLInputElement;
+			expect(inputAfterRemount.value).toBe('');
 		});
 	});
 });
