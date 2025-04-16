@@ -10,7 +10,7 @@ import { CreateTodoParams } from '@/types/todoTypes';
  * It provides a simple input field and submit button.
  */
 const meta = {
-	title: 'Components/AddTodoForm',
+	title: 'Todo/AddTodoForm',
 	component: AddTodoForm,
 	parameters: {
 		layout: 'centered',

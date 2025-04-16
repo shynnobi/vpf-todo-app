@@ -7,9 +7,10 @@ This folder contains all the tests for the project, organized by type:
 ### Unit Tests (`/unit`)
 
 - Individual tests for components and functions
-- Extension: `.test.tsx`
+- Extension: `.test.tsx` or `.test.ts`
 - Uses: Vitest + Testing Library
 - Focus: Isolated component behavior
+- Approach: BDD (Behavior-Driven Development) with Given-When-Then format
 
 ### Integration Tests (`/integration`)
 
@@ -17,6 +18,7 @@ This folder contains all the tests for the project, organized by type:
 - Extension: `.integration.test.tsx`
 - Uses: Vitest + Testing Library + MSW (for API mocking)
 - Focus: Complete flows and component interactions
+- Approach: BDD (Behavior-Driven Development) with Given-When-Then format
 - Example cases:
   - Complex forms
   - Navigation flows
@@ -63,6 +65,8 @@ pnpm test:e2e:ui
 - One test per behavior
 - Maximum isolation
 - Use mocks for dependencies
+- Follow the Given-When-Then pattern (BDD approach)
+- Comment each test step with Given/When/Then
 
 ### Integration Tests
 
@@ -70,6 +74,8 @@ pnpm test:e2e:ui
 - Use MSW to mock API calls
 - Focus on user interactions
 - Verify intermediate states
+- Follow the Given-When-Then pattern (BDD approach)
+- Comment each test step with Given/When/Then
 
 ### E2E Tests
 
@@ -92,6 +98,16 @@ tests/
 └── e2e/              # End-to-end tests
     └── specs/        # E2E specifications
 ```
+
+## Behavior-Driven Development (BDD) Approach
+
+All unit and integration tests follow the BDD approach using the Given-When-Then format:
+
+1. **Given**: Initial context setup (preconditions)
+2. **When**: Action being performed
+3. **Then**: Expected outcomes to verify
+
+Each test contains comments explicitly marking these three sections for clarity and consistency.
 
 ## Tools & Dependencies
 
