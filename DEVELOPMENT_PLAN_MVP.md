@@ -43,9 +43,9 @@
 
 **Branch: `feat/app-assembly`**
 
-- [ ] ASMBLY-1: Create a container component (e.g., `TodoContainer`) that integrates `AddTodoForm` and `TodoList`.
-- [ ] ASMBLY-2: Render the container component within `App.tsx`.
-- [ ] ASMBLY-3: Write basic integration tests for the assembled UI.
+- [x] ASMBLY-1: Create a container component (e.g., `TodoContainer`) that integrates `AddTodoForm` and `TodoList`.
+- [x] ASMBLY-2: Render the container component within `App.tsx`.
+- [x] ASMBLY-3: Write basic integration tests for the assembled UI.
 - [ ] ASMBLY-4: Create PR `feat/app-assembly` → `dev`.
 
 **First Usable Version (v0.1.1-core-assembled)**
@@ -135,10 +135,4 @@
 
 - [ ] DOC-1: Update README with usage instructions
 - [ ] DOC-2: Add comprehensive JSDoc comments
-- [ ] DOC-3: Create PR `enhance/documentation` → `dev`
-
-**Production Release (v1.0.0)**
-
-- [ ] PROD-1: Verify all enhancement PRs are merged
-- [ ] PROD-2: All tests pass
-- [ ] PROD-3: Create tag `v1.0.0`
+- [ ] DOC-3: Create PR `
