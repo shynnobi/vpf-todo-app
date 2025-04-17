@@ -9,4 +9,3 @@ alwaysApply: true
 - Meaningful tests (Given-When-Then pattern)
 - Comments only when necessary to clarify complex logic
 - Feature-based architecture rather than technical type
-- ALL code comments must be written in English
