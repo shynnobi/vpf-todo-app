@@ -157,4 +157,47 @@ describe('Todo Store - Behavior', () => {
 			expect(TodoStoreTestHelpers.getTodosCount()).toBe(0);
 		});
 	});
+
+	describe('Delete todos', () => {
+		beforeEach(() => {
+			useTodoStore.getState().reset();
+		});
+
+		it('should delete a todo by id', () => {
+			// Add a test todo
+			const todo = useTodoStore.getState().addTodo({ title: 'Test todo' });
+
+			// Verify it was added
+			expect(useTodoStore.getState().todos.length).toBe(1);
+
+			// Delete the todo
+			const result = useTodoStore.getState().deleteTodo(todo.id);
+
+			// Verify it was deleted
+			expect(useTodoStore.getState().todos.length).toBe(0);
+			expect(result).toEqual(todo);
+		});
+
+		it('should return null when trying to delete a non-existent todo', () => {
+			// Attempt to delete a non-existent todo
+			const result = useTodoStore.getState().deleteTodo('non-existent-id');
+
+			// Verify null is returned
+			expect(result).toBeNull();
+		});
+
+		it('should not change the state when deleting a non-existent todo', () => {
+			// Add a test todo
+			useTodoStore.getState().addTodo({ title: 'Test todo' });
+
+			// Store the current todos
+			const todosBeforeDelete = useTodoStore.getState().todos;
+
+			// Attempt to delete a non-existent todo
+			useTodoStore.getState().deleteTodo('non-existent-id');
+
+			// Verify the todos list is unchanged
+			expect(useTodoStore.getState().todos).toEqual(todosBeforeDelete);
+		});
+	});
 });

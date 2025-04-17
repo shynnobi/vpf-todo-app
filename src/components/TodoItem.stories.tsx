@@ -23,9 +23,14 @@ const InteractiveTodoDecorator: Decorator = (_Story, context) => {
 		(context.args.onToggle as (id: string) => void)(id);
 	};
 
+	// Handler for delete
+	const handleDelete = (id: string) => {
+		(context.args.onDelete as (id: string) => void)(id);
+	};
+
 	return (
 		<ul className="w-80 border rounded-md p-2">
-			<TodoItem todo={interactiveTodo} onToggle={handleToggle} />
+			<TodoItem todo={interactiveTodo} onToggle={handleToggle} onDelete={handleDelete} />
 		</ul>
 	);
 };
@@ -40,6 +45,7 @@ const meta = {
 	// Default args that will be applied to all stories
 	args: {
 		onToggle: fn((id: string) => console.log(`Toggle todo with ID: ${id}`)),
+		onDelete: fn((id: string) => console.log(`Delete todo with ID: ${id}`)),
 	},
 } satisfies Meta<typeof TodoItem>;
 
