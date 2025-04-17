@@ -31,6 +31,12 @@ export default defineConfig({
 		include: ['./tests/{unit,integration}/**/*.{test,spec}.{ts,tsx}'],
 		exclude: ['./tests/e2e/**/*', '.storybook/**/*'],
 		reporters: ['default'],
+		onConsoleLog(log) {
+			if (log.includes('not wrapped in act')) {
+				return false;
+			}
+			return undefined;
+		},
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'json', 'html'],
