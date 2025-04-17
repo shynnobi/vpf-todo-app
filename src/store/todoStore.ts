@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { CreateTodoParams, Todo, TodoState } from '@/types/todoTypes';
+import { CreateTodoParams, Todo, TodoFilter, TodoState } from '@/types/todoTypes';
 
 // Fallback for environments without localStorage
 const inMemoryStorage = {
@@ -18,6 +18,7 @@ export const useTodoStore = create<TodoState>()(
 	persist(
 		(set, get) => ({
 			todos: [],
+			filter: TodoFilter.All,
 
 			addTodo: (params: CreateTodoParams): Todo => {
 				const newTodo: Todo = {
@@ -63,8 +64,15 @@ export const useTodoStore = create<TodoState>()(
 				return todo;
 			},
 
+			setFilter: (filter: TodoFilter): void => {
+				set({ filter });
+			},
+
 			reset: () => {
-				set({ todos: [] });
+				set({
+					todos: [],
+					filter: TodoFilter.All,
+				});
 			},
 		}),
 		{
@@ -74,6 +82,7 @@ export const useTodoStore = create<TodoState>()(
 			),
 			partialize: state => ({
 				todos: state.todos,
+				filter: state.filter,
 			}),
 		}
 	)
