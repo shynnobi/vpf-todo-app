@@ -72,7 +72,7 @@
 
 **Branch: `feat/basic-filtering`**
 
-- [ ] FILT-1: Write tests for "Filter Todos" feature (active/completed)
+- [x] FILT-1: Write tests for "Filter Todos" feature (active/completed)
 - [ ] FILT-2: Implement basic filter controls
 - [ ] FILT-3: Implement store integration for filtering
 - [ ] FILT-4: Create PR `feat/basic-filtering` → `dev`
