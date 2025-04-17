@@ -52,6 +52,11 @@ export interface TodoState {
 	todos: Todo[];
 
 	/**
+	 * Current filter for the todo list
+	 */
+	filter: TodoFilter;
+
+	/**
 	 * Adds a new todo to the store
 	 * @param params Todo creation parameters
 	 * @returns The newly created todo
@@ -71,6 +76,12 @@ export interface TodoState {
 	 * @returns The deleted todo or null if not found
 	 */
 	deleteTodo: (id: string) => Todo | null;
+
+	/**
+	 * Sets the current filter for todo items
+	 * @param filter The filter to apply
+	 */
+	setFilter: (filter: TodoFilter) => void;
 
 	/**
 	 * Resets the store to its initial state (for testing purposes)
@@ -128,4 +139,28 @@ export interface AddTodoFormProps {
 	 * Callback function called when a new todo is submitted
 	 */
 	onAddTodo: (todo: CreateTodoParams) => void;
+}
+
+/**
+ * Props for the TodoFilter component
+ */
+export interface TodoFilterProps {
+	/**
+	 * Current active filter
+	 */
+	currentFilter: TodoFilter;
+
+	/**
+	 * Callback function when filter is changed
+	 */
+	onFilterChange: (filter: TodoFilter) => void;
+
+	/**
+	 * Count of todos for each filter
+	 */
+	counts: {
+		[TodoFilter.All]: number;
+		[TodoFilter.Active]: number;
+		[TodoFilter.Completed]: number;
+	};
 }
