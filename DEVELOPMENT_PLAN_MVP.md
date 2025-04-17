@@ -68,7 +68,7 @@
 - [x] DEL-1: Write tests for "Delete Todo" feature
 - [x] DEL-2: Implement delete button in TodoItem
 - [x] DEL-3: Implement store integration for deleting
-- [ ] DEL-4: Create PR `feat/todo-deletion` → `dev`
+- [x] DEL-4: Create PR `feat/todo-deletion` → `dev`
 
 **Branch: `feat/basic-filtering`**
 
