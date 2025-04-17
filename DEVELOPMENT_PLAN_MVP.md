@@ -32,41 +32,50 @@
 - [x] LIST-1: Write tests for "List Todos" feature
 - [x] LIST-2: Implement minimal TodoList component
 - [x] LIST-3: Implement store integration for listing todos
-- [ ] LIST-4: Create PR `mvp/list-todos-feature` → `dev`
+- [x] LIST-4: Create PR `mvp/list-todos-feature` → `dev`
 
 **Branch: `mvp/complete-todo-feature`**
 
-- [ ] COMP-1: Write tests for "Complete Todo" feature
-- [ ] COMP-2: Implement completion toggle in TodoItem
-- [ ] COMP-3: Implement store integration for toggling completion
-- [ ] COMP-4: Create PR `mvp/complete-todo-feature` → `dev`
+- [x] COMP-1: Write tests for "Complete Todo" feature
+- [x] COMP-2: Implement completion toggle in TodoItem
+- [x] COMP-3: Implement store integration for toggling completion
+- [ ] COMP-4: Create PR `mvp/complete-todo-feature` → `dev` _(Branch not needed, feature implemented earlier)_
 
-**First Usable Version (v0.1.0)**
+**Branch: `feat/app-assembly`**
 
-- [ ] MVP-1: Verify core functionality PRs are merged
-- [ ] MVP-2: All tests pass for core features
-- [ ] MVP-3: Create tag `v0.1.0-core`
+- [x] ASMBLY-1: Create a container component (e.g., `TodoContainer`) that integrates `AddTodoForm` and `TodoList`.
+- [x] ASMBLY-2: Render the container component within `App.tsx`.
+- [x] ASMBLY-3: Write basic integration tests for the assembled UI.
+- [x] ASMBLY-4: Create PR `feat/app-assembly` → `dev`.
+
+**First Usable Version (v0.1.1-core-assembled)**
+
+- [x] MVP-1: Verify core functionality PRs are merged
+- [x] MVP-2: All tests pass for core features
+- [x] MVP-3: Create tag `v0.1.0-core` _(Initial core tag created)_
+- [x] MVP-4: Create tag `v0.1.1-core-assembled`
 
 ## Phase 2: Essential Enhancements
 
 **Branch: `feat/persistence`**
 
-- [ ] PERS-1: Write tests for localStorage persistence
-- [ ] PERS-2: Implement saving/loading from localStorage
-- [ ] PERS-3: Create PR `feat/persistence` → `dev`
+- [x] PERS-1: Write tests for localStorage persistence
+- [x] PERS-2: Implement saving/loading from localStorage
+- [x] PERS-3: Create PR `feat/persistence` → `dev`
 
 **Branch: `feat/todo-deletion`**
 
-- [ ] DEL-1: Write tests for "Delete Todo" feature
-- [ ] DEL-2: Implement delete button in TodoItem
-- [ ] DEL-3: Implement store integration for deleting
-- [ ] DEL-4: Create PR `feat/todo-deletion` → `dev`
+- [x] DEL-1: Write tests for "Delete Todo" feature
+- [x] DEL-2: Implement delete button in TodoItem
+- [x] DEL-3: Implement store integration for deleting
+- [x] DEL-4: Create PR `feat/todo-deletion` → `dev`
 
 **Branch: `feat/basic-filtering`**
 
-- [ ] FILT-1: Write tests for "Filter Todos" feature (active/completed)
-- [ ] FILT-2: Implement basic filter controls
-- [ ] FILT-3: Implement store integration for filtering
+- [x] FILT-1: Write tests for "Filter Todos" feature (active/completed)
+- [x] FILT-2: Implement basic filter controls
+- [x] FILT-3: Implement store integration for filtering
+- [x] FILT-STORY: Create Storybook stories for TodoFilter component
 - [ ] FILT-4: Create PR `feat/basic-filtering` → `dev`
 
 **Enhanced Usable Version (v0.2.0)**
@@ -127,10 +136,4 @@
 
 - [ ] DOC-1: Update README with usage instructions
 - [ ] DOC-2: Add comprehensive JSDoc comments
-- [ ] DOC-3: Create PR `enhance/documentation` → `dev`
-
-**Production Release (v1.0.0)**
-
-- [ ] PROD-1: Verify all enhancement PRs are merged
-- [ ] PROD-2: All tests pass
-- [ ] PROD-3: Create tag `v1.0.0`
+- [ ] DOC-3: Create PR `

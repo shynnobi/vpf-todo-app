@@ -1,41 +1,56 @@
+import { useMemo } from 'react';
+
 import { AddTodoForm } from '@/components/AddTodoForm';
+import { TodoFilter } from '@/components/TodoFilter';
 import { TodoList } from '@/components/TodoList';
 import { useTodoStore } from '@/store/todoStore';
-import { CreateTodoParams } from '@/types/todoTypes';
+import { TodoFilter as FilterType } from '@/types/todoTypes';
 
 /**
- * Main container component for the Todo application
- * Integrates the TodoStore with UI components
+ * Container component that orchestrates the Todo application UI.
  */
 export function TodoContainer() {
-	const { addTodo, toggleTodo, todos, todosCount } = useTodoStore();
+	// Use separate atomic selectors instead of object selector to prevent unnecessary re-renders
+	const todos = useTodoStore(state => state.todos);
+	const filter = useTodoStore(state => state.filter);
 
-	const handleAddTodo = (todoParams: CreateTodoParams) => {
-		addTodo(todoParams);
-	};
+	// Actions selectors (these are stable)
+	const addTodo = useTodoStore(state => state.addTodo);
+	const toggleTodo = useTodoStore(state => state.toggleTodo);
+	const deleteTodo = useTodoStore(state => state.deleteTodo);
+	const setFilter = useTodoStore(state => state.setFilter);
 
-	const handleToggleTodo = (id: string) => {
-		toggleTodo(id);
-	};
+	const filteredTodos = useMemo(() => {
+		switch (filter) {
+			case FilterType.Active:
+				return todos.filter(todo => !todo.completed);
+			case FilterType.Completed:
+				return todos.filter(todo => todo.completed);
+			case FilterType.All:
+			default:
+				return todos;
+		}
+	}, [todos, filter]);
+
+	const counts = useMemo(
+		() => ({
+			[FilterType.All]: todos.length,
+			[FilterType.Active]: todos.filter(todo => !todo.completed).length,
+			[FilterType.Completed]: todos.filter(todo => todo.completed).length,
+		}),
+		[todos]
+	);
 
 	return (
-		<div className="max-w-md mx-auto p-6">
-			<header className="mb-6 text-center">
-				<h1 className="text-2xl font-bold mb-2">Todo App</h1>
-				<p className="text-sm text-gray-500">
-					{todosCount} {todosCount === 1 ? 'task' : 'tasks'} total
-				</p>
-			</header>
-
-			<AddTodoForm onAddTodo={handleAddTodo} />
-
-			<div className="border rounded-md p-4 mt-4">
-				{todos.length === 0 ? (
-					<p className="text-center text-gray-500">No todos yet. Add one above!</p>
-				) : (
-					<TodoList todos={todos} onToggleTodo={handleToggleTodo} />
-				)}
-			</div>
+		<div className="max-w-xl mx-auto p-4">
+			<h1 className="text-2xl font-bold text-center mb-6">Todo App</h1>
+			<AddTodoForm onAddTodo={addTodo} />
+			<TodoFilter currentFilter={filter} onFilterChange={setFilter} counts={counts} />
+			<TodoList todos={filteredTodos} onToggleTodo={toggleTodo} onDeleteTodo={deleteTodo} />
+			<p className="text-center text-sm text-gray-500 mt-4">
+				{counts[FilterType.All]} tasks total
+				{filter !== FilterType.All && ` (${filteredTodos.length} shown)`}
+			</p>
 		</div>
 	);
 }
