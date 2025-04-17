@@ -76,13 +76,13 @@
 - [x] FILT-2: Implement basic filter controls
 - [x] FILT-3: Implement store integration for filtering
 - [x] FILT-STORY: Create Storybook stories for TodoFilter component
-- [ ] FILT-4: Create PR `feat/basic-filtering` → `dev`
+- [x] FILT-4: Create PR `feat/basic-filtering` → `dev`
 
 **Enhanced Usable Version (v0.2.0)**
 
-- [ ] ENH-1: Verify enhancement PRs are merged
-- [ ] ENH-2: All tests pass
-- [ ] ENH-3: Create tag `v0.2.0`
+- [x] ENH-1: Verify enhancement PRs are merged
+- [x] ENH-2: All tests pass
+- [x] ENH-3: Create tag `v0.2.0`
 
 ## Phase 3: Advanced Features
 
