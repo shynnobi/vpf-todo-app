@@ -73,8 +73,9 @@
 **Branch: `feat/basic-filtering`**
 
 - [x] FILT-1: Write tests for "Filter Todos" feature (active/completed)
-- [ ] FILT-2: Implement basic filter controls
-- [ ] FILT-3: Implement store integration for filtering
+- [x] FILT-2: Implement basic filter controls
+- [x] FILT-3: Implement store integration for filtering
+- [x] FILT-STORY: Create Storybook stories for TodoFilter component
 - [ ] FILT-4: Create PR `feat/basic-filtering` → `dev`
 
 **Enhanced Usable Version (v0.2.0)**
