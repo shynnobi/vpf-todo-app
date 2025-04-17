@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { CreateTodoParams } from '@/types/todoTypes';
-
-interface AddTodoFormProps {
-	/**
-	 * Callback function called when a new todo is submitted
-	 */
-	onAddTodo: (todo: CreateTodoParams) => void;
-}
+import { AddTodoFormProps } from '@/types/todoTypes';
 
 /**
  * A form component for adding new todos
