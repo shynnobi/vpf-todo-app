@@ -13,6 +13,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [0.2.0] - 2024-07-29
+
+### Added
+
+- Todo list persistence using LocalStorage (`feat/persistence`).
+- Ability to delete individual todo items (`feat/todo-deletion`).
+- Basic filtering functionality (All, Active, Completed) (`feat/basic-filtering`).
+- Storybook stories for the `TodoFilter` component.
+
+### Changed
+
+- Updated dependencies based on Dependabot alerts (multiple updates).
+- Refactored unit tests (`TodoContainer`, `todoStore`) for improved maintainability.
+- Refactored component prop interfaces and type definitions for better organization.
+- Simplified `todoStore` implementation.
+
+### Internal
+
+- Updated test configurations and integration tests to accommodate new features.
+
 ## [0.1.1-core-assembled] - 2025-04-16
 
 ### Added
