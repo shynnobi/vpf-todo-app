@@ -1,24 +1,4 @@
-import { Todo } from '@/types/todoTypes';
-
-/**
- * Props for the TodoItem component
- */
-interface TodoItemProps {
-	/**
-	 * The todo to display
-	 */
-	todo: Todo;
-
-	/**
-	 * Callback function when todo completion is toggled
-	 */
-	onToggle: (id: string) => void;
-
-	/**
-	 * Callback function when todo is deleted
-	 */
-	onDelete: (id: string) => void;
-}
+import { TodoItemProps } from '@/types/todoTypes';
 
 /**
  * A component that renders a single todo item with checkbox

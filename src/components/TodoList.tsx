@@ -1,25 +1,5 @@
 import { TodoItem } from '@/components/TodoItem';
-import { Todo } from '@/types/todoTypes';
-
-/**
- * Props for the TodoList component
- */
-interface TodoListProps {
-	/**
-	 * Array of todos to display
-	 */
-	todos: Todo[];
-
-	/**
-	 * Callback function when a todo's completion is toggled
-	 */
-	onToggleTodo: (id: string) => void;
-
-	/**
-	 * Callback function when a todo is deleted
-	 */
-	onDeleteTodo: (id: string) => void;
-}
+import { TodoListProps } from '@/types/todoTypes';
 
 /**
  * A component that renders a list of todo items
