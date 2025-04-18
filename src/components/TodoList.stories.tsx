@@ -44,7 +44,7 @@ const InteractiveTodoListDecorator: Decorator = (_Story, context) => {
 };
 
 const meta: Meta<typeof TodoList> = {
-	title: 'Components/TodoList',
+	title: 'Todo/TodoList',
 	component: TodoList,
 	tags: ['autodocs'],
 	argTypes: {
