@@ -26,6 +26,11 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 		setIsEditing(false);
 	};
 
+	const handleCancel = () => {
+		setIsEditing(false);
+		setEditedTitle(todo.title);
+	};
+
 	return (
 		<li
 			className="py-2 flex items-center gap-2 border-b border-gray-100 last:border-0"
@@ -73,6 +78,24 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 								<path
 									fillRule="evenodd"
 									d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+									clipRule="evenodd"
+								/>
+							</svg>
+						</button>
+						<button
+							onClick={handleCancel}
+							className="text-gray-500 hover:text-gray-700 focus:outline-none"
+							aria-label="Cancel edit"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								className="h-5 w-5"
+								viewBox="0 0 20 20"
+								fill="currentColor"
+							>
+								<path
+									fillRule="evenodd"
+									d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
 									clipRule="evenodd"
 								/>
 							</svg>
