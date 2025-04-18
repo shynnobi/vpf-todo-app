@@ -7,58 +7,79 @@ import { TodoList } from './TodoList';
 
 import { Todo } from '@/types/todoTypes';
 
-// Interactive decorator that manages todos state
+// Decorator to manage state for interactive TodoList stories
 const InteractiveTodoListDecorator: Decorator = (_Story, context) => {
 	const initialTodos = [...(context.args.todos as Todo[])];
 	const [todos, setTodos] = useState(initialTodos);
 
-	// Handler that updates local state
 	const handleToggleTodo = (id: string) => {
-		// Update todos state
 		setTodos(prevTodos =>
 			prevTodos.map(todo => (todo.id === id ? { ...todo, completed: !todo.completed } : todo))
 		);
 
-		// Call the original callback function for logging
 		(context.args.onToggleTodo as ReturnType<typeof fn>)(id);
 	};
 
-	// Handler that deletes a todo
 	const handleDeleteTodo = (id: string) => {
-		// Update todos state
 		setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
 
-		// Call the original callback function for logging
 		(context.args.onDeleteTodo as ReturnType<typeof fn>)(id);
+	};
+
+	const handleSaveTodo = (id: string, updates: Partial<Omit<Todo, 'id'>>) => {
+		(context.args.onSaveTodo as ReturnType<typeof fn>)(id, updates);
+		// Note: Updating local state for saves is not implemented in this decorator
 	};
 
 	return (
 		<div className="w-80 border rounded-md p-4">
-			<TodoList todos={todos} onToggleTodo={handleToggleTodo} onDeleteTodo={handleDeleteTodo} />
+			<TodoList
+				todos={todos}
+				onToggleTodo={handleToggleTodo}
+				onDeleteTodo={handleDeleteTodo}
+				onSaveTodo={handleSaveTodo}
+			/>
 		</div>
 	);
 };
 
-const meta = {
+const meta: Meta<typeof TodoList> = {
 	title: 'Todo/TodoList',
 	component: TodoList,
-	parameters: {
-		layout: 'centered',
-	},
 	tags: ['autodocs'],
-	// Default args that will be applied to all stories
-	args: {
-		onToggleTodo: fn((id: string) => console.log(`Toggle todo with ID: ${id}`)),
-		onDeleteTodo: fn((id: string) => console.log(`Delete todo with ID: ${id}`)),
+	argTypes: {
+		todos: { control: 'object' },
+		onToggleTodo: { action: 'toggled' },
+		onDeleteTodo: { action: 'deleted' },
+		onSaveTodo: { action: 'saved' },
 	},
-} satisfies Meta<typeof TodoList>;
+	args: {
+		onToggleTodo: fn(),
+		onDeleteTodo: fn(),
+		onSaveTodo: fn(),
+	},
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const mockTodos: Todo[] = [
+	{ id: '1', title: 'Learn Storybook', completed: false },
+	{ id: '2', title: 'Write stories', completed: true },
+	{ id: '3', title: 'Test components', completed: false },
+];
+
+export const Default: Story = {
+	args: {
+		todos: mockTodos,
+		// onSaveTodo uses default arg
+	},
+};
+
 export const Empty: Story = {
 	args: {
 		todos: [],
+		// onSaveTodo uses default arg
 	},
 };
 
@@ -69,8 +90,9 @@ export const WithTodos: Story = {
 			{ id: '2', title: 'Build a todo app', completed: true },
 			{ id: '3', title: 'Master TypeScript', completed: false },
 		],
+		// onSaveTodo uses default arg
 	},
-	decorators: [InteractiveTodoListDecorator],
+	decorators: [InteractiveTodoListDecorator], // Apply decorator for interactivity
 };
 
 export const ManyTodos: Story = {
@@ -83,6 +105,7 @@ export const ManyTodos: Story = {
 			{ id: '5', title: 'Fix bugs', completed: true },
 			{ id: '6', title: 'Deploy application', completed: false },
 		],
+		// onSaveTodo uses default arg
 	},
-	decorators: [InteractiveTodoListDecorator],
+	decorators: [InteractiveTodoListDecorator], // Apply decorator for interactivity
 };
