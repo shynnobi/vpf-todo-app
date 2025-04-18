@@ -94,8 +94,8 @@
 - [x] DET-4: Write tests for enhanced Todo editing UI/interaction
 - [x] DET-5: Implement detailed Todo edit form component
 - [x] DET-6: Update TodoItem to display additional details & integrate edit form
-- [ ] DET-STORY: Create Storybook stories for updated TodoItem and new Edit Form
-- [ ] DET-7: Create PR `feat/todo-details` → `dev`
+- [x] DET-STORY: Create Storybook stories for updated TodoItem and new Edit Form
+- [x] DET-7: Create PR `feat/todo-details` → `dev`
 
 **Branch: `feat/prioritization`**
 
