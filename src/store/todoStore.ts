@@ -25,6 +25,8 @@ export const useTodoStore = create<TodoState>()(
 					id: uuidv4(),
 					title: params.title,
 					completed: params.completed ?? false,
+					description: params.description,
+					dueDate: params.dueDate,
 				};
 
 				set(state => ({
@@ -42,6 +44,22 @@ export const useTodoStore = create<TodoState>()(
 				}
 
 				const updatedTodo = { ...todo, completed: !todo.completed };
+
+				set(state => ({
+					todos: state.todos.map(t => (t.id === id ? updatedTodo : t)),
+				}));
+
+				return updatedTodo;
+			},
+
+			updateTodo: (id: string, updates: Partial<Omit<Todo, 'id'>>): Todo | null => {
+				const todo = get().todos.find(t => t.id === id);
+
+				if (!todo) {
+					return null;
+				}
+
+				const updatedTodo: Todo = { ...todo, ...updates };
 
 				set(state => ({
 					todos: state.todos.map(t => (t.id === id ? updatedTodo : t)),
