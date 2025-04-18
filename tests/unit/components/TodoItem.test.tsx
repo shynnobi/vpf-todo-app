@@ -131,4 +131,32 @@ describe('TodoItem Component', () => {
 			expect(deleteButton).toHaveAttribute('aria-label', 'Delete todo: Learn React');
 		});
 	});
+
+	// Add tests for editing mode
+	describe('Editing Mode', () => {
+		it('should switch to edit mode when the edit button is clicked', () => {
+			// Given: A todo item rendered
+			render(<TodoItem todo={mockIncompleteTodo} onToggle={() => {}} onDelete={() => {}} />);
+			const titleDisplay = screen.getByText(mockIncompleteTodo.title); // The normal title display
+
+			// Expect the input field not to be present initially
+			expect(screen.queryByRole('textbox', { name: /edit title/i })).not.toBeInTheDocument();
+
+			// When: The edit button is clicked
+			const editButton = screen.getByRole('button', {
+				name: `Edit todo: ${mockIncompleteTodo.title}`,
+			});
+			fireEvent.click(editButton);
+
+			// Then: The normal title display should disappear (or be hidden)
+			expect(titleDisplay).not.toBeInTheDocument(); // Or check for visibility/class change
+
+			// And: An input field for editing the title should appear
+			const titleInput = screen.getByRole('textbox', { name: /edit title/i });
+			expect(titleInput).toBeInTheDocument();
+			expect(titleInput).toHaveValue(mockIncompleteTodo.title);
+
+			// Later, we'll add checks for description/dueDate fields and save/cancel buttons
+		});
+	});
 });
