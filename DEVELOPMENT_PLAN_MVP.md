@@ -88,11 +88,14 @@
 
 **Branch: `feat/todo-details`**
 
-- [ ] DET-1: Extend Todo model with description and due date
-- [ ] DET-2: Write tests for enhanced Todo editing
-- [ ] DET-3: Implement detailed Todo edit form
-- [ ] DET-4: Update TodoItem to display additional details
-- [ ] DET-5: Create PR `feat/todo-details` → `dev`
+- [x] DET-1: Write/Adapt store tests for description and due date handling
+- [x] DET-2: Extend Todo model with description and due date
+- [x] DET-3: Adapt store functions for new fields (make DET-1 pass)
+- [x] DET-4: Write tests for enhanced Todo editing UI/interaction
+- [x] DET-5: Implement detailed Todo edit form component
+- [x] DET-6: Update TodoItem to display additional details & integrate edit form
+- [ ] DET-STORY: Create Storybook stories for updated TodoItem and new Edit Form
+- [ ] DET-7: Create PR `feat/todo-details` → `dev`
 
 **Branch: `feat/prioritization`**
 
