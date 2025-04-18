@@ -4,7 +4,7 @@ import { TodoListProps } from '@/types/todoTypes';
 /**
  * A component that renders a list of todo items
  */
-export function TodoList({ todos, onToggleTodo, onDeleteTodo }: TodoListProps) {
+export function TodoList({ todos, onToggleTodo, onDeleteTodo, onSaveTodo }: TodoListProps) {
 	if (todos.length === 0) {
 		return <div className="text-center py-4 text-gray-500">No todos to display</div>;
 	}
@@ -12,7 +12,13 @@ export function TodoList({ todos, onToggleTodo, onDeleteTodo }: TodoListProps) {
 	return (
 		<ul className="mt-4" aria-label="Todo list" role="list">
 			{todos.map(todo => (
-				<TodoItem key={todo.id} todo={todo} onToggle={onToggleTodo} onDelete={onDeleteTodo} />
+				<TodoItem
+					key={todo.id}
+					todo={todo}
+					onToggle={onToggleTodo}
+					onDelete={onDeleteTodo}
+					onSave={onSaveTodo}
+				/>
 			))}
 		</ul>
 	);
