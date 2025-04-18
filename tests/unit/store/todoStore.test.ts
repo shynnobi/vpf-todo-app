@@ -89,6 +89,28 @@ describe('Todo Store - Behavior', () => {
 			// Then: Count should update to 2
 			expect(TodoStoreTestHelpers.getTodosCount()).toBe(2);
 		});
+
+		it('should allow adding a todo with description and due date', () => {
+			// Given: The store is empty
+			expect(TodoStoreTestHelpers.getTodos()).toEqual([]);
+			const date = new Date().toISOString();
+
+			// When: A new todo is added with description and due date
+			const newTodo = useTodoStore.getState().addTodo({
+				title: 'Detailed Task',
+				description: 'This is a description',
+				dueDate: date,
+			});
+
+			// Then: It should appear with the new fields
+			const todos = TodoStoreTestHelpers.getTodos();
+			expect(todos).toHaveLength(1);
+			expect(todos[0].title).toBe('Detailed Task');
+			expect(todos[0].description).toBe('This is a description');
+			expect(todos[0].dueDate).toBe(date);
+			expect(todos[0].completed).toBe(false); // Assuming default completion is false
+			expect(todos[0]).toEqual(newTodo);
+		});
 	});
 
 	describe('Toggling Todo Status', () => {
@@ -136,6 +158,43 @@ describe('Todo Store - Behavior', () => {
 			expect(TodoStoreTestHelpers.getTodos()).toEqual(todosBefore);
 			expect(TodoStoreTestHelpers.getTodosCount()).toBe(countBefore);
 		});
+	});
+
+	// New Test Suite for Updating Todos
+	describe('Updating Todos', () => {
+		let initialTodo: Todo;
+
+		beforeEach(() => {
+			TodoStoreTestHelpers.resetStore();
+			initialTodo = TodoStoreTestHelpers.addTodo('Task to update');
+			expect(TodoStoreTestHelpers.getTodos()).toHaveLength(1);
+		});
+
+		it('should allow updating the description and due date of an existing todo', () => {
+			// Given: An existing todo
+			const todoId = initialTodo.id;
+			const newDescription = 'Updated description';
+			const newDueDate = new Date(Date.now() + 86400000).toISOString(); // Tomorrow
+
+			// When: Updating the todo's details
+			const updatedTodo = useTodoStore.getState().updateTodo(todoId, {
+				description: newDescription,
+				dueDate: newDueDate,
+			});
+
+			// Then: The todo in the store should reflect the changes
+			const todos = TodoStoreTestHelpers.getTodos();
+			expect(todos).toHaveLength(1);
+			const todoInStore = todos.find(t => t.id === todoId);
+			expect(todoInStore).toBeDefined();
+			expect(todoInStore?.title).toBe(initialTodo.title); // Title shouldn't change unless specified
+			expect(todoInStore?.description).toBe(newDescription);
+			expect(todoInStore?.dueDate).toBe(newDueDate);
+			expect(todoInStore?.completed).toBe(initialTodo.completed); // Completion shouldn't change
+			expect(updatedTodo).toEqual(todoInStore); // The action should return the updated todo
+		});
+
+		// Add more tests here later for updating title, completion status via updateTodo if needed
 	});
 
 	describe('Resetting the Store', () => {
