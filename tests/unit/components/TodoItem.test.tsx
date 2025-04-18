@@ -257,15 +257,26 @@ describe('TodoItem Component', () => {
 			const newTitle = 'Learn React Hooks';
 			fireEvent.change(titleInput, { target: { value: newTitle } });
 
+			// And: The description is changed
+			const descriptionInput = screen.getByRole('textbox', { name: /edit description/i });
+			const newDescription = 'Focus on custom hooks';
+			fireEvent.change(descriptionInput, { target: { value: newDescription } });
+
+			// And: The due date is changed
+			const dueDateInput = screen.getByLabelText(/edit due date/i);
+			const newDueDate = '2024-12-31'; // Example date
+			fireEvent.change(dueDateInput, { target: { value: newDueDate } });
+
 			// And: The save button is clicked
 			const saveButton = screen.getByRole('button', { name: /save changes/i });
 			fireEvent.click(saveButton);
 
-			// Then: onSave should be called with the todo id and the updated title
+			// Then: onSave should be called with the todo id and all updated fields
 			expect(mockSave).toHaveBeenCalledTimes(1);
 			expect(mockSave).toHaveBeenCalledWith(mockIncompleteTodo.id, {
 				title: newTitle,
-				// We'll add description and dueDate checks later
+				description: newDescription,
+				dueDate: newDueDate,
 			});
 
 			// And: The component should exit edit mode (input disappears)
@@ -295,7 +306,13 @@ describe('TodoItem Component', () => {
 			const titleInput = screen.getByRole('textbox', { name: /edit title/i });
 			fireEvent.change(titleInput, { target: { value: 'Temporary Change' } });
 
-			// And: The cancel button is clicked (it doesn't exist yet)
+			// And: Other fields are also changed (assume they exist for the test)
+			const descriptionInput = screen.getByRole('textbox', { name: /edit description/i });
+			fireEvent.change(descriptionInput, { target: { value: 'Temp Desc' } });
+			const dueDateInput = screen.getByLabelText(/edit due date/i);
+			fireEvent.change(dueDateInput, { target: { value: '2025-01-01' } });
+
+			// And: The cancel button is clicked
 			const cancelButton = screen.getByRole('button', { name: /cancel edit/i });
 			fireEvent.click(cancelButton);
 
@@ -304,6 +321,7 @@ describe('TodoItem Component', () => {
 
 			// And: The original title should be displayed
 			expect(screen.getByText(mockIncompleteTodo.title)).toBeInTheDocument();
+			// We also expect original description/date to be implicitly restored, but cannot easily test display here.
 
 			// And: onSave should not have been called
 			expect(mockSave).not.toHaveBeenCalled();
