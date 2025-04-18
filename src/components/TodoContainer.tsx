@@ -19,6 +19,7 @@ export function TodoContainer() {
 	const toggleTodo = useTodoStore(state => state.toggleTodo);
 	const deleteTodo = useTodoStore(state => state.deleteTodo);
 	const setFilter = useTodoStore(state => state.setFilter);
+	const updateTodo = useTodoStore(state => state.updateTodo);
 
 	const filteredTodos = useMemo(() => {
 		switch (filter) {
@@ -46,7 +47,12 @@ export function TodoContainer() {
 			<h1 className="text-2xl font-bold text-center mb-6">Todo App</h1>
 			<AddTodoForm onAddTodo={addTodo} />
 			<TodoFilter currentFilter={filter} onFilterChange={setFilter} counts={counts} />
-			<TodoList todos={filteredTodos} onToggleTodo={toggleTodo} onDeleteTodo={deleteTodo} />
+			<TodoList
+				todos={filteredTodos}
+				onToggleTodo={toggleTodo}
+				onDeleteTodo={deleteTodo}
+				onSaveTodo={updateTodo}
+			/>
 			<p className="text-center text-sm text-gray-500 mt-4">
 				{counts[FilterType.All]} tasks total
 				{filter !== FilterType.All && ` (${filteredTodos.length} shown)`}

@@ -36,12 +36,14 @@ export interface TodoItemProps {
 	todo: Todo;
 	onToggle: (id: string) => void;
 	onDelete: (id: string) => void;
+	onSave: (id: string, updates: Partial<Omit<Todo, 'id'>>) => void;
 }
 
 export interface TodoListProps {
 	todos: Todo[];
 	onToggleTodo: (id: string) => void;
 	onDeleteTodo: (id: string) => void;
+	onSaveTodo: (id: string, updates: Partial<Omit<Todo, 'id'>>) => void;
 }
 
 export interface AddTodoFormProps {
