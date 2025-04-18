@@ -272,5 +272,41 @@ describe('TodoItem Component', () => {
 			expect(screen.queryByRole('textbox', { name: /edit title/i })).not.toBeInTheDocument();
 			// We cannot assert the new title is displayed here, as the prop `todo` hasn't changed in this unit test
 		});
+
+		it('should cancel editing and revert changes when cancel button is clicked', () => {
+			// Given: A mock save function and the component in edit mode with changes made
+			const mockSave = vi.fn();
+			render(
+				<TodoItem
+					todo={mockIncompleteTodo}
+					onToggle={() => {}}
+					onDelete={() => {}}
+					onSave={mockSave}
+				/>
+			);
+
+			// When: The component is put into edit mode
+			const editButton = screen.getByRole('button', {
+				name: `Edit todo: ${mockIncompleteTodo.title}`,
+			});
+			fireEvent.click(editButton);
+
+			// And: The input value is changed
+			const titleInput = screen.getByRole('textbox', { name: /edit title/i });
+			fireEvent.change(titleInput, { target: { value: 'Temporary Change' } });
+
+			// And: The cancel button is clicked (it doesn't exist yet)
+			const cancelButton = screen.getByRole('button', { name: /cancel edit/i });
+			fireEvent.click(cancelButton);
+
+			// Then: The component should exit edit mode
+			expect(screen.queryByRole('textbox', { name: /edit title/i })).not.toBeInTheDocument();
+
+			// And: The original title should be displayed
+			expect(screen.getByText(mockIncompleteTodo.title)).toBeInTheDocument();
+
+			// And: onSave should not have been called
+			expect(mockSave).not.toHaveBeenCalled();
+		});
 	});
 });
