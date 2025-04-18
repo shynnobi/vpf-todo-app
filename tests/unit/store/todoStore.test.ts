@@ -165,7 +165,6 @@ describe('Todo Store - Behavior', () => {
 		let initialTodo: Todo;
 
 		beforeEach(() => {
-			// Start clean and add a basic todo
 			TodoStoreTestHelpers.resetStore();
 			initialTodo = TodoStoreTestHelpers.addTodo('Task to update');
 			expect(TodoStoreTestHelpers.getTodos()).toHaveLength(1);

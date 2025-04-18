@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 import { TodoItemProps } from '@/types/todoTypes';
 
 /**
  * A component that renders a single todo item with checkbox, edit and delete buttons.
  */
-export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
+export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 	const [isEditing, setIsEditing] = useState(false);
+	const [editedTitle, setEditedTitle] = useState(todo.title);
 
 	const handleToggle = () => {
 		onToggle(todo.id);
@@ -14,6 +15,15 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
 
 	const handleDelete = () => {
 		onDelete(todo.id);
+	};
+
+	const handleEdit = () => {
+		setIsEditing(true);
+	};
+
+	const handleSave = () => {
+		onSave(todo.id, { title: editedTitle });
+		setIsEditing(false);
 	};
 
 	return (
@@ -32,7 +42,8 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
 			{isEditing ? (
 				<input
 					type="text"
-					defaultValue={todo.title}
+					value={editedTitle}
+					onChange={(e: ChangeEvent<HTMLInputElement>) => setEditedTitle(e.target.value)}
 					aria-label="Edit title"
 					className="flex-1 text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
 					autoFocus
@@ -46,9 +57,30 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
 				</span>
 			)}
 			<div className="flex items-center gap-2">
-				{!isEditing && (
+				{isEditing ? (
+					<>
+						<button
+							onClick={handleSave}
+							className="text-green-500 hover:text-green-700 focus:outline-none"
+							aria-label="Save changes"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								className="h-5 w-5"
+								viewBox="0 0 20 20"
+								fill="currentColor"
+							>
+								<path
+									fillRule="evenodd"
+									d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+									clipRule="evenodd"
+								/>
+							</svg>
+						</button>
+					</>
+				) : (
 					<button
-						onClick={() => setIsEditing(true)}
+						onClick={handleEdit}
 						className="text-blue-500 hover:text-blue-700 focus:outline-none"
 						aria-label={`Edit todo: ${todo.title}`}
 					>
