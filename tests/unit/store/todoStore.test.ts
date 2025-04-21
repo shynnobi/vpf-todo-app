@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { useTodoStore } from '@/store/todoStore';
-import { Todo, TodoFilter } from '@/types/todoTypes';
+import { CreateTodoParams, PriorityLevel, Todo, TodoFilter } from '@/types/todoTypes';
 
 // Define the storage key for potential manual cleanup if needed
 const STORAGE_KEY = 'todo-storage';
@@ -160,7 +160,6 @@ describe('Todo Store - Behavior', () => {
 		});
 	});
 
-	// New Test Suite for Updating Todos
 	describe('Updating Todos', () => {
 		let initialTodo: Todo;
 
@@ -195,6 +194,81 @@ describe('Todo Store - Behavior', () => {
 		});
 
 		// Add more tests here later for updating title, completion status via updateTodo if needed
+	});
+
+	describe('Prioritizing Todos', () => {
+		beforeEach(() => {
+			TodoStoreTestHelpers.cleanupStorage();
+			TodoStoreTestHelpers.resetStore();
+		});
+
+		it('should add a new todo with default priority (medium) if not specified', () => {
+			// Given: Store is empty
+			expect(TodoStoreTestHelpers.getTodosCount()).toBe(0);
+
+			// When: Adding a todo without specifying priority
+			const newTodo = useTodoStore.getState().addTodo({ title: 'Default Priority Task' });
+
+			// Then: The todo should have priority 'medium'
+			expect(newTodo).toBeDefined();
+			expect(newTodo.priority).toBe<PriorityLevel>('medium');
+			const todos = TodoStoreTestHelpers.getTodos();
+			expect(todos).toHaveLength(1);
+			expect(todos[0].priority).toBe<PriorityLevel>('medium');
+		});
+
+		it('should add a new todo with the specified priority', () => {
+			// Given: Store is empty
+			expect(TodoStoreTestHelpers.getTodosCount()).toBe(0);
+
+			// When: Adding todos with specific priorities
+			const lowPriorityParams: CreateTodoParams = { title: 'Low Prio Task', priority: 'low' };
+			const highPriorityParams: CreateTodoParams = { title: 'High Prio Task', priority: 'high' };
+			const lowTodo = useTodoStore.getState().addTodo(lowPriorityParams);
+			const highTodo = useTodoStore.getState().addTodo(highPriorityParams);
+
+			// Then: The todos should have the correct priorities stored
+			expect(lowTodo).toBeDefined();
+			expect(highTodo).toBeDefined();
+			expect(lowTodo.priority).toBe<PriorityLevel>('low');
+			expect(highTodo.priority).toBe<PriorityLevel>('high');
+
+			const todos = TodoStoreTestHelpers.getTodos();
+			expect(todos).toHaveLength(2);
+			expect(todos.find(t => t.id === lowTodo.id)?.priority).toBe('low');
+			expect(todos.find(t => t.id === highTodo.id)?.priority).toBe('high');
+		});
+
+		it('should allow updating the priority of an existing todo', () => {
+			// Given: An existing todo (assume default medium priority)
+			const initialTodo = useTodoStore.getState().addTodo({ title: 'Task to prioritize' });
+			expect(initialTodo.priority).toBe('medium'); // Assumption based on first test
+
+			// When: Updating the priority to 'high'
+			const updatedTodo = useTodoStore.getState().updateTodo(initialTodo.id, { priority: 'high' });
+
+			// Then: The todo should reflect the new priority
+			expect(updatedTodo).toBeDefined();
+			expect(updatedTodo?.priority).toBe<PriorityLevel>('high');
+			const todos = TodoStoreTestHelpers.getTodos();
+			expect(todos.find(t => t.id === initialTodo.id)?.priority).toBe('high');
+		});
+
+		it('should provide todos sorted by priority (high > medium > low)', () => {
+			// Given: Todos with different priorities added in a mixed order
+			useTodoStore.getState().addTodo({ title: 'Medium Task 1', priority: 'medium' });
+			useTodoStore.getState().addTodo({ title: 'High Task 1', priority: 'high' });
+			useTodoStore.getState().addTodo({ title: 'Low Task 1', priority: 'low' });
+			useTodoStore.getState().addTodo({ title: 'High Task 2', priority: 'high' });
+
+			// When: Getting the sorted list from the store (hypothetical getter)
+			const sortedTodos = useTodoStore.getState().getSortedTodosByPriority();
+
+			// Then: The getter should return todos sorted by high > medium > low
+			expect(sortedTodos).toBeDefined();
+			const sortedTitles = sortedTodos.map((t: Todo) => t.title);
+			expect(sortedTitles).toEqual(['High Task 1', 'High Task 2', 'Medium Task 1', 'Low Task 1']);
+		});
 	});
 
 	describe('Resetting the Store', () => {
