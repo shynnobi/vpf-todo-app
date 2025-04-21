@@ -4,12 +4,21 @@ import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { EditTodoForm } from './EditTodoForm';
 
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { PriorityLevel, Todo, TodoItemProps } from '@/types/todoTypes';
 
-const priorityVariantMap: Record<PriorityLevel, 'destructive' | 'outline' | 'secondary'> = {
-	high: 'destructive',
-	medium: 'outline',
-	low: 'secondary',
+// Helper function to get badge classes based on priority
+const getPriorityBadgeClasses = (priority: PriorityLevel): string => {
+	switch (priority) {
+		case 'high':
+			return 'border-transparent bg-red-100 text-red-700 hover:bg-red-100/80'; // Subtle red
+		case 'medium':
+			return 'border-transparent bg-yellow-100 text-yellow-700 hover:bg-yellow-100/80'; // Subtle yellow
+		case 'low':
+			return 'border-transparent bg-blue-100 text-blue-700 hover:bg-blue-100/80'; // Subtle blue
+		default:
+			return 'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80'; // Default like secondary
+	}
 };
 
 /**
@@ -42,7 +51,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 
 	return (
 		<li
-			className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0"
+			className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0 hover:bg-muted/50 transition-colors duration-150"
 			aria-labelledby={`todo-title-${todo.id}`}
 			role="listitem"
 		>
@@ -50,7 +59,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 				<EditTodoForm initialData={todo} onSave={handleSave} onCancel={handleCancel} />
 			) : (
 				// Display mode
-				<div className="flex items-center gap-2 w-full">
+				<div className="flex items-center gap-2 w-full px-2">
 					<input
 						type="checkbox"
 						checked={todo.completed}
@@ -58,11 +67,11 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 						className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-2 focus:ring-primary"
 						aria-labelledby={`todo-title-${todo.id}`}
 					/>
-					<div className="flex-1 flex flex-col text-sm">
+					<div className="flex-1 flex flex-col text-sm py-1">
 						<div className="flex items-center gap-2">
-							{' '}
-							{/* Wrapper for title and badge */}
-							<Badge variant={priorityVariantMap[todo.priority]} className="px-1.5 py-0.5 text-xs">
+							<Badge
+								className={`px-1.5 py-0.5 text-xs font-medium ${getPriorityBadgeClasses(todo.priority)}`}
+							>
 								{todo.priority}
 							</Badge>
 							<span
@@ -74,31 +83,35 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 						</div>
 						{/* Display description if it exists */}
 						{todo.description && (
-							<span className="text-xs text-gray-600 mt-1">{todo.description}</span>
+							<span className="text-xs text-muted-foreground mt-1">{todo.description}</span>
 						)}
 						{/* Display due date if it exists */}
 						{todo.dueDate && (
-							<span className="text-xs text-gray-500 mt-1">
+							<span className="text-xs text-muted-foreground mt-1">
 								Due: {new Date(todo.dueDate).toLocaleDateString()}
 							</span>
 						)}
 					</div>
 					{/* Action Buttons in display mode */}
-					<div className="flex items-center gap-2">
-						<button
+					<div className="flex items-center">
+						<Button
+							variant="ghost"
+							size="icon"
 							onClick={handleEdit}
-							className="text-blue-500 hover:text-blue-700 focus:outline-none p-1"
 							aria-label={`Edit todo: ${todo.title}`}
+							className="h-7 w-7 text-muted-foreground hover:text-blue-600"
 						>
 							<FaEdit className="h-4 w-4" />
-						</button>
-						<button
+						</Button>
+						<Button
+							variant="ghost"
+							size="icon"
 							onClick={handleDelete}
-							className="text-red-500 hover:text-red-700 focus:outline-none p-1"
 							aria-label={`Delete todo: ${todo.title}`}
+							className="h-7 w-7 text-muted-foreground hover:text-red-600"
 						>
 							<FaTrashAlt className="h-4 w-4" />
-						</button>
+						</Button>
 					</div>
 				</div>
 			)}

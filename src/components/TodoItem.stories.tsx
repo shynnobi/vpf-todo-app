@@ -53,6 +53,17 @@ export const Completed: Story = {
 	},
 };
 
+export const Minimal: Story = {
+	args: {
+		todo: {
+			id: '4',
+			title: 'Minimal Todo (No Desc/Date)',
+			completed: false,
+			priority: 'medium',
+		},
+	},
+};
+
 export const Interactive: Story = {
 	render: args => {
 		// Use state within the render function for interactivity specific to this story
