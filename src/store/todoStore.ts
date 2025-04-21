@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { CreateTodoParams, Todo, TodoFilter, TodoState } from '@/types/todoTypes';
+import { CreateTodoParams, PriorityLevel, Todo, TodoFilter, TodoState } from '@/types/todoTypes';
 
 // Fallback for environments without localStorage
 const inMemoryStorage = {
@@ -27,6 +27,7 @@ export const useTodoStore = create<TodoState>()(
 					completed: params.completed ?? false,
 					description: params.description,
 					dueDate: params.dueDate,
+					priority: params.priority ?? 'medium',
 				};
 
 				set(state => ({
@@ -84,6 +85,18 @@ export const useTodoStore = create<TodoState>()(
 
 			setFilter: (filter: TodoFilter): void => {
 				set({ filter });
+			},
+
+			getSortedTodosByPriority: (): Todo[] => {
+				const todos = get().todos;
+				// Define the sort order for priorities
+				const priorityOrder: Record<PriorityLevel, number> = {
+					high: 1,
+					medium: 2,
+					low: 3,
+				};
+				// Create a new sorted array (do not mutate the original state)
+				return [...todos].sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
 			},
 
 			reset: () => {

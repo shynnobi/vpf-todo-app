@@ -15,12 +15,14 @@ describe('TodoItem Component', () => {
 		id: '1',
 		title: 'Learn React',
 		completed: false,
+		priority: 'medium',
 	};
 
 	const mockCompletedTodo: Todo = {
 		id: '2',
 		title: 'Build a todo app',
 		completed: true,
+		priority: 'high',
 	};
 
 	describe('Initial Rendering', () => {

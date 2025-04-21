@@ -16,7 +16,8 @@ const meta = {
 		layout: 'centered',
 		docs: {
 			description: {
-				component: 'Form for adding new todos with validation and submission handling',
+				component:
+					'Form for adding new todos with title input and priority selection (defaults to medium). Handles validation and submission.',
 			},
 		},
 	},

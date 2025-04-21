@@ -99,11 +99,12 @@
 
 **Branch: `feat/prioritization`**
 
-- [ ] PRIO-1: Extend Todo model with priority levels
-- [ ] PRIO-2: Write tests for priority features
-- [ ] PRIO-3: Implement priority selector in forms
-- [ ] PRIO-4: Implement priority display in TodoItem
-- [ ] PRIO-5: Implement sorting by priority
+- [x] PRIO-1: Write tests for priority features (add, edit, sort)
+- [x] PRIO-2: Extend Todo model with priority levels
+- [x] PRIO-3: Implement sorting by priority (in store)
+- [x] PRIO-4: Implement priority selector in forms
+- [x] PRIO-5: Implement priority display in TodoItem
+- [x] PRIO-STORY: Create/Update Storybook stories for AddTodoForm & TodoItem
 - [ ] PRIO-6: Create PR `feat/prioritization` → `dev`
 
 **Branch: `feat/advanced-filtering`**
