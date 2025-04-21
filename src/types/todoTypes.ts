@@ -6,7 +6,7 @@ export interface Todo {
 	completed: boolean;
 	description?: string;
 	dueDate?: string;
-	priority: PriorityLevel;
+	priority: PriorityLevel | null;
 }
 
 export enum TodoFilter {
@@ -20,7 +20,7 @@ export type CreateTodoParams = {
 	completed?: boolean;
 	description?: string;
 	dueDate?: string;
-	priority?: PriorityLevel;
+	priority?: PriorityLevel | null;
 };
 
 export interface TodoState {

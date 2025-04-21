@@ -16,7 +16,7 @@ import { AddTodoFormProps, CreateTodoParams, PriorityLevel } from '@/types/todoT
  */
 export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 	const [title, setTitle] = useState('');
-	const [priority, setPriority] = useState<PriorityLevel>('medium');
+	const [priority, setPriority] = useState<PriorityLevel | null>(null);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -31,10 +31,25 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 		onAddTodo(newTodoParams);
 
 		setTitle('');
-		setPriority('medium');
+		setPriority(null);
 	};
 
 	const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+	const getPriorityButtonText = () => {
+		if (priority === null) {
+			return 'Priority';
+		}
+		return capitalize(priority);
+	};
+
+	const handlePriorityChange = (value: string) => {
+		if (value === 'null') {
+			setPriority(null);
+		} else {
+			setPriority(value as PriorityLevel);
+		}
+	};
 
 	return (
 		<form
@@ -55,15 +70,16 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
 					<Button variant="outline" className="flex items-center gap-1 px-3">
-						{capitalize(priority)}
+						{getPriorityButtonText()}
 						<ChevronDown className="h-4 w-4" />
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent className="w-40">
 					<DropdownMenuRadioGroup
-						value={priority}
-						onValueChange={(value: string) => setPriority(value as PriorityLevel)}
+						value={priority === null ? 'null' : priority}
+						onValueChange={handlePriorityChange}
 					>
+						<DropdownMenuRadioItem value="null">None</DropdownMenuRadioItem>
 						<DropdownMenuRadioItem value="low">Low</DropdownMenuRadioItem>
 						<DropdownMenuRadioItem value="medium">Medium</DropdownMenuRadioItem>
 						<DropdownMenuRadioItem value="high">High</DropdownMenuRadioItem>

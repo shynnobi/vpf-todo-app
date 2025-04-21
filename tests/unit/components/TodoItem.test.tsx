@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { TodoItem } from '@/components/TodoItem';
 import { Todo } from '@/types/todoTypes';
@@ -24,6 +25,26 @@ describe('TodoItem Component', () => {
 		completed: true,
 		priority: 'high',
 	};
+
+	// Define mock handlers once, typed as functions
+	let mockHandlers: {
+		onToggle: (id: string) => void;
+		onDelete: (id: string) => void;
+		onSave: (id: string, updates: Partial<Omit<Todo, 'id'>>) => void;
+	};
+
+	beforeEach(() => {
+		// Assign vi.fn() here. TS should infer the mock capabilities.
+		mockHandlers = {
+			onToggle: vi.fn(),
+			onDelete: vi.fn(),
+			onSave: vi.fn(),
+		};
+	});
+
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
 
 	describe('Initial Rendering', () => {
 		it('should render a todo item with its title', () => {
@@ -204,129 +225,92 @@ describe('TodoItem Component', () => {
 
 	// Add tests for editing mode
 	describe('Editing Mode', () => {
-		it('should switch to edit mode when the edit button is clicked', () => {
+		it('should switch to edit mode when the edit button is clicked', async () => {
 			// Given: A todo item rendered
-			render(
-				<TodoItem
-					todo={mockIncompleteTodo}
-					onToggle={() => {}}
-					onDelete={() => {}}
-					onSave={() => {}}
-				/>
-			);
-			const titleDisplay = screen.getByText(mockIncompleteTodo.title);
-
-			// Expect the input field not to be present initially
-			expect(screen.queryByRole('textbox', { name: /edit title/i })).not.toBeInTheDocument();
+			render(<TodoItem todo={mockIncompleteTodo} {...mockHandlers} />);
+			const editButton = screen.getByLabelText(/edit todo/i);
 
 			// When: The edit button is clicked
-			const editButton = screen.getByRole('button', {
-				name: `Edit todo: ${mockIncompleteTodo.title}`,
-			});
-			fireEvent.click(editButton);
+			await userEvent.click(editButton);
 
-			// Then: The normal title display should disappear (or be hidden)
-			expect(titleDisplay).not.toBeInTheDocument(); // Or check for visibility/class change
-
-			// And: An input field for editing the title should appear
-			const titleInput = screen.getByRole('textbox', { name: /edit title/i });
-			expect(titleInput).toBeInTheDocument();
-			expect(titleInput).toHaveValue(mockIncompleteTodo.title);
-
-			// Later, we'll add checks for description/dueDate fields and save/cancel buttons
+			// Then: The edit form should be displayed
+			expect(screen.getByRole('textbox', { name: /edit title/i })).toBeInTheDocument();
+			expect(screen.getByRole('textbox', { name: /edit description/i })).toBeInTheDocument();
+			expect(screen.getByLabelText(/due date/i)).toBeInTheDocument();
+			expect(screen.getByRole('button', { name: /save changes/i })).toBeInTheDocument();
+			expect(screen.getByRole('button', { name: /cancel edit/i })).toBeInTheDocument();
 		});
 
-		it('should call onSave with updated data when save button is clicked', () => {
-			// Given: A mock save function and the component in edit mode
-			const mockSave = vi.fn();
-			render(
-				<TodoItem
-					todo={mockIncompleteTodo}
-					onToggle={() => {}}
-					onDelete={() => {}}
-					onSave={mockSave}
-				/>
-			);
+		it('should call onSave with updated data when save button is clicked', async () => {
+			// Given: The component is in edit mode
+			render(<TodoItem todo={mockIncompleteTodo} {...mockHandlers} />);
+			const editButton = screen.getByLabelText(/edit todo/i);
+			await userEvent.click(editButton);
 
-			// When: The component is put into edit mode
-			const editButton = screen.getByRole('button', {
-				name: `Edit todo: ${mockIncompleteTodo.title}`,
-			});
-			fireEvent.click(editButton);
-
-			// And: The input value is changed
+			// When: Fields are changed (title, description, date, priority)
 			const titleInput = screen.getByRole('textbox', { name: /edit title/i });
-			const newTitle = 'Learn React Hooks';
-			fireEvent.change(titleInput, { target: { value: newTitle } });
+			const newTitle = 'Updated Title';
+			await userEvent.clear(titleInput);
+			await userEvent.type(titleInput, newTitle);
 
-			// And: The description is changed
 			const descriptionInput = screen.getByRole('textbox', { name: /edit description/i });
-			const newDescription = 'Focus on custom hooks';
-			fireEvent.change(descriptionInput, { target: { value: newDescription } });
+			const newDescription = 'Updated Description';
+			await userEvent.clear(descriptionInput);
+			await userEvent.type(descriptionInput, newDescription);
 
-			// And: The due date is changed
-			const dueDateInput = screen.getByLabelText(/edit due date/i);
-			const newDueDate = '2024-12-31'; // Example date
+			const dueDateInput = screen.getByLabelText(/due date/i);
+			const newDueDate = '2024-12-31';
 			fireEvent.change(dueDateInput, { target: { value: newDueDate } });
+
+			// Use aria-label to find the button reliably
+			const priorityButton = screen.getByRole('button', { name: /edit priority/i });
+			await userEvent.click(priorityButton);
+			// Use correct role 'menuitemradio'
+			const lowOption = await screen.findByRole('menuitemradio', { name: /low/i });
+			await userEvent.click(lowOption);
 
 			// And: The save button is clicked
 			const saveButton = screen.getByRole('button', { name: /save changes/i });
-			fireEvent.click(saveButton);
+			await userEvent.click(saveButton);
 
-			// Then: onSave should be called with the todo id and all updated fields
-			expect(mockSave).toHaveBeenCalledTimes(1);
-			expect(mockSave).toHaveBeenCalledWith(mockIncompleteTodo.id, {
+			// Then: onSave should be called with the correct id and updated fields
+			expect(mockHandlers.onSave).toHaveBeenCalledWith(mockIncompleteTodo.id, {
 				title: newTitle,
 				description: newDescription,
 				dueDate: newDueDate,
+				priority: 'low',
 			});
 
-			// And: The component should exit edit mode (input disappears)
+			// And: The component should exit edit mode
 			expect(screen.queryByRole('textbox', { name: /edit title/i })).not.toBeInTheDocument();
-			// We cannot assert the new title is displayed here, as the prop `todo` hasn't changed in this unit test
 		});
 
-		it('should cancel editing and revert changes when cancel button is clicked', () => {
-			// Given: A mock save function and the component in edit mode with changes made
-			const mockSave = vi.fn();
-			render(
-				<TodoItem
-					todo={mockIncompleteTodo}
-					onToggle={() => {}}
-					onDelete={() => {}}
-					onSave={mockSave}
-				/>
-			);
+		it('should cancel editing and revert changes when cancel button is clicked', async () => {
+			// Given: The component is in edit mode
+			render(<TodoItem todo={mockIncompleteTodo} {...mockHandlers} />);
+			const editButton = screen.getByLabelText(/edit todo/i);
+			await userEvent.click(editButton);
 
-			// When: The component is put into edit mode
-			const editButton = screen.getByRole('button', {
-				name: `Edit todo: ${mockIncompleteTodo.title}`,
-			});
-			fireEvent.click(editButton);
-
-			// And: The input value is changed
+			// When: Some changes are made
 			const titleInput = screen.getByRole('textbox', { name: /edit title/i });
-			fireEvent.change(titleInput, { target: { value: 'Temporary Change' } });
-
-			// And: Other fields are also changed (assume they exist for the test)
+			await userEvent.type(titleInput, 'Temporary Change');
 			const descriptionInput = screen.getByRole('textbox', { name: /edit description/i });
 			fireEvent.change(descriptionInput, { target: { value: 'Temp Desc' } });
-			const dueDateInput = screen.getByLabelText(/edit due date/i);
+			const dueDateInput = screen.getByLabelText(/due date/i);
 			fireEvent.change(dueDateInput, { target: { value: '2025-01-01' } });
 
 			// And: The cancel button is clicked
 			const cancelButton = screen.getByRole('button', { name: /cancel edit/i });
-			fireEvent.click(cancelButton);
+			await userEvent.click(cancelButton);
 
 			// Then: The component should exit edit mode
 			expect(screen.queryByRole('textbox', { name: /edit title/i })).not.toBeInTheDocument();
 
-			// And: The original title should be displayed
-			expect(screen.getByText(mockIncompleteTodo.title)).toBeInTheDocument();
-			// We also expect original description/date to be implicitly restored, but cannot easily test display here.
-
 			// And: onSave should not have been called
-			expect(mockSave).not.toHaveBeenCalled();
+			expect(mockHandlers.onSave).not.toHaveBeenCalled();
+
+			// And: The displayed title should be the original title
+			expect(screen.getByText(mockIncompleteTodo.title)).toBeInTheDocument();
 		});
 	});
 });
