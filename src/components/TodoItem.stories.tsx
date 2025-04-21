@@ -35,6 +35,7 @@ export const Default: Story = {
 			completed: false,
 			description: 'This is a default todo item',
 			dueDate: undefined,
+			priority: 'medium',
 		},
 	},
 };
@@ -47,6 +48,18 @@ export const Completed: Story = {
 			completed: true,
 			description: 'This task is done!',
 			dueDate: new Date().toISOString(),
+			priority: 'low',
+		},
+	},
+};
+
+export const Minimal: Story = {
+	args: {
+		todo: {
+			id: '4',
+			title: 'Minimal Todo (No Desc/Date)',
+			completed: false,
+			priority: 'medium',
 		},
 	},
 };
@@ -93,6 +106,7 @@ export const Interactive: Story = {
 			title: 'Interactive Todo',
 			completed: false,
 			description: 'Try editing me!',
+			priority: 'high',
 		},
 		// onSave, onToggle, onDelete handlers are provided by the default meta args
 	},
