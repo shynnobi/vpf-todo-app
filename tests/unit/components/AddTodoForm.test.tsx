@@ -39,8 +39,8 @@ describe('AddTodoForm Component', () => {
 			const buttonElement = screen.getByRole('button', { name: /add/i });
 			fireEvent.click(buttonElement);
 
-			// Then: onAddTodo should be called with the entered title
-			expect(mockAddTodo).toHaveBeenCalledWith({ title: 'Test Todo' });
+			// Then: onAddTodo should be called with the entered title and default priority
+			expect(mockAddTodo).toHaveBeenCalledWith({ title: 'Test Todo', priority: 'medium' });
 		});
 
 		it('should not call onAddTodo when form is submitted with empty input', () => {
