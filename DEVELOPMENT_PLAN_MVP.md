@@ -104,7 +104,7 @@
 - [x] PRIO-3: Implement sorting by priority (in store)
 - [x] PRIO-4: Implement priority selector in forms
 - [x] PRIO-5: Implement priority display in TodoItem
-- [ ] PRIO-STORY: Create/Update Storybook stories for AddTodoForm & TodoItem
+- [x] PRIO-STORY: Create/Update Storybook stories for AddTodoForm & TodoItem
 - [ ] PRIO-6: Create PR `feat/prioritization` → `dev`
 
 **Branch: `feat/advanced-filtering`**
