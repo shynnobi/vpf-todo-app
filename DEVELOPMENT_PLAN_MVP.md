@@ -107,6 +107,16 @@
 - [x] PRIO-STORY: Create/Update Storybook stories for AddTodoForm & TodoItem
 - [ ] PRIO-6: Create PR `feat/prioritization` → `dev`
 
+**Branch: `feat/optional-priority`**
+
+- [ ] OPT-PRIO-1: Adapt tests for optional priority (add, edit, sort, display)
+- [ ] OPT-PRIO-2: Update Todo model & types (`priority?: PriorityLevel | null`)
+- [ ] OPT-PRIO-3: Adapt store logic (add/edit/sort) to handle `null` priority
+- [ ] OPT-PRIO-4: Update forms to allow selecting "No Priority" (`null`)
+- [ ] OPT-PRIO-5: Update display components to handle `null` priority
+- [ ] OPT-PRIO-STORY: Update Storybook stories (AddTodoForm, TodoItem) for optional priority
+- [ ] OPT-PRIO-6: Create PR `feat/optional-priority` → `dev`
+
 **Branch: `feat/advanced-filtering`**
 
 - [ ] AFILT-1: Write tests for advanced filtering (due date, priority)
