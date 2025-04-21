@@ -1,9 +1,12 @@
+export type PriorityLevel = 'low' | 'medium' | 'high';
+
 export interface Todo {
 	id: string;
 	title: string;
 	completed: boolean;
 	description?: string;
 	dueDate?: string;
+	priority: PriorityLevel;
 }
 
 export enum TodoFilter {
@@ -17,6 +20,7 @@ export type CreateTodoParams = {
 	completed?: boolean;
 	description?: string;
 	dueDate?: string;
+	priority?: PriorityLevel;
 };
 
 export interface TodoState {
@@ -27,6 +31,7 @@ export interface TodoState {
 	updateTodo: (id: string, updates: Partial<Omit<Todo, 'id'>>) => Todo | null;
 	deleteTodo: (id: string) => Todo | null;
 	setFilter: (filter: TodoFilter) => void;
+	getSortedTodosByPriority: () => Todo[];
 	reset: () => void;
 }
 

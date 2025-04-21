@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import type { Decorator } from '@storybook/react';
 import { fn } from '@storybook/test';
@@ -64,31 +65,35 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const mockTodos: Todo[] = [
-	{ id: '1', title: 'Learn Storybook', completed: false },
-	{ id: '2', title: 'Write stories', completed: true },
-	{ id: '3', title: 'Test components', completed: false },
+	{ id: '1', title: 'Learn Storybook', completed: false, priority: 'medium' },
+	{ id: '2', title: 'Write stories', completed: true, priority: 'high' },
+	{ id: '3', title: 'Test components', completed: false, priority: 'low' },
 ];
 
 export const Default: Story = {
 	args: {
 		todos: mockTodos,
-		// onSaveTodo uses default arg
+		onToggleTodo: action('onToggleTodo'),
+		onDeleteTodo: action('onDeleteTodo'),
+		onSaveTodo: action('onSaveTodo'),
 	},
 };
 
 export const Empty: Story = {
 	args: {
 		todos: [],
-		// onSaveTodo uses default arg
+		onToggleTodo: action('onToggleTodo'),
+		onDeleteTodo: action('onDeleteTodo'),
+		onSaveTodo: action('onSaveTodo'),
 	},
 };
 
 export const WithTodos: Story = {
 	args: {
 		todos: [
-			{ id: '1', title: 'Learn React', completed: false },
-			{ id: '2', title: 'Build a todo app', completed: true },
-			{ id: '3', title: 'Master TypeScript', completed: false },
+			{ id: '1', title: 'Learn React', completed: false, priority: 'medium' },
+			{ id: '2', title: 'Build a todo app', completed: true, priority: 'high' },
+			{ id: '3', title: 'Master TypeScript', completed: false, priority: 'low' },
 		],
 		// onSaveTodo uses default arg
 	},
@@ -98,12 +103,12 @@ export const WithTodos: Story = {
 export const ManyTodos: Story = {
 	args: {
 		todos: [
-			{ id: '1', title: 'Learn React', completed: false },
-			{ id: '2', title: 'Build a todo app', completed: true },
-			{ id: '3', title: 'Master TypeScript', completed: false },
-			{ id: '4', title: 'Implement new features', completed: false },
-			{ id: '5', title: 'Fix bugs', completed: true },
-			{ id: '6', title: 'Deploy application', completed: false },
+			{ id: '1', title: 'Learn React', completed: false, priority: 'medium' },
+			{ id: '2', title: 'Build a todo app', completed: true, priority: 'high' },
+			{ id: '3', title: 'Master TypeScript', completed: false, priority: 'low' },
+			{ id: '4', title: 'Implement new features', completed: false, priority: 'medium' },
+			{ id: '5', title: 'Fix bugs', completed: true, priority: 'high' },
+			{ id: '6', title: 'Deploy application', completed: false, priority: 'low' },
 		],
 		// onSaveTodo uses default arg
 	},
