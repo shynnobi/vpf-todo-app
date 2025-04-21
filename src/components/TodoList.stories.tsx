@@ -68,6 +68,8 @@ const mockTodos: Todo[] = [
 	{ id: '1', title: 'Learn Storybook', completed: false, priority: 'medium' },
 	{ id: '2', title: 'Write stories', completed: true, priority: 'high' },
 	{ id: '3', title: 'Test components', completed: false, priority: 'low' },
+	{ id: '4', title: 'Think about life', completed: false, priority: null },
+	{ id: '5', title: 'Take a break', completed: true, priority: null },
 ];
 
 export const Default: Story = {
@@ -94,6 +96,7 @@ export const WithTodos: Story = {
 			{ id: '1', title: 'Learn React', completed: false, priority: 'medium' },
 			{ id: '2', title: 'Build a todo app', completed: true, priority: 'high' },
 			{ id: '3', title: 'Master TypeScript', completed: false, priority: 'low' },
+			{ id: '4', title: 'Go shopping', completed: false, priority: null },
 		],
 		// onSaveTodo uses default arg
 	},
@@ -109,6 +112,8 @@ export const ManyTodos: Story = {
 			{ id: '4', title: 'Implement new features', completed: false, priority: 'medium' },
 			{ id: '5', title: 'Fix bugs', completed: true, priority: 'high' },
 			{ id: '6', title: 'Deploy application', completed: false, priority: 'low' },
+			{ id: '7', title: 'Read a book', completed: false, priority: null },
+			{ id: '8', title: 'Meditate', completed: true, priority: null },
 		],
 		// onSaveTodo uses default arg
 	},

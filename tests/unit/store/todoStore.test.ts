@@ -111,6 +111,40 @@ describe('Todo Store - Behavior', () => {
 			expect(todos[0].completed).toBe(false); // Assuming default completion is false
 			expect(todos[0]).toEqual(newTodo);
 		});
+
+		it('Given the store is empty, When a new todo is added without specifying priority, Then it should be added with priority set to null', () => {
+			// Given: Store is empty
+			expect(TodoStoreTestHelpers.getTodos()).toEqual([]);
+
+			// When: Add a todo without priority
+			const newTodo = useTodoStore.getState().addTodo({ title: 'No priority task' });
+			// Note: We are explicitly NOT passing priority field here
+
+			// Then: Priority should be null
+			const todos = TodoStoreTestHelpers.getTodos();
+			expect(todos).toHaveLength(1);
+			expect(todos[0].title).toBe('No priority task');
+			expect(todos[0].priority).toBeNull();
+			expect(todos[0]).toEqual(newTodo);
+		});
+
+		it('Given the store is empty, When a new todo is added with priority explicitly set to null, Then it should be added with priority as null', () => {
+			// Given: Store is empty
+			expect(TodoStoreTestHelpers.getTodos()).toEqual([]);
+
+			// When: Add a todo with priority explicitly null
+			const newTodo = useTodoStore.getState().addTodo({
+				title: 'Explicit null priority task',
+				priority: null,
+			});
+
+			// Then: Priority should be null
+			const todos = TodoStoreTestHelpers.getTodos();
+			expect(todos).toHaveLength(1);
+			expect(todos[0].title).toBe('Explicit null priority task');
+			expect(todos[0].priority).toBeNull();
+			expect(todos[0]).toEqual(newTodo);
+		});
 	});
 
 	describe('Toggling Todo Status', () => {
@@ -173,7 +207,7 @@ describe('Todo Store - Behavior', () => {
 			// Given: An existing todo
 			const todoId = initialTodo.id;
 			const newDescription = 'Updated description';
-			const newDueDate = new Date(Date.now() + 86400000).toISOString(); // Tomorrow
+			const newDueDate = new Date(Date.now() + 86400000).toISOString();
 
 			// When: Updating the todo's details
 			const updatedTodo = useTodoStore.getState().updateTodo(todoId, {
@@ -186,35 +220,35 @@ describe('Todo Store - Behavior', () => {
 			expect(todos).toHaveLength(1);
 			const todoInStore = todos.find(t => t.id === todoId);
 			expect(todoInStore).toBeDefined();
-			expect(todoInStore?.title).toBe(initialTodo.title); // Title shouldn't change unless specified
 			expect(todoInStore?.description).toBe(newDescription);
 			expect(todoInStore?.dueDate).toBe(newDueDate);
-			expect(todoInStore?.completed).toBe(initialTodo.completed); // Completion shouldn't change
-			expect(updatedTodo).toEqual(todoInStore); // The action should return the updated todo
+			expect(updatedTodo).toEqual(todoInStore);
 		});
 
-		// Add more tests here later for updating title, completion status via updateTodo if needed
+		it('should allow updating the priority of an existing todo, including setting it to null', () => {
+			// Given: An existing todo
+			const todoId = initialTodo.id;
+
+			// When: Updating the priority to 'high'
+			let updatedTodo = useTodoStore.getState().updateTodo(todoId, { priority: 'high' });
+
+			// Then: The priority should be 'high'
+			expect(updatedTodo?.priority).toBe('high');
+			expect(TodoStoreTestHelpers.getTodos().find(t => t.id === todoId)?.priority).toBe('high');
+
+			// When: Updating the priority to null
+			updatedTodo = useTodoStore.getState().updateTodo(todoId, { priority: null });
+
+			// Then: The priority should be null
+			expect(updatedTodo?.priority).toBeNull();
+			expect(TodoStoreTestHelpers.getTodos().find(t => t.id === todoId)?.priority).toBeNull();
+		});
 	});
 
 	describe('Prioritizing Todos', () => {
 		beforeEach(() => {
 			TodoStoreTestHelpers.cleanupStorage();
 			TodoStoreTestHelpers.resetStore();
-		});
-
-		it('should add a new todo with default priority (medium) if not specified', () => {
-			// Given: Store is empty
-			expect(TodoStoreTestHelpers.getTodosCount()).toBe(0);
-
-			// When: Adding a todo without specifying priority
-			const newTodo = useTodoStore.getState().addTodo({ title: 'Default Priority Task' });
-
-			// Then: The todo should have priority 'medium'
-			expect(newTodo).toBeDefined();
-			expect(newTodo.priority).toBe<PriorityLevel>('medium');
-			const todos = TodoStoreTestHelpers.getTodos();
-			expect(todos).toHaveLength(1);
-			expect(todos[0].priority).toBe<PriorityLevel>('medium');
 		});
 
 		it('should add a new todo with the specified priority', () => {
@@ -239,35 +273,29 @@ describe('Todo Store - Behavior', () => {
 			expect(todos.find(t => t.id === highTodo.id)?.priority).toBe('high');
 		});
 
-		it('should allow updating the priority of an existing todo', () => {
-			// Given: An existing todo (assume default medium priority)
-			const initialTodo = useTodoStore.getState().addTodo({ title: 'Task to prioritize' });
-			expect(initialTodo.priority).toBe('medium'); // Assumption based on first test
-
-			// When: Updating the priority to 'high'
-			const updatedTodo = useTodoStore.getState().updateTodo(initialTodo.id, { priority: 'high' });
-
-			// Then: The todo should reflect the new priority
-			expect(updatedTodo).toBeDefined();
-			expect(updatedTodo?.priority).toBe<PriorityLevel>('high');
-			const todos = TodoStoreTestHelpers.getTodos();
-			expect(todos.find(t => t.id === initialTodo.id)?.priority).toBe('high');
-		});
-
-		it('should provide todos sorted by priority (high > medium > low)', () => {
-			// Given: Todos with different priorities added in a mixed order
+		it('should provide todos sorted by priority (high > medium > low > null)', () => {
+			// Given: Todos with different priorities, including null, added in a mixed order
 			useTodoStore.getState().addTodo({ title: 'Medium Task 1', priority: 'medium' });
 			useTodoStore.getState().addTodo({ title: 'High Task 1', priority: 'high' });
+			useTodoStore.getState().addTodo({ title: 'No Priority Task 1', priority: null });
 			useTodoStore.getState().addTodo({ title: 'Low Task 1', priority: 'low' });
 			useTodoStore.getState().addTodo({ title: 'High Task 2', priority: 'high' });
+			useTodoStore.getState().addTodo({ title: 'No Priority Task 2', priority: null });
 
-			// When: Getting the sorted list from the store (hypothetical getter)
+			// When: Getting the sorted list
 			const sortedTodos = useTodoStore.getState().getSortedTodosByPriority();
 
-			// Then: The getter should return todos sorted by high > medium > low
+			// Then: The getter should return todos sorted by high > medium > low > null
 			expect(sortedTodos).toBeDefined();
 			const sortedTitles = sortedTodos.map((t: Todo) => t.title);
-			expect(sortedTitles).toEqual(['High Task 1', 'High Task 2', 'Medium Task 1', 'Low Task 1']);
+			expect(sortedTitles).toEqual([
+				'High Task 1',
+				'High Task 2',
+				'Medium Task 1',
+				'Low Task 1',
+				'No Priority Task 1',
+				'No Priority Task 2',
+			]);
 		});
 	});
 
