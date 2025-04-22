@@ -21,7 +21,7 @@ export default function App(): ReactElement {
 						<ThemeToggle />
 					</div>
 				</nav>
-				<div className="pt-16">
+				<div className="pt-16 min-h-screen bg-background">
 					<Outlet />
 				</div>
 			</>
