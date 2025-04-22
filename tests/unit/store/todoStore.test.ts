@@ -1,3 +1,4 @@
+import { act } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { useTodoStore } from '@/store/todoStore';
@@ -358,14 +359,52 @@ describe('Todo Store - Behavior', () => {
 	});
 
 	describe('Filtering Todos', () => {
+		let todos: Todo[];
+		const today = new Date();
+		const yesterday = new Date(today);
+		yesterday.setDate(today.getDate() - 1);
+		const tomorrow = new Date(today);
+		tomorrow.setDate(today.getDate() + 1);
+
 		beforeEach(() => {
-			// Start with a clean state for filter tests
-			TodoStoreTestHelpers.resetStore();
-			// Add a mix of completed and active todos
-			TodoStoreTestHelpers.addTodo('Active todo 1');
-			TodoStoreTestHelpers.addTodo('Completed todo 1', true);
-			TodoStoreTestHelpers.addTodo('Active todo 2');
-			TodoStoreTestHelpers.addTodo('Completed todo 2', true);
+			// Setup: Add diverse todos before each filtering test
+			todos = [
+				useTodoStore.getState().addTodo({ title: 'Task High', priority: 'high', completed: false }),
+				useTodoStore
+					.getState()
+					.addTodo({ title: 'Task Medium 1', priority: 'medium', completed: false }),
+				useTodoStore
+					.getState()
+					.addTodo({ title: 'Task Medium 2', priority: 'medium', completed: true }),
+				useTodoStore.getState().addTodo({ title: 'Task Low', priority: 'low', completed: false }),
+				useTodoStore.getState().addTodo({ title: 'Task Null 1', priority: null, completed: false }),
+				useTodoStore.getState().addTodo({ title: 'Task Null 2', priority: null, completed: true }),
+				useTodoStore.getState().addTodo({
+					title: 'Overdue Task',
+					priority: 'medium',
+					completed: false,
+					dueDate: yesterday.toISOString().split('T')[0],
+				}),
+				useTodoStore.getState().addTodo({
+					title: 'Future Task',
+					priority: 'low',
+					completed: false,
+					dueDate: tomorrow.toISOString().split('T')[0],
+				}),
+				useTodoStore.getState().addTodo({
+					title: 'Completed Overdue Task',
+					priority: 'high',
+					completed: true,
+					dueDate: yesterday.toISOString().split('T')[0],
+				}),
+			];
+			// Reset filters to default before each filtering test run
+			act(() => {
+				useTodoStore.getState().setFilter(TodoFilter.All);
+				// Assuming a reset for potential advanced filters (to be implemented)
+				useTodoStore.getState().setPriorityFilter(undefined);
+				useTodoStore.getState().setDueDateFilter(undefined);
+			});
 		});
 
 		it('should have All as the default filter', () => {
@@ -406,6 +445,290 @@ describe('Todo Store - Behavior', () => {
 
 			// Then: The filter should be All
 			expect(TodoStoreTestHelpers.getFilter()).toBe(TodoFilter.All);
+		});
+
+		it('Given todos exist, When filter is "All", Then getFilteredTodos should return all todos', () => {
+			// Given: Filter is already All by default in beforeEach
+			// When: Getting filtered todos
+			const filteredTodos = useTodoStore.getState().getFilteredAndSortedTodos();
+			// Then: All todos should be returned
+			expect(filteredTodos).toHaveLength(todos.length);
+		});
+
+		it('Given todos exist, When filter is "Active", Then getFilteredTodos should return only active todos', () => {
+			// Given: Set filter to Active
+			act(() => {
+				useTodoStore.getState().setFilter(TodoFilter.Active);
+			});
+			// When: Getting filtered todos
+			const filteredTodos = useTodoStore.getState().getFilteredAndSortedTodos();
+			// Then: Only active todos should be returned
+			const activeTodos = todos.filter((t: Todo) => !t.completed);
+			expect(filteredTodos).toHaveLength(activeTodos.length);
+			expect(filteredTodos.every((t: Todo) => !t.completed)).toBe(true);
+		});
+
+		it('Given todos exist, When filter is "Completed", Then getFilteredTodos should return only completed todos', () => {
+			// Given: Set filter to Completed
+			act(() => {
+				useTodoStore.getState().setFilter(TodoFilter.Completed);
+			});
+			// When: Getting filtered todos
+			const filteredTodos = useTodoStore.getState().getFilteredAndSortedTodos();
+			// Then: Only completed todos should be returned
+			const completedTodos = todos.filter((t: Todo) => t.completed);
+			expect(filteredTodos).toHaveLength(completedTodos.length);
+			expect(filteredTodos.every((t: Todo) => t.completed)).toBe(true);
+		});
+
+		describe('Advanced Filtering', () => {
+			// Setup a shorthand for the filter setter function (assuming it will exist)
+			const setPriorityFilter = (priority?: PriorityLevel | null | undefined) => {
+				act(() => {
+					// Check if function exists before calling (for initial test run)
+					if (useTodoStore.getState().setPriorityFilter) {
+						useTodoStore.getState().setPriorityFilter(priority);
+					}
+				});
+			};
+			// Use inline type for the filterType parameter
+			const setDueDateFilter = (filterType?: 'overdue' | 'no-due-date' | undefined) => {
+				act(() => {
+					// Check if function exists before calling
+					if (useTodoStore.getState().setDueDateFilter) {
+						useTodoStore.getState().setDueDateFilter(filterType);
+					}
+				});
+			};
+
+			describe('by Priority', () => {
+				it('should return only high priority todos when priority filter is "high"', () => {
+					// Given: Priority filter is set to 'high'
+					setPriorityFilter('high');
+
+					// When: Getting filtered todos (assuming default status filter 'All')
+					const filtered = useTodoStore.getState().getFilteredAndSortedTodos();
+
+					// Then: Only high priority todos should be returned
+					const expected = todos.filter((t: Todo) => t.priority === 'high');
+					expect(filtered).toHaveLength(expected.length);
+					expect(filtered.every((t: Todo) => t.priority === 'high')).toBe(true);
+				});
+
+				it('should return only medium priority todos when priority filter is "medium"', () => {
+					// Given: Priority filter is set to 'medium'
+					setPriorityFilter('medium');
+					// When: Getting filtered todos
+					const filtered = useTodoStore.getState().getFilteredAndSortedTodos();
+					// Then: Only medium priority todos should be returned
+					const expected = todos.filter((t: Todo) => t.priority === 'medium');
+					expect(filtered).toHaveLength(expected.length);
+					expect(filtered.every((t: Todo) => t.priority === 'medium')).toBe(true);
+				});
+
+				it('should return only low priority todos when priority filter is "low"', () => {
+					// Given: Priority filter is set to 'low'
+					setPriorityFilter('low');
+					// When: Getting filtered todos
+					const filtered = useTodoStore.getState().getFilteredAndSortedTodos();
+					// Then: Only low priority todos should be returned
+					const expected = todos.filter((t: Todo) => t.priority === 'low');
+					expect(filtered).toHaveLength(expected.length);
+					expect(filtered.every((t: Todo) => t.priority === 'low')).toBe(true);
+				});
+
+				it('should return only null priority todos when priority filter is null', () => {
+					// Given: Priority filter is set to null
+					setPriorityFilter(null);
+					// When: Getting filtered todos
+					const filtered = useTodoStore.getState().getFilteredAndSortedTodos();
+					// Then: Only null priority todos should be returned
+					const expected = todos.filter((t: Todo) => t.priority === null);
+					expect(filtered).toHaveLength(expected.length);
+					expect(filtered.every((t: Todo) => t.priority === null)).toBe(true);
+				});
+
+				it('should return all todos (respecting status filter) when priority filter is reset', () => {
+					// Given: Priority filter is set to 'high' initially
+					setPriorityFilter('high');
+					const filteredHigh = useTodoStore.getState().getFilteredAndSortedTodos();
+					expect(filteredHigh.every((t: Todo) => t.priority === 'high')).toBe(true);
+					expect(filteredHigh.length).toBeLessThan(todos.length);
+
+					// When: Priority filter is reset (set to undefined)
+					setPriorityFilter(undefined);
+					const filteredAll = useTodoStore.getState().getFilteredAndSortedTodos();
+
+					// Then: All todos (respecting default status filter 'All') should be returned
+					expect(filteredAll).toHaveLength(todos.length);
+				});
+
+				it('should combine priority filter and status filter (e.g., Active High)', () => {
+					// Given: Priority filter is 'high' and status filter is 'Active'
+					setPriorityFilter('high');
+					act(() => {
+						useTodoStore.getState().setFilter(TodoFilter.Active);
+					});
+
+					// When: Getting filtered todos
+					const filtered = useTodoStore.getState().getFilteredAndSortedTodos();
+
+					// Then: Only Active High todos should be returned
+					const expected = todos.filter((t: Todo) => t.priority === 'high' && !t.completed);
+					expect(filtered).toHaveLength(expected.length);
+					expect(filtered.every((t: Todo) => t.priority === 'high' && !t.completed)).toBe(true);
+				});
+			});
+
+			// --- Tests for Due Date Filtering ---
+			describe('by Due Date', () => {
+				// Make todayStr accessible within this scope
+				const todayStr = new Date().toISOString().split('T')[0];
+
+				it('should return only active overdue todos when due date filter is "overdue" and status is "All" or "Active"', () => {
+					// Given: Due date filter is 'overdue'
+					setDueDateFilter('overdue');
+
+					// When: Getting filtered todos (Status Filter: All)
+					act(() => {
+						useTodoStore.getState().setFilter(TodoFilter.All);
+					});
+					let filteredAll = useTodoStore.getState().getFilteredAndSortedTodos();
+
+					// Then: Only active overdue todos should be returned
+					let expectedAll = todos.filter(
+						(t: Todo) => !t.completed && t.dueDate && t.dueDate < todayStr
+					);
+					expect(filteredAll).toHaveLength(expectedAll.length);
+					expect(
+						filteredAll.every((t: Todo) => !t.completed && t.dueDate && t.dueDate < todayStr)
+					).toBe(true);
+					expect(filteredAll.some((t: Todo) => t.title === 'Overdue Task')).toBe(true); // Check specific task
+
+					// When: Getting filtered todos (Status Filter: Active)
+					act(() => {
+						useTodoStore.getState().setFilter(TodoFilter.Active);
+					});
+					let filteredActive = useTodoStore.getState().getFilteredAndSortedTodos();
+
+					// Then: Should still only return active overdue todos
+					expect(filteredActive).toHaveLength(expectedAll.length); // Same result as 'All'
+					expect(
+						filteredActive.every((t: Todo) => !t.completed && t.dueDate && t.dueDate < todayStr)
+					).toBe(true);
+
+					// When: Getting filtered todos (Status Filter: Completed)
+					act(() => {
+						useTodoStore.getState().setFilter(TodoFilter.Completed);
+					});
+					let filteredCompleted = useTodoStore.getState().getFilteredAndSortedTodos();
+
+					// Then: Should return no todos
+					expect(filteredCompleted).toHaveLength(0);
+				});
+
+				it('should return only todos with no due date when due date filter is "no-due-date"', () => {
+					// Given: Due date filter is 'no-due-date'
+					setDueDateFilter('no-due-date');
+
+					// When: Getting filtered todos (Status Filter: All)
+					act(() => {
+						useTodoStore.getState().setFilter(TodoFilter.All);
+					});
+					const filtered = useTodoStore.getState().getFilteredAndSortedTodos();
+
+					// Then: Only todos without due dates should be returned
+					const expected = todos.filter((t: Todo) => !t.dueDate);
+					expect(filtered).toHaveLength(expected.length);
+					expect(filtered.every((t: Todo) => !t.dueDate)).toBe(true);
+				});
+
+				it('should combine due date filter and status filter (e.g., Completed No-Due-Date)', () => {
+					// Given: Due date filter is 'no-due-date', Status filter is 'Completed'
+					setDueDateFilter('no-due-date');
+					act(() => {
+						useTodoStore.getState().setFilter(TodoFilter.Completed);
+					});
+
+					// When: Getting filtered todos
+					const filtered = useTodoStore.getState().getFilteredAndSortedTodos();
+
+					// Then: Only completed todos without due dates should be returned
+					const expected = todos.filter((t: Todo) => t.completed && !t.dueDate);
+					expect(filtered).toHaveLength(expected.length);
+					expect(filtered.every((t: Todo) => t.completed && !t.dueDate)).toBe(true);
+				});
+
+				it('should combine due date filter and priority filter (e.g., High Overdue)', () => {
+					// Given: Due date filter 'overdue', Priority filter 'high'
+					setDueDateFilter('overdue');
+					setPriorityFilter('high');
+					act(() => {
+						useTodoStore.getState().setFilter(TodoFilter.All);
+					}); // Ensure status filter is All
+
+					// When: Getting filtered todos
+					const filtered = useTodoStore.getState().getFilteredAndSortedTodos();
+
+					// Then: Should return only active High overdue todos
+					const expected = todos.filter(
+						(t: Todo) => !t.completed && t.priority === 'high' && t.dueDate && t.dueDate < todayStr
+					);
+					expect(filtered).toHaveLength(expected.length); // Should be 0 based on our test data
+					expect(
+						filtered.every(
+							(t: Todo) =>
+								!t.completed && t.priority === 'high' && t.dueDate && t.dueDate < todayStr
+						)
+					).toBe(true);
+				});
+
+				it('should combine all filters (e.g., Active Medium Overdue)', () => {
+					// Given: Status 'Active', Priority 'medium', Due date 'overdue'
+					act(() => {
+						useTodoStore.getState().setFilter(TodoFilter.Active);
+					});
+					setPriorityFilter('medium');
+					setDueDateFilter('overdue');
+
+					// When: Getting filtered todos
+					const filtered = useTodoStore.getState().getFilteredAndSortedTodos();
+
+					// Then: Should return only active medium overdue todos
+					const expected = todos.filter(
+						(t: Todo) =>
+							!t.completed && t.priority === 'medium' && t.dueDate && t.dueDate < todayStr
+					);
+					expect(filtered).toHaveLength(expected.length); // Should be 1 ('Overdue Task')
+					expect(filtered[0]?.title).toBe('Overdue Task');
+					expect(
+						filtered.every(
+							(t: Todo) =>
+								!t.completed && t.priority === 'medium' && t.dueDate && t.dueDate < todayStr
+						)
+					).toBe(true);
+				});
+
+				it('should return all todos (respecting other filters) when due date filter is reset', () => {
+					// Given: Filters are set initially
+					act(() => {
+						useTodoStore.getState().setFilter(TodoFilter.Active);
+					});
+					setPriorityFilter('medium');
+					setDueDateFilter('overdue');
+					const initiallyFiltered = useTodoStore.getState().getFilteredAndSortedTodos();
+					expect(initiallyFiltered.length).toBe(1); // Active Medium Overdue
+
+					// When: Due date filter is reset
+					setDueDateFilter(undefined);
+					const afterReset = useTodoStore.getState().getFilteredAndSortedTodos();
+
+					// Then: Should return all Active Medium todos
+					const expected = todos.filter((t: Todo) => !t.completed && t.priority === 'medium');
+					expect(afterReset).toHaveLength(expected.length); // Should be 1 ('Task Medium 1')
+					expect(afterReset.every((t: Todo) => !t.completed && t.priority === 'medium')).toBe(true);
+				});
+			});
 		});
 	});
 });
