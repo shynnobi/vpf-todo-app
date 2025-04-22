@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { AddTodoForm } from '@/components/AddTodoForm';
+import { AdvancedFilters } from '@/components/AdvancedFilters';
 import { TodoFilter } from '@/components/TodoFilter';
 import { TodoList } from '@/components/TodoList';
 import { useTodoStore } from '@/store/todoStore';
@@ -46,7 +47,10 @@ export function TodoContainer() {
 		<div className="max-w-xl mx-auto p-4">
 			<h1 className="text-2xl font-bold text-center mb-6">Todo App</h1>
 			<AddTodoForm onAddTodo={addTodo} />
-			<TodoFilter currentFilter={filter} onFilterChange={setFilter} counts={counts} />
+			<div className="my-4 flex justify-between items-center">
+				<TodoFilter currentFilter={filter} onFilterChange={setFilter} counts={counts} />
+				<AdvancedFilters />
+			</div>
 			<TodoList
 				todos={filteredTodos}
 				onToggleTodo={toggleTodo}
