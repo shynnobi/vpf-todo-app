@@ -25,11 +25,12 @@ type Story = StoryObj<typeof meta>;
 
 // --- Stories ---
 
-const defaultInitialData: Pick<Todo, 'id' | 'title' | 'description' | 'dueDate'> = {
+const defaultInitialData: Pick<Todo, 'id' | 'title' | 'description' | 'dueDate' | 'priority'> = {
 	id: 'edit-1',
 	title: 'Initial Title',
 	description: 'Initial Description',
 	dueDate: '2024-10-20',
+	priority: 'medium',
 };
 
 export const Default: Story = {
@@ -45,6 +46,7 @@ export const WithEmptyOptionalFields: Story = {
 			id: 'edit-2',
 			description: undefined,
 			dueDate: undefined,
+			priority: 'low',
 		},
 	},
 };
@@ -54,7 +56,19 @@ export const MinimalData: Story = {
 		initialData: {
 			id: 'edit-3',
 			title: 'Only Title',
-			// description and dueDate will default to '' in the component state
+			priority: null,
+		},
+	},
+};
+
+export const EditingNoPriority: Story = {
+	args: {
+		initialData: {
+			id: 'edit-4',
+			title: 'Task with No Priority',
+			description: 'Try setting a priority',
+			dueDate: '',
+			priority: null,
 		},
 	},
 };

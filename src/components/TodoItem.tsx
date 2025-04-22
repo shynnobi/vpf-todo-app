@@ -7,17 +7,22 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PriorityLevel, Todo, TodoItemProps } from '@/types/todoTypes';
 
-// Helper function to get badge classes based on priority
-const getPriorityBadgeClasses = (priority: PriorityLevel): string => {
+// Update signature to accept null, return string | null
+const getPriorityBadgeClasses = (priority: PriorityLevel | null): string | null => {
+	if (priority === null) {
+		return null; // Return null if no priority, badge won't render styles properly or we hide it
+	}
 	switch (priority) {
 		case 'high':
-			return 'border-transparent bg-red-100 text-red-700 hover:bg-red-100/80'; // Subtle red
+			return 'border-transparent bg-red-100 text-red-700 hover:bg-red-100/80';
 		case 'medium':
-			return 'border-transparent bg-yellow-100 text-yellow-700 hover:bg-yellow-100/80'; // Subtle yellow
+			return 'border-transparent bg-yellow-100 text-yellow-700 hover:bg-yellow-100/80';
 		case 'low':
-			return 'border-transparent bg-blue-100 text-blue-700 hover:bg-blue-100/80'; // Subtle blue
+			return 'border-transparent bg-blue-100 text-blue-700 hover:bg-blue-100/80';
 		default:
-			return 'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80'; // Default like secondary
+			// This case should technically not be reachable with PriorityLevel type
+			// but returning a default style or null is safer.
+			return 'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80';
 	}
 };
 
@@ -49,6 +54,8 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 		setIsEditing(false);
 	};
 
+	const badgeClasses = getPriorityBadgeClasses(todo.priority);
+
 	return (
 		<li
 			className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0 hover:bg-muted/50 transition-colors duration-150"
@@ -69,11 +76,12 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 					/>
 					<div className="flex-1 flex flex-col text-sm py-1">
 						<div className="flex items-center gap-2">
-							<Badge
-								className={`px-1.5 py-0.5 text-xs font-medium ${getPriorityBadgeClasses(todo.priority)}`}
-							>
-								{todo.priority}
-							</Badge>
+							{/* Conditionally render the Badge only if priority is not null and classes exist */}
+							{todo.priority && badgeClasses && (
+								<Badge className={`px-1.5 py-0.5 text-xs font-medium ${badgeClasses}`}>
+									{todo.priority}
+								</Badge>
+							)}
 							<span
 								id={`todo-title-${todo.id}`}
 								className={`${todo.completed ? 'text-gray-500 line-through' : ''}`}
