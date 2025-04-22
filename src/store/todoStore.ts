@@ -27,7 +27,7 @@ export const useTodoStore = create<TodoState>()(
 					completed: params.completed ?? false,
 					description: params.description,
 					dueDate: params.dueDate,
-					priority: params.priority ?? 'medium',
+					priority: params.priority ?? null,
 				};
 
 				set(state => ({
@@ -89,14 +89,21 @@ export const useTodoStore = create<TodoState>()(
 
 			getSortedTodosByPriority: (): Todo[] => {
 				const todos = get().todos;
-				// Define the sort order for priorities
-				const priorityOrder: Record<PriorityLevel, number> = {
+				// Define the sort order, assigning a high number to null to place it last
+				const priorityOrder: Record<PriorityLevel | string, number> = {
+					// Use string index for null
 					high: 1,
 					medium: 2,
 					low: 3,
+					null: 4, // Treat null as the lowest priority
 				};
-				// Create a new sorted array (do not mutate the original state)
-				return [...todos].sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+
+				return [...todos].sort((a, b) => {
+					// Get the order value for each todo's priority (use 'null' key if priority is null)
+					const orderA = priorityOrder[String(a.priority)];
+					const orderB = priorityOrder[String(b.priority)];
+					return orderA - orderB;
+				});
 			},
 
 			reset: () => {
