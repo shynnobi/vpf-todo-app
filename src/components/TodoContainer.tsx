@@ -14,6 +14,8 @@ export function TodoContainer() {
 	// Use separate atomic selectors instead of object selector to prevent unnecessary re-renders
 	const todos = useTodoStore(state => state.todos);
 	const filter = useTodoStore(state => state.filter);
+	const priorityFilter = useTodoStore(state => state.priorityFilter);
+	const dueDateFilter = useTodoStore(state => state.dueDateFilter);
 
 	// Actions selectors (these are stable)
 	const addTodo = useTodoStore(state => state.addTodo);
@@ -23,16 +25,35 @@ export function TodoContainer() {
 	const updateTodo = useTodoStore(state => state.updateTodo);
 
 	const filteredTodos = useMemo(() => {
-		switch (filter) {
-			case FilterType.Active:
-				return todos.filter(todo => !todo.completed);
-			case FilterType.Completed:
-				return todos.filter(todo => todo.completed);
-			case FilterType.All:
-			default:
-				return todos;
+		let result = todos;
+
+		// 1. Apply status filter (All, Active, Completed)
+		if (filter === FilterType.Active) {
+			result = result.filter(todo => !todo.completed);
+		} else if (filter === FilterType.Completed) {
+			result = result.filter(todo => todo.completed);
 		}
-	}, [todos, filter]);
+
+		// 2. Apply priority filter (if not 'undefined')
+		if (priorityFilter !== undefined) {
+			result = result.filter(todo => todo.priority === priorityFilter);
+		}
+
+		// 3. Apply due date filter (if not 'undefined')
+		if (dueDateFilter !== undefined) {
+			const now = new Date();
+			if (dueDateFilter === 'overdue') {
+				result = result.filter(
+					todo => todo.dueDate && new Date(todo.dueDate) < now && !todo.completed
+				);
+			} else if (dueDateFilter === 'no-due-date') {
+				result = result.filter(todo => !todo.dueDate);
+			}
+			// Potential future date filters (e.g., 'today', 'this-week') could be added here
+		}
+
+		return result;
+	}, [todos, filter, priorityFilter, dueDateFilter]);
 
 	const counts = useMemo(
 		() => ({
