@@ -260,7 +260,7 @@ describe('TodoItem Component', () => {
 
 			const dueDateInput = screen.getByLabelText(/due date/i);
 			const newDueDate = '2024-12-31';
-			fireEvent.change(dueDateInput, { target: { value: newDueDate } });
+			await userEvent.type(dueDateInput, newDueDate);
 
 			const priorityButton = screen.getByRole('button', { name: /select priority for this task/i });
 			await userEvent.click(priorityButton);
@@ -293,9 +293,9 @@ describe('TodoItem Component', () => {
 			const titleInput = screen.getByRole('textbox', { name: /edit title/i });
 			await userEvent.type(titleInput, 'Temporary Change');
 			const descriptionInput = screen.getByRole('textbox', { name: /edit description/i });
-			fireEvent.change(descriptionInput, { target: { value: 'Temp Desc' } });
+			await userEvent.type(descriptionInput, 'Temp Desc');
 			const dueDateInput = screen.getByLabelText(/due date/i);
-			fireEvent.change(dueDateInput, { target: { value: '2025-01-01' } });
+			await userEvent.type(dueDateInput, '2025-01-01');
 
 			// And: The cancel button is clicked
 			const cancelButton = screen.getByRole('button', { name: /cancel$/i });

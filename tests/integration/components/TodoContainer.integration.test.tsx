@@ -341,37 +341,37 @@ describe('TodoContainer Component - Integration Tests', () => {
 			await act(async () => {
 				fireEvent.change(input, { target: { value: ACTIVE_TODO_TEXT } });
 				fireEvent.click(addButton);
-				await screen.findByText(ACTIVE_TODO_TEXT); // Ensure it's rendered within act
 			});
+			await screen.findByText(ACTIVE_TODO_TEXT); // Wait for the first todo to appear
 
-			// When: Adding todo that will be completed
+			// When: Adding completed todo
 			await act(async () => {
 				fireEvent.change(input, { target: { value: COMPLETED_TODO_TEXT } });
 				fireEvent.click(addButton);
-				await screen.findByText(COMPLETED_TODO_TEXT);
 			});
+			const addedCompletedTodo = await screen.findByText(COMPLETED_TODO_TEXT); // Wait for the second todo
 
-			// When: Marking the second todo as completed
-			const listItems = screen.getAllByRole('listitem'); // Assuming todos are in list items
-			const completedListItem = listItems.find(item =>
-				item.textContent?.includes(COMPLETED_TODO_TEXT)
-			);
-			if (!completedListItem) throw new Error('Completed list item not found');
-			const checkbox = completedListItem.querySelector('input[type="checkbox"]');
-			if (!checkbox) throw new Error('Checkbox not found in completed item');
+			// Mark the second todo as completed
+			const listItem = addedCompletedTodo.closest('li');
+			if (!listItem) throw new Error('List item for completed todo not found');
+			const checkbox = listItem.querySelector('input[type="checkbox"]') as HTMLInputElement;
+			if (!checkbox) throw new Error('Checkbox for completed todo not found');
 
 			await act(async () => {
 				fireEvent.click(checkbox);
-				await waitFor(() => expect(checkbox).toBeChecked()); // Wait for completion within act
 			});
+			await waitFor(() => expect(checkbox.checked).toBe(true)); // Confirm it's checked
 		};
 
 		it('should display filter controls with initial counts', async () => {
-			// Given: The store is initialized with todos
-			render(<TodoContainer />);
+			// Given: The store is initialized
+			// When: Rendering the component (wrapped in act)
+			act(() => {
+				render(<TodoContainer />);
+			});
 			await setupTodos();
 
-			// Then: Filter buttons should exist with correct initial counts
+			// Then: Filter buttons should exist with correct initial counts (All: 2, Active: 1, Completed: 1)
 			const allButton = await screen.findByRole('button', { name: /show all todos/i });
 			const activeButton = await screen.findByRole('button', { name: /show active todos/i });
 			const completedButton = await screen.findByRole('button', { name: /show completed todos/i });
@@ -388,7 +388,9 @@ describe('TodoContainer Component - Integration Tests', () => {
 
 		it('should filter to show only active todos when Active button is clicked', async () => {
 			// Given: The store is initialized with todos
-			render(<TodoContainer />);
+			act(() => {
+				render(<TodoContainer />);
+			});
 			await setupTodos();
 
 			// Given: The activeButton is found after todos are set up
@@ -413,7 +415,9 @@ describe('TodoContainer Component - Integration Tests', () => {
 
 		it('should filter to show only completed todos when Completed button is clicked', async () => {
 			// Given: The store is initialized with todos
-			render(<TodoContainer />);
+			act(() => {
+				render(<TodoContainer />);
+			});
 			await setupTodos();
 
 			// Given: The completedButton is found after todos are set up
@@ -438,7 +442,9 @@ describe('TodoContainer Component - Integration Tests', () => {
 
 		it('should show all todos when All button is clicked after filtering', async () => {
 			// Given: The store is initialized with todos
-			render(<TodoContainer />);
+			act(() => {
+				render(<TodoContainer />);
+			});
 			await setupTodos();
 
 			// When: Active filter is applied first
@@ -467,7 +473,9 @@ describe('TodoContainer Component - Integration Tests', () => {
 
 		it('should update filter counts when a todo status changes', async () => {
 			// Given: The store is initialized with two active todos
-			render(<TodoContainer />);
+			act(() => {
+				render(<TodoContainer />);
+			});
 			const input = screen.getByPlaceholderText(/what's on your mind/i);
 			const addButton = screen.getByRole('button', { name: /add/i });
 
