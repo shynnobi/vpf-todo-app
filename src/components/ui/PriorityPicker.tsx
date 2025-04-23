@@ -38,7 +38,7 @@ export const PriorityPicker: React.FC<PriorityPickerProps> = ({
 			<DropdownMenuTrigger asChild>
 				<Button
 					variant="outline"
-					className={`flex items-center gap-1 px-3 py-1 h-auto text-sm cursor-pointer ${className ?? ''}`}
+					className={`flex items-center gap-1 px-3 py-2 h-auto text-sm cursor-pointer ${className ?? ''}`}
 					aria-label={ariaLabel}
 				>
 					<ArrowUpDown className="mr-1 h-4 w-4" />

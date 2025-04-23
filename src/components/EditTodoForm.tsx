@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { X } from 'lucide-react';
+import { Save, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { PriorityPicker } from '@/components/ui/PriorityPicker';
@@ -108,14 +108,17 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 
 			{/* Action Buttons */}
 			<div className="mt-4 flex justify-end space-x-2">
-				<button
+				<Button
 					type="button"
+					variant="ghost"
 					onClick={onCancel}
-					className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer"
+					className="cursor-pointer text-gray-600"
+					size="sm"
 				>
-					Cancel
-				</button>
-				<Button type="submit" size="sm">
+					<X /> Cancel
+				</Button>
+				<Button type="submit" size="sm" className="cursor-pointer">
+					<Save />
 					Save Changes
 				</Button>
 			</div>
