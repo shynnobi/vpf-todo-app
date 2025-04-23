@@ -76,18 +76,19 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 					/>
 					<div className="flex-1 flex flex-col text-sm py-1">
 						<div className="flex items-center gap-2">
-							{/* Conditionally render the Badge only if priority is not null and classes exist */}
-							{todo.priority && badgeClasses && (
-								<Badge className={`px-1.5 py-0.5 text-xs font-medium ${badgeClasses}`}>
-									{todo.priority}
-								</Badge>
-							)}
 							<span
 								id={`todo-title-${todo.id}`}
 								className={`${todo.completed ? 'text-gray-500 line-through' : ''}`}
 							>
 								{todo.title}
 							</span>
+
+							{/* Conditionally render the Badge only if priority is not null and classes exist */}
+							{todo.priority && badgeClasses && (
+								<Badge className={`px-1.5 py-0.5 text-xs font-medium ${badgeClasses}`}>
+									{todo.priority}
+								</Badge>
+							)}
 						</div>
 						{/* Display description if it exists */}
 						{todo.description && (

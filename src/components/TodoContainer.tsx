@@ -65,8 +65,8 @@ export function TodoContainer() {
 	);
 
 	return (
-		<div className="max-w-xl mx-auto p-4">
-			<h1 className="text-2xl font-bold text-center mb-6">Todo App</h1>
+		<div className="max-w-xl mx-auto p-4 mt-10">
+			{/* <h1 className="text-2xl font-bold text-center mb-6">Todo App</h1> */}
 			<AddTodoForm onAddTodo={addTodo} />
 			<div className="my-4 flex justify-between gap-3 items-center">
 				<TodoFilter currentFilter={filter} onFilterChange={setFilter} counts={counts} />
