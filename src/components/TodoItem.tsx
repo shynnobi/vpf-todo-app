@@ -7,10 +7,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PriorityLevel, Todo, TodoItemProps } from '@/types/todoTypes';
 
-// Update signature to accept null, return string | null
+// Return type is string (classes) or null (no badge)
 const getPriorityBadgeClasses = (priority: PriorityLevel | null): string | null => {
 	if (priority === null) {
-		return null; // Return null if no priority, badge won't render styles properly or we hide it
+		// No specific classes if priority is null
+		return null;
 	}
 	switch (priority) {
 		case 'high':
@@ -54,7 +55,8 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 		setIsEditing(false);
 	};
 
-	const badgeClasses = getPriorityBadgeClasses(todo.priority);
+	// Determine badge classes based on priority, handling null/undefined
+	const badgeClasses = getPriorityBadgeClasses(todo.priority ?? null);
 
 	return (
 		<li

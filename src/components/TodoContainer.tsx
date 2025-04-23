@@ -1,21 +1,30 @@
 import { useMemo } from 'react';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 
 import { AddTodoForm } from '@/components/AddTodoForm';
-import { AdvancedFilters } from '@/components/AdvancedFilters';
 import { TodoFilter } from '@/components/TodoFilter';
 import { TodoList } from '@/components/TodoList';
+import { Button } from '@/components/ui/button';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select';
+import { sortOptions } from '@/constants/sortOptions';
 import { useTodoStore } from '@/store/todoStore';
 import { TodoFilter as FilterType } from '@/types/todoTypes';
+import { getFilteredAndSortedTodosUtil } from '@/utils/todoUtils';
 
 /**
  * Container component that orchestrates the Todo application UI.
  */
 export function TodoContainer() {
-	// Use separate atomic selectors instead of object selector to prevent unnecessary re-renders
+	// Read raw state needed for local computation
 	const todos = useTodoStore(state => state.todos);
 	const filter = useTodoStore(state => state.filter);
-	const priorityFilter = useTodoStore(state => state.priorityFilter);
-	const dueDateFilter = useTodoStore(state => state.dueDateFilter);
+	const sortConfig = useTodoStore(state => state.sortConfig);
 
 	// Actions selectors (these are stable)
 	const addTodo = useTodoStore(state => state.addTodo);
@@ -23,37 +32,12 @@ export function TodoContainer() {
 	const deleteTodo = useTodoStore(state => state.deleteTodo);
 	const setFilter = useTodoStore(state => state.setFilter);
 	const updateTodo = useTodoStore(state => state.updateTodo);
+	const setSortConfig = useTodoStore(state => state.setSortConfig);
 
-	const filteredTodos = useMemo(() => {
-		let result = todos;
-
-		// 1. Apply status filter (All, Active, Completed)
-		if (filter === FilterType.Active) {
-			result = result.filter(todo => !todo.completed);
-		} else if (filter === FilterType.Completed) {
-			result = result.filter(todo => todo.completed);
-		}
-
-		// 2. Apply priority filter (if not 'undefined')
-		if (priorityFilter !== undefined) {
-			result = result.filter(todo => todo.priority === priorityFilter);
-		}
-
-		// 3. Apply due date filter (if not 'undefined')
-		if (dueDateFilter !== undefined) {
-			const now = new Date();
-			if (dueDateFilter === 'overdue') {
-				result = result.filter(
-					todo => todo.dueDate && new Date(todo.dueDate) < now && !todo.completed
-				);
-			} else if (dueDateFilter === 'no-due-date') {
-				result = result.filter(todo => !todo.dueDate);
-			}
-			// Potential future date filters (e.g., 'today', 'this-week') could be added here
-		}
-
-		return result;
-	}, [todos, filter, priorityFilter, dueDateFilter]);
+	// Use useMemo to call the utility function only when dependencies change
+	const filteredAndSortedTodos = useMemo(() => {
+		return getFilteredAndSortedTodosUtil(todos, filter, sortConfig);
+	}, [todos, filter, sortConfig]);
 
 	const counts = useMemo(
 		() => ({
@@ -64,24 +48,78 @@ export function TodoContainer() {
 		[todos]
 	);
 
+	// Handler for Sort Select change
+	const handleSortChange = (value: string) => {
+		const selectedOption = sortOptions.find(opt => opt.value === value);
+		if (selectedOption) {
+			setSortConfig({ criterion: selectedOption.criterion, direction: selectedOption.direction });
+		}
+	};
+
+	// Handler for Sort Direction toggle
+	const handleSortDirectionToggle = () => {
+		setSortConfig({ direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' });
+	};
+
+	// Generate the current value for the Select based on state
+	const currentSortValue = `${sortConfig.criterion}_${sortConfig.direction}`;
+
 	return (
 		<div className="max-w-xl mx-auto p-4 mt-10">
 			{/* <h1 className="text-2xl font-bold text-center mb-6">Todo App</h1> */}
 			<AddTodoForm onAddTodo={addTodo} />
-			<div className="my-4 flex justify-between gap-3 items-center">
+
+			{/* Filter and Sort Controls Row */}
+			<div
+				className="my-4 flex flex-wrap justify-between gap-3 items-center"
+				aria-label="Filter and sort controls"
+			>
+				{/* Status Filter */}
 				<TodoFilter currentFilter={filter} onFilterChange={setFilter} counts={counts} />
-				<AdvancedFilters />
+
+				{/* Sorting Controls */}
+				<div className="flex items-center gap-2">
+					<Select value={currentSortValue} onValueChange={handleSortChange}>
+						<SelectTrigger className="w-[180px]" aria-label="Sort by">
+							<SelectValue placeholder="Sort by..." />
+						</SelectTrigger>
+						<SelectContent>
+							{sortOptions.map(option => (
+								<SelectItem key={option.value} value={option.value}>
+									{/* Icon placeholder - add later */}
+									{option.label}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+					<Button
+						variant="outline"
+						size="icon"
+						onClick={handleSortDirectionToggle}
+						aria-label="Change sort direction"
+					>
+						{sortConfig.direction === 'asc' ? (
+							<ArrowUp className="h-4 w-4" />
+						) : (
+							<ArrowDown className="h-4 w-4" />
+						)}
+					</Button>
+				</div>
 			</div>
+
+			{/* Todo List */}
 			<TodoList
-				todos={filteredTodos}
+				todos={filteredAndSortedTodos}
 				onToggleTodo={toggleTodo}
 				onDeleteTodo={deleteTodo}
 				onSaveTodo={updateTodo}
 			/>
+
+			{/* Footer Count */}
 			<hr className="my-2" />
 			<p className="text-center text-sm text-gray-500 mt-4">
 				{counts[FilterType.All]} tasks total
-				{filter !== FilterType.All && ` (${filteredTodos.length} shown)`}
+				{filter !== FilterType.All && ` (${filteredAndSortedTodos.length} shown)`}
 			</p>
 		</div>
 	);

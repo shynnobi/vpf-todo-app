@@ -14,16 +14,18 @@ import { Todo } from '@/types/todoTypes';
 describe('TodoItem Component', () => {
 	const mockIncompleteTodo: Todo = {
 		id: '1',
-		title: 'Learn React',
+		title: 'Incomplete Task',
 		completed: false,
 		priority: 'medium',
+		creationDate: '2023-01-01T10:00:00Z',
 	};
 
 	const mockCompletedTodo: Todo = {
 		id: '2',
-		title: 'Build a todo app',
+		title: 'Completed Task',
 		completed: true,
 		priority: 'high',
+		creationDate: '2023-01-02T11:00:00Z',
 	};
 
 	// Define mock handlers once, typed as functions
@@ -60,7 +62,7 @@ describe('TodoItem Component', () => {
 			);
 
 			// Then: It should display the todo title
-			expect(screen.getByText('Learn React')).toBeInTheDocument();
+			expect(screen.getByText('Incomplete Task')).toBeInTheDocument();
 		});
 
 		it('should render a checkbox with the correct checked state for an incomplete todo', () => {
@@ -110,7 +112,7 @@ describe('TodoItem Component', () => {
 			);
 
 			// Then: The text should have a line-through style for completed todos
-			const titleElement = screen.getByText('Build a todo app');
+			const titleElement = screen.getByText('Completed Task');
 			expect(titleElement).toHaveClass('line-through');
 
 			// Given: An incomplete todo
@@ -125,7 +127,7 @@ describe('TodoItem Component', () => {
 			);
 
 			// Then: The text should not have a line-through style
-			const incompleteTitle = screen.getByText('Learn React');
+			const incompleteTitle = screen.getByText('Incomplete Task');
 			expect(incompleteTitle).not.toHaveClass('line-through');
 		});
 
@@ -142,7 +144,7 @@ describe('TodoItem Component', () => {
 			);
 
 			// Then: It should display a delete button
-			const deleteButton = screen.getByRole('button', { name: /delete todo: learn react/i });
+			const deleteButton = screen.getByRole('button', { name: /delete todo: incomplete task/i });
 			expect(deleteButton).toBeInTheDocument();
 		});
 	});
@@ -181,7 +183,7 @@ describe('TodoItem Component', () => {
 			);
 
 			// When: The delete button is clicked
-			const deleteButton = screen.getByRole('button', { name: /delete todo: learn react/i });
+			const deleteButton = screen.getByRole('button', { name: /delete todo: incomplete task/i });
 			fireEvent.click(deleteButton);
 
 			// Then: onDelete should be called with the todo id
@@ -218,8 +220,8 @@ describe('TodoItem Component', () => {
 			);
 
 			// Then: The delete button should have a descriptive ARIA label
-			const deleteButton = screen.getByRole('button', { name: /delete todo: learn react/i });
-			expect(deleteButton).toHaveAttribute('aria-label', 'Delete todo: Learn React');
+			const deleteButton = screen.getByRole('button', { name: /delete todo: incomplete task/i });
+			expect(deleteButton).toHaveAttribute('aria-label', 'Delete todo: Incomplete Task');
 		});
 	});
 

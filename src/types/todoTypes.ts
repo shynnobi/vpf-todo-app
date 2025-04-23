@@ -4,9 +4,10 @@ export interface Todo {
 	id: string;
 	title: string;
 	completed: boolean;
+	creationDate: string;
 	description?: string;
 	dueDate?: string;
-	priority: PriorityLevel | null;
+	priority?: PriorityLevel | null;
 }
 
 export enum TodoFilter {
