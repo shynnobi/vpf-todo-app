@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { CalendarClock, Image, Plus } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { PriorityPicker } from '@/components/ui/PriorityPicker';
@@ -35,7 +35,7 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 	return (
 		<form
 			onSubmit={handleSubmit}
-			className="flex items-center gap-2 mb-4"
+			className="flex flex-col items-center gap-3 mb-8 p-3 bg-amber-100 rounded-md border border-amber-200 shadow-md"
 			aria-label="Add todo form"
 			role="form"
 		>
@@ -43,20 +43,27 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 				type="text"
 				value={title}
 				onChange={e => setTitle(e.target.value)}
-				placeholder="Add a new todo"
-				className="flex-1 text-sm px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+				placeholder="What's on your mind?"
+				className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs bg-white"
 				aria-label="Todo title"
 			/>
 
-			<PriorityPicker
-				value={priority}
-				onPriorityChange={handlePrioritySelect}
-				ariaLabel="Select priority for new task"
-			/>
-
-			<Button type="submit" variant="default" className="flex items-center gap-1 cursor-pointer">
-				<Plus className="h-4 w-4" /> <span className="mr-1">Add</span>
-			</Button>
+			<div className="flex gap-2 w-full justify-end">
+				<Button variant="outline" className="cursor-pointer">
+					<Image />
+				</Button>
+				<Button variant="outline" className="cursor-pointer">
+					<CalendarClock />
+				</Button>
+				<PriorityPicker
+					value={priority}
+					onPriorityChange={handlePrioritySelect}
+					ariaLabel="Select priority for new task"
+				/>
+				<Button type="submit" variant="default" className="flex items-center gap-1 cursor-pointer">
+					<Plus className="h-4 w-4" /> <span className="mr-1">Add</span>
+				</Button>
+			</div>
 		</form>
 	);
 }

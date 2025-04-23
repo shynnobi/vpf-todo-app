@@ -53,7 +53,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// When: A new todo is added through the form
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			await act(async () => {
 				fireEvent.change(inputElement, { target: { value: 'Test Todo' } });
 				fireEvent.click(screen.getByRole('button', { name: /add/i }));
@@ -78,7 +78,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// When: Multiple todos are added
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			const addButton = screen.getByRole('button', { name: /add/i });
 
 			// When: First todo is added
@@ -114,7 +114,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// And: A todo is added
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			await act(async () => {
 				fireEvent.change(inputElement, { target: { value: 'Toggle Test Todo' } });
 				fireEvent.click(screen.getByRole('button', { name: /add/i }));
@@ -142,7 +142,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// And: A todo is added
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			await act(async () => {
 				fireEvent.change(inputElement, { target: { value: 'Todo to Delete' } });
 				fireEvent.click(screen.getByRole('button', { name: /add/i }));
@@ -171,7 +171,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// And: Multiple todos are added
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			const addButton = screen.getByRole('button', { name: /add/i });
 
 			// When: First todo is added
@@ -222,7 +222,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// When: A todo is added
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			await act(async () => {
 				fireEvent.change(inputElement, { target: { value: 'Persisted Task' } });
 				fireEvent.click(screen.getByRole('button', { name: /add/i }));
@@ -254,7 +254,9 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// And: Input should be empty after remount
-			const inputAfterRemount = screen.getByPlaceholderText(/add a new todo/i) as HTMLInputElement;
+			const inputAfterRemount = screen.getByPlaceholderText(
+				/what's on your mind/i
+			) as HTMLInputElement;
 			expect(inputAfterRemount.value).toBe('');
 		});
 	});
@@ -264,7 +266,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 		act(() => {
 			render(<TodoContainer />);
 		});
-		const input = screen.getByPlaceholderText(/add a new todo/i);
+		const input = screen.getByPlaceholderText(/what's on your mind/i);
 
 		// When: Adding a todo
 		await act(async () => {
@@ -304,7 +306,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 		act(() => {
 			render(<TodoContainer />);
 		});
-		const input = screen.getByPlaceholderText(/add a new todo/i);
+		const input = screen.getByPlaceholderText(/what's on your mind/i);
 		const addButton = screen.getByRole('button', { name: /add/i });
 
 		// When: Adding first todo
@@ -332,7 +334,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 		// Helper to add initial todos for filter tests
 		const setupTodos = async () => {
 			// Given: Input elements to add todos
-			const input = screen.getByPlaceholderText(/add a new todo/i);
+			const input = screen.getByPlaceholderText(/what's on your mind/i);
 			const addButton = screen.getByRole('button', { name: /add/i });
 
 			// When: Adding active todo
@@ -466,7 +468,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 		it('should update filter counts when a todo status changes', async () => {
 			// Given: The store is initialized with two active todos
 			render(<TodoContainer />);
-			const input = screen.getByPlaceholderText(/add a new todo/i);
+			const input = screen.getByPlaceholderText(/what's on your mind/i);
 			const addButton = screen.getByRole('button', { name: /add/i });
 
 			// When: Adding two active todos
