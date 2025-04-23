@@ -1,4 +1,4 @@
-import { CalendarClock, ListFilter } from 'lucide-react';
+import { ArrowUpDown, CalendarClock } from 'lucide-react';
 
 import {
 	Select,
@@ -7,6 +7,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { filterPriorityOptions } from '@/constants/priorities';
 import { DueDateFilter, useTodoStore } from '@/store/todoStore';
 import { PriorityLevel } from '@/types/todoTypes';
 
@@ -21,14 +22,6 @@ const stringToDueDateFilter = (value: string): DueDateFilter => {
 	return value as DueDateFilter; // Assume 'overdue', 'no-due-date'
 };
 
-const priorityOptions: Array<{ value: PriorityLevel | 'all' | null; label: string }> = [
-	{ value: 'all', label: 'All Priorities' },
-	{ value: 'high', label: 'High' },
-	{ value: 'medium', label: 'Medium' },
-	{ value: 'low', label: 'Low' },
-	{ value: null, label: 'None' },
-];
-
 export function AdvancedFilters() {
 	// Use atomic selectors for state and actions
 	const priorityFilter = useTodoStore(state => state.priorityFilter);
@@ -37,7 +30,8 @@ export function AdvancedFilters() {
 	const setDueDateFilter = useTodoStore(state => state.setDueDateFilter);
 
 	const handlePriorityChange = (value: string) => {
-		const selectedPriority = value === 'all' ? undefined : (value as PriorityLevel | null);
+		const selectedPriority: PriorityLevel | null | undefined =
+			value === 'all' ? undefined : (value as PriorityLevel | null);
 		setPriorityFilter(selectedPriority);
 	};
 
@@ -45,21 +39,21 @@ export function AdvancedFilters() {
 		setDueDateFilter(stringToDueDateFilter(value));
 	};
 
-	// Determine the display value for the trigger
+	// Determine the display value for the trigger using the shared options
 	const currentPriorityLabel =
-		priorityOptions.find(opt => opt.value === (priorityFilter ?? 'all'))?.label ||
+		filterPriorityOptions.find(opt => opt.value === (priorityFilter ?? 'all'))?.label ||
 		'Filter by priority...';
 
 	return (
 		<div className="flex items-center gap-2">
 			{/* Priority Filter */}
-			<Select value={priorityFilter ?? 'all'} onValueChange={handlePriorityChange}>
+			<Select value={String(priorityFilter ?? 'all')} onValueChange={handlePriorityChange}>
 				<SelectTrigger className="w-[180px] text-muted-foreground">
-					<ListFilter className="mr-2 h-4 w-4" />
+					<ArrowUpDown className="mr-2 h-4 w-4" />
 					<SelectValue placeholder="Filter by priority...">{currentPriorityLabel}</SelectValue>
 				</SelectTrigger>
 				<SelectContent>
-					{priorityOptions.map(option => (
+					{filterPriorityOptions.map(option => (
 						<SelectItem key={String(option.value)} value={String(option.value)}>
 							{option.label}
 						</SelectItem>

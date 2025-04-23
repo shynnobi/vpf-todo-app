@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { Pencil, Trash } from 'lucide-react';
 
 import { EditTodoForm } from './EditTodoForm';
 
@@ -107,18 +107,18 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 							size="icon"
 							onClick={handleEdit}
 							aria-label={`Edit todo: ${todo.title}`}
-							className="h-7 w-7 text-muted-foreground hover:text-blue-600"
+							className="h-7 w-7 text-muted-foreground hover:text-blue-600 cursor-pointer"
 						>
-							<FaEdit className="h-4 w-4" />
+							<Pencil className="h-4 w-4" />
 						</Button>
 						<Button
 							variant="ghost"
 							size="icon"
 							onClick={handleDelete}
 							aria-label={`Delete todo: ${todo.title}`}
-							className="h-7 w-7 text-muted-foreground hover:text-red-600"
+							className="h-7 w-7 text-muted-foreground hover:text-red-600 cursor-pointer"
 						>
-							<FaTrashAlt className="h-4 w-4" />
+							<Trash className="h-4 w-4" />
 						</Button>
 					</div>
 				</div>

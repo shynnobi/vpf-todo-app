@@ -21,12 +21,12 @@ export function TodoFilter({ currentFilter, onFilterChange, counts }: TodoFilter
 	];
 
 	return (
-		<div className="flex justify-center space-x-2 mr-2">
+		<div className="flex items-center justify-center space-x-2 rounded-md text-muted-foreground">
 			{filterButtons.map(({ label, value, count, aria }) => {
 				const isPressed = currentFilter === value;
 				const buttonClass = isPressed
-					? 'px-4 py-2 rounded-md bg-blue-500 text-white text-sm'
-					: 'px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm';
+					? 'px-4 py-2 rounded-md bg-blue-500 text-white text-sm cursor-pointer'
+					: 'px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm cursor-pointer';
 
 				return (
 					<button
@@ -37,7 +37,7 @@ export function TodoFilter({ currentFilter, onFilterChange, counts }: TodoFilter
 						onClick={() => onFilterChange(value)}
 					>
 						{label}
-						<span className="ml-1 text-sm">({count})</span>
+						<span className="ml-1 text-sm font-bold">{count}</span>
 					</button>
 				);
 			})}

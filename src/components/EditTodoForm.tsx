@@ -1,14 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuRadioGroup,
-	DropdownMenuRadioItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { PriorityPicker } from '@/components/ui/PriorityPicker';
 import { PriorityLevel, Todo } from '@/types/todoTypes';
 
 type EditTodoFormProps = {
@@ -34,21 +28,8 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 		onSave(initialData.id, updates);
 	};
 
-	const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
-	const getPriorityButtonText = () => {
-		if (editedPriority === null) {
-			return 'Priority';
-		}
-		return capitalize(editedPriority);
-	};
-
-	const handlePriorityChange = (value: string) => {
-		if (value === 'null') {
-			setEditedPriority(null);
-		} else {
-			setEditedPriority(value as PriorityLevel);
-		}
+	const handlePrioritySelect = (selectedPriority: PriorityLevel | null) => {
+		setEditedPriority(selectedPriority);
 	};
 
 	return (
@@ -91,7 +72,7 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 			{/* Due Date and Priority Row */}
 			<div className="flex items-center gap-4">
 				{/* Due Date Input */}
-				<div>
+				<div className="relative">
 					<label htmlFor={`edit-date-${initialData.id}`} className="text-xs text-gray-600 mr-1">
 						Due Date
 					</label>
@@ -102,54 +83,41 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setEditedDueDate(e.target.value)}
 						className="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
 					/>
+					{editedDueDate && (
+						<button
+							type="button"
+							onClick={() => setEditedDueDate('')}
+							className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-destructive cursor-pointer"
+							aria-label="Clear due date"
+						>
+							<X className="h-4 w-4" />
+						</button>
+					)}
 				</div>
 
-				{/* Priority Dropdown - Added */}
+				{/* Priority Dropdown */}
 				<div>
-					<label className="text-xs text-gray-600 mr-1">Priority</label>
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button
-								variant="outline"
-								className="flex items-center gap-1 px-3 py-1 h-auto text-sm"
-								aria-label="Edit priority"
-							>
-								{getPriorityButtonText()}
-								<ChevronDown className="h-4 w-4" />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent className="w-40">
-							<DropdownMenuRadioGroup
-								value={editedPriority === null ? 'null' : editedPriority}
-								onValueChange={handlePriorityChange}
-							>
-								<DropdownMenuRadioItem value="null">None</DropdownMenuRadioItem>
-								<DropdownMenuRadioItem value="low">Low</DropdownMenuRadioItem>
-								<DropdownMenuRadioItem value="medium">Medium</DropdownMenuRadioItem>
-								<DropdownMenuRadioItem value="high">High</DropdownMenuRadioItem>
-							</DropdownMenuRadioGroup>
-						</DropdownMenuContent>
-					</DropdownMenu>
+					{/* <label className="text-xs text-gray-600 mr-1">Priority</label> */}
+					<PriorityPicker
+						value={editedPriority}
+						onPriorityChange={handlePrioritySelect}
+						ariaLabel="Select priority for this task"
+					/>
 				</div>
 			</div>
 
 			{/* Action Buttons */}
-			<div className="flex justify-end gap-2 mt-2">
-				<button
-					type="submit"
-					className="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1"
-					aria-label="Save changes"
-				>
-					Save
-				</button>
+			<div className="mt-4 flex justify-end space-x-2">
 				<button
 					type="button"
 					onClick={onCancel}
-					className="px-3 py-1 text-sm bg-gray-200 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-1"
-					aria-label="Cancel edit"
+					className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer"
 				>
 					Cancel
 				</button>
+				<Button type="submit" size="sm">
+					Save Changes
+				</Button>
 			</div>
 		</form>
 	);

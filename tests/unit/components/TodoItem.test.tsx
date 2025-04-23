@@ -238,7 +238,7 @@ describe('TodoItem Component', () => {
 			expect(screen.getByRole('textbox', { name: /edit description/i })).toBeInTheDocument();
 			expect(screen.getByLabelText(/due date/i)).toBeInTheDocument();
 			expect(screen.getByRole('button', { name: /save changes/i })).toBeInTheDocument();
-			expect(screen.getByRole('button', { name: /cancel edit/i })).toBeInTheDocument();
+			expect(screen.getByRole('button', { name: /cancel$/i })).toBeInTheDocument();
 		});
 
 		it('should call onSave with updated data when save button is clicked', async () => {
@@ -262,10 +262,8 @@ describe('TodoItem Component', () => {
 			const newDueDate = '2024-12-31';
 			fireEvent.change(dueDateInput, { target: { value: newDueDate } });
 
-			// Use aria-label to find the button reliably
-			const priorityButton = screen.getByRole('button', { name: /edit priority/i });
+			const priorityButton = screen.getByRole('button', { name: /select priority for this task/i });
 			await userEvent.click(priorityButton);
-			// Use correct role 'menuitemradio'
 			const lowOption = await screen.findByRole('menuitemradio', { name: /low/i });
 			await userEvent.click(lowOption);
 
@@ -300,7 +298,7 @@ describe('TodoItem Component', () => {
 			fireEvent.change(dueDateInput, { target: { value: '2025-01-01' } });
 
 			// And: The cancel button is clicked
-			const cancelButton = screen.getByRole('button', { name: /cancel edit/i });
+			const cancelButton = screen.getByRole('button', { name: /cancel$/i });
 			await userEvent.click(cancelButton);
 
 			// Then: The component should exit edit mode

@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuRadioGroup,
-	DropdownMenuRadioItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { PriorityPicker } from '@/components/ui/PriorityPicker';
 import { AddTodoFormProps, CreateTodoParams, PriorityLevel } from '@/types/todoTypes';
 
 /**
@@ -34,21 +28,8 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 		setPriority(null);
 	};
 
-	const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
-	const getPriorityButtonText = () => {
-		if (priority === null) {
-			return 'Priority';
-		}
-		return capitalize(priority);
-	};
-
-	const handlePriorityChange = (value: string) => {
-		if (value === 'null') {
-			setPriority(null);
-		} else {
-			setPriority(value as PriorityLevel);
-		}
+	const handlePrioritySelect = (selectedPriority: PriorityLevel | null) => {
+		setPriority(selectedPriority);
 	};
 
 	return (
@@ -67,28 +48,14 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 				aria-label="Todo title"
 			/>
 
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button variant="outline" className="flex items-center gap-1 px-3">
-						{getPriorityButtonText()}
-						<ChevronDown className="h-4 w-4" />
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent className="w-40">
-					<DropdownMenuRadioGroup
-						value={priority === null ? 'null' : priority}
-						onValueChange={handlePriorityChange}
-					>
-						<DropdownMenuRadioItem value="null">None</DropdownMenuRadioItem>
-						<DropdownMenuRadioItem value="low">Low</DropdownMenuRadioItem>
-						<DropdownMenuRadioItem value="medium">Medium</DropdownMenuRadioItem>
-						<DropdownMenuRadioItem value="high">High</DropdownMenuRadioItem>
-					</DropdownMenuRadioGroup>
-				</DropdownMenuContent>
-			</DropdownMenu>
+			<PriorityPicker
+				value={priority}
+				onPriorityChange={handlePrioritySelect}
+				ariaLabel="Select priority for new task"
+			/>
 
-			<Button type="submit" variant="default" className="px-4">
-				Add
+			<Button type="submit" variant="default" className="flex items-center gap-1 cursor-pointer">
+				<Plus className="h-4 w-4" /> <span className="mr-1">Add</span>
 			</Button>
 		</form>
 	);
