@@ -1,6 +1,6 @@
-# MVP-Oriented Todo Application Development Plan
+# MVP-Oriented Todo Application Development Plan (Consolidated)
 
-> **Note**: This development plan follows an MVP approach with incremental delivery of complete user features.
+> **Note**: This development plan follows an MVP approach with incremental delivery of complete user features and strategic refactoring phases.
 
 ## Phase 0: Epic Definition & Roadmapping
 
@@ -39,7 +39,7 @@
 - [x] COMP-1: Write tests for "Complete Todo" feature
 - [x] COMP-2: Implement completion toggle in TodoItem
 - [x] COMP-3: Implement store integration for toggling completion
-- [ ] COMP-4: Create PR `mvp/complete-todo-feature` → `dev` _(Branch not needed, feature implemented earlier)_
+- [x] COMP-4: PR not needed, feature implemented earlier
 
 **Branch: `feat/app-assembly`**
 
@@ -68,12 +68,13 @@
 - [x] DEL-1: Write tests for "Delete Todo" feature
 - [x] DEL-2: Implement delete button in TodoItem
 - [x] DEL-3: Implement store integration for deleting
-- [x] DEL-4: Create PR `feat/todo-deletion` → `dev`
+- [ ] DEL-CONFIRM-TESTS: Verify/Adapt tests for deletion confirmation dialog (Post-implementation check from REFACTORING_PLAN#1)
+- [x] DEL-4: Create PR `feat/todo-deletion` → `dev` (Dialog added later)
 
 **Branch: `feat/basic-filtering`**
 
 - [x] FILT-1: Write tests for "Filter Todos" feature (active/completed)
-- [x] FILT-2: Implement basic filter controls
+- [x] FILT-2: Implement basic filter controls (`TodoFilter`)
 - [x] FILT-3: Implement store integration for filtering
 - [x] FILT-STORY: Create Storybook stories for TodoFilter component
 - [x] FILT-4: Create PR `feat/basic-filtering` → `dev`
@@ -84,9 +85,9 @@
 - [x] ENH-2: All tests pass
 - [x] ENH-3: Create tag `v0.2.0`
 
-## Phase 3: Advanced Features
+## Phase 3: Advanced Data Features & Core Interactions
 
-**Branch: `feat/todo-details`**
+**Branch: `feat/todo-details`** (Included Description & Initial Due Date Logic)
 
 - [x] DET-1: Write/Adapt store tests for description and due date handling
 - [x] DET-2: Extend Todo model with description and due date
@@ -95,7 +96,7 @@
 - [x] DET-5: Implement detailed Todo edit form component
 - [x] DET-6: Update TodoItem to display additional details & integrate edit form
 - [x] DET-STORY: Create Storybook stories for updated TodoItem and new Edit Form
-- [x] DET-7: Create PR `feat/todo-details` → `dev`
+- [x] DET-7: Create PR `feat/todo-details` → `dev` (Initial PR merged)
 
 **Branch: `feat/prioritization`**
 
@@ -115,41 +116,121 @@
 - [x] OPT-PRIO-4: Update forms to allow selecting "No Priority" (`null`)
 - [x] OPT-PRIO-5: Update display components to handle `null` priority
 - [x] OPT-PRIO-STORY: Update Storybook stories (AddTodoForm, TodoItem) for optional priority
-- [ ] OPT-PRIO-6: Create PR `feat/optional-priority` → `dev`
+- [x] OPT-PRIO-6: Create PR `feat/optional-priority` → `dev` (Marked as done)
 
-**Branch: `feat/advanced-filtering`**
+**Branch: `feat/add-due-date`** (Moved from Phase 4 & Consolidated Calendar Work)
 
-- [ ] AFILT-1: Write tests for advanced filtering (due date, priority)
-- [ ] AFILT-2: Implement advanced filter UI
-- [ ] AFILT-3: Implement advanced filter logic in store
-- [ ] AFILT-INTEG: Write/Update integration tests for advanced filtering (e.g., in TodoContainer)
-- [ ] AFILT-STORY: Create/Update Storybook stories for advanced filters
-- [ ] AFILT-4: Create PR `feat/advanced-filtering` → `dev`
+- [ ] DATE-1: Finalize `DatePicker` integration in `AddTodoForm`.
+- [ ] DATE-2: Finalize `DatePicker` integration in `TodoItem` edit mode.
+- [ ] DATE-3: Ensure store logic correctly handles `dueDate` on addition and update.
+- [ ] DATE-4: Write/Adapt stable unit tests for `AddTodoForm` & `TodoItem` edit form with `DatePicker` (addressing stability/mocking issues).
+- [ ] DATE-5: Write/Adapt relevant integration tests covering date addition/editing.
+- [ ] DATE-6: Create PR `feat/add-due-date` → `dev`
 
-**Feature-Complete Version (v0.3.0)**
+**Branch: `feat/todo-detail-modal`** (Moved from Phase 4)
 
-- [ ] FEAT-1: Verify advanced feature PRs are merged
+- [ ] MODAL-1: Design and implement Todo Detail Modal component UI.
+- [ ] MODAL-2: Implement logic to fetch/display full todo details.
+- [ ] MODAL-3: Integrate modal triggering (e.g., from TodoItem).
+- [ ] MODAL-4: Write unit tests for the Modal component.
+- [ ] MODAL-5: Adapt integration tests if necessary.
+- [ ] MODAL-STORY: Create Storybook stories for the Modal.
+- [ ] MODAL-6: Create PR `feat/todo-detail-modal` → `dev`
+
+**Advanced Data Features & Interactions Version (v0.3.0)** (Target)
+
+- [ ] FEAT-1: Verify advanced feature PRs are merged (Optional Priority, Modal, Due Date)
 - [ ] FEAT-2: All tests pass
 - [ ] FEAT-3: Create tag `v0.3.0`
 
-## Phase 4: Polish & Production Readiness
+## Phase 4: Strategic Refactoring & Feature Enhancements
+
+**Branch: `refactor/behavioral-tests-review`** (Improve Test Robustness)
+
+- [ ] BEHAV-TEST-1: Review `AddTodoForm.test.tsx` for behavioral focus. Refactor if needed.
+- [ ] BEHAV-TEST-2: Review `TodoList.test.tsx` for behavioral focus. Refactor if needed.
+- [ ] BEHAV-TEST-3: Review `TodoItem.test.tsx` for behavioral focus (consider date picker mock stability). Refactor if needed.
+- [ ] BEHAV-TEST-4: Review `TodoFilter.test.tsx` for behavioral focus. Refactor if needed.
+- [ ] BEHAV-TEST-5: Review `TodoContainer.test.tsx` (integration) - Coordinate with `refactor/integration-tests`.
+- [ ] BEHAV-TEST-6: Create PR `refactor/behavioral-tests-review` → `dev`
+
+**Branch: `refactor/integration-tests`** (Simplify Integration Tests)
+
+- [ ] INTEG-REF-1: Apply simplifications/removals to `TodoContainer.integration.test.tsx` as per TESTING_REFACTOR_PLAN.
+  - **Keep:** Initial rendering test.
+  - **Simplify:** Addition (check text/checkbox, remove counter).
+  - **Simplify:** Multiple additions (check text, remove counter).
+  - **Simplify:** Toggle completion (check text/style, remove counter).
+  - **Simplify:** Deletion (check disappearance/empty state, remove counter).
+  - **Simplify:** Delete one of multiple (check disappearance/presence, remove counter).
+  - **Simplify:** Persistence (keep main logic, remove counter).
+  - **Simplify:** Filter controls presence (remove count/aria-pressed checks).
+  - **Simplify:** Filtering logic (check item presence/absence, remove aria-pressed checks).
+  - **Simplify:** Clear completed (check item presence/absence, remove counter checks).
+  - **Remove:** Redundant full UI flow test.
+  - **Remove:** Tests focusing solely on counters.
+- [ ] INTEG-REF-2: Verify the integration test suite passes after changes.
+- [ ] INTEG-REF-3: Document identified E2E candidates clearly (See E2E tests below).
+- [ ] INTEG-REF-4: Create PR `refactor/integration-tests` → `dev`
+
+**Branch: `feat/e2e-tests`** (Implement End-to-End Tests)
+
+- [ ] E2E-SETUP-1: Choose and install E2E framework (e.g., Playwright).
+- [ ] E2E-SETUP-2: Configure base setup, scripts, and CI integration if possible.
+- [ ] E2E-IMPL-SCENARIOS: Implement E2E tests for identified candidates:
+  - Precise validation of counters (`TodoStats`, filter buttons) after actions.
+  - Verification of `aria-pressed` state on filter buttons.
+  - Full user flow: Add -> Complete -> Filter (Active) -> All -> Clear Completed -> Delete last.
+  - Testing editing, including real DatePicker interaction.
+  - Testing deletion confirmation dialog flow.
+- [ ] E2E-5: Create PR `feat/e2e-tests` → `dev`
+
+**Branch: `refactor/ui-harmonization`** (Improve UI Consistency)
+
+- [ ] UI-HARM-1: Finalize `lucide-react` icon standardization.
+- [ ] UI-HARM-2: Ensure consistent `cursor: pointer` on interactive elements.
+- [ ] UI-HARM-3: Harmonize filter/sort button icons & visual styles.
+- [ ] UI-HARM-4: Visually verify UI consistency. Adapt snapshots/tests if needed.
+- [ ] UI-HARM-5: Create PR `refactor/ui-harmonization` → `dev`
+
+**Branch: `feat/clear-form-fields`** (Reset Add Form Date/Priority)
+
+- [ ] CLEAR-FORM-1: Add 'Clear' button/icon to `AddTodoForm` for Date and Priority fields.
+- [ ] CLEAR-FORM-2: Implement logic to reset Date and Priority state in the form.
+- [ ] CLEAR-FORM-3: Add unit tests for the clear functionality in `AddTodoForm`.
+- [ ] CLEAR-FORM-4: Create PR `feat/clear-form-fields` → `dev`
+
+**Refactored & Enhanced Version (v0.4.0)** (Target)
+
+- [ ] REFACTOR-1: Verify refactoring and new feature PRs are merged.
+- [ ] REFACTOR-2: All test suites (Unit, Integration, E2E) pass.
+- [ ] REFACTOR-3: Create tag `v0.4.0`
+
+## Phase 5: Polish & Production Readiness
 
 **Branch: `enhance/ui-polish`**
 
-- [ ] POL-1: Implement responsive design
-- [ ] POL-2: Add animations and transitions
-- [ ] POL-3: Improve empty states and error handling
+- [ ] POL-1: Implement responsive design improvements.
+- [ ] POL-2: Add subtle animations and transitions.
+- [ ] POL-3: Improve empty states and loading/error handling visuals.
 - [ ] POL-4: Create PR `enhance/ui-polish` → `dev`
 
 **Branch: `enhance/accessibility`**
 
-- [ ] A11Y-1: Implement keyboard navigation
-- [ ] A11Y-2: Ensure proper ARIA attributes
-- [ ] A11Y-3: Implement screen reader compatibility
+- [ ] A11Y-1: Thoroughly test and implement keyboard navigation.
+- [ ] A11Y-2: Verify and ensure proper ARIA attributes across components.
+- [ ] A11Y-3: Test and improve screen reader compatibility.
 - [ ] A11Y-4: Create PR `enhance/accessibility` → `dev`
 
 **Branch: `enhance/documentation`**
 
-- [ ] DOC-1: Update README with usage instructions
-- [ ] DOC-2: Add comprehensive JSDoc comments
-- [ ] DOC-3: Create PR `
+- [ ] DOC-1: Update README with comprehensive usage instructions and feature list.
+- [ ] DOC-2: Add/Improve JSDoc comments throughout the codebase.
+- [ ] DOC-3: Create architecture overview document if needed.
+- [ ] DOC-4: Create PR `enhance/documentation` → `dev`
+
+**Production Ready Version (v1.0.0)** (Target)
+
+- [ ] PROD-1: Verify polish and documentation PRs are merged.
+- [ ] PROD-2: Final round of testing across all levels.
+- [ ] PROD-3: Create tag `v1.0.0`
