@@ -30,11 +30,8 @@ describe('AddTodoForm Component', () => {
 			// Given: The component is rendered
 			render(<AddTodoForm onAddTodo={() => {}} />);
 
-			// When: Searching for the due date button (initially by accessible name or icon presence)
-			// Note: The actual button might not have text initially, so we might need a more robust selector later (e.g., aria-label)
-			// For now, let's assume we can find it by a test-id or role if needed, or check for the icon.
-			// Let's look for the parent button of the CalendarClock icon for now.
-			const calendarButton = screen.getByRole('button', { name: /open calendar/i }); // Placeholder name, needs implementation
+			// When: Searching for the due date button
+			const calendarButton = screen.getByRole('button', { name: /open calendar/i });
 
 			// Then: The button should be present
 			expect(calendarButton).toBeInTheDocument();
@@ -43,94 +40,86 @@ describe('AddTodoForm Component', () => {
 
 	describe('Form Interaction', () => {
 		it('should call onAddTodo with entered title when form is submitted', async () => {
-			// Given: A spy function for onAddTodo and the component is rendered
+			// Given
 			const mockAddTodo = vi.fn();
 			render(<AddTodoForm onAddTodo={mockAddTodo} />);
-
-			// And: A todo title is entered in the input
 			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			await userEvent.type(inputElement, 'Test Todo');
-
-			// When: The form is submitted
 			const buttonElement = screen.getByRole('button', { name: /add/i });
+
+			// When
 			await userEvent.click(buttonElement);
 
-			// Then: onAddTodo should be called with the entered title and default priority (null)
+			// Then
 			expect(mockAddTodo).toHaveBeenCalledWith({ title: 'Test Todo', priority: null });
 		});
 
 		it('should not call onAddTodo when form is submitted with empty input', () => {
-			// Given: A spy function for onAddTodo and the component is rendered
+			// Given
 			const mockAddTodo = vi.fn();
 			render(<AddTodoForm onAddTodo={mockAddTodo} />);
-
-			// When: The form is submitted without entering a title
 			const buttonElement = screen.getByRole('button', { name: /add/i });
+
+			// When
 			fireEvent.click(buttonElement);
 
-			// Then: onAddTodo should not be called
+			// Then
 			expect(mockAddTodo).not.toHaveBeenCalled();
 		});
 
 		it('should clear input field after successful submission', () => {
-			// Given: The component is rendered
+			// Given
 			render(<AddTodoForm onAddTodo={() => {}} />);
-
-			// And: A todo title is entered in the input
 			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			fireEvent.change(inputElement, { target: { value: 'Test Todo' } });
-
-			// When: The form is submitted
 			const buttonElement = screen.getByRole('button', { name: /add/i });
+
+			// When
 			fireEvent.click(buttonElement);
 
-			// Then: The input field should be cleared
+			// Then
 			expect(inputElement).toHaveValue('');
 		});
 
 		it('should open date picker popover when calendar button is clicked', async () => {
-			// Given: The component is rendered
+			// Given
 			render(<AddTodoForm onAddTodo={() => {}} />);
 			const user = userEvent.setup();
+			const calendarButton = screen.getByRole('button', { name: /open calendar/i });
 
-			// When: The calendar button is clicked
-			const calendarButton = screen.getByRole('button', { name: /open calendar/i }); // Assumes accessible name is added
+			// When
 			await user.click(calendarButton);
 
-			// Then: A popover containing the calendar should be visible
-			// We check for an element typically found within the react-day-picker calendar
-			const calendarElement = await screen.findByRole('grid'); // react-day-picker uses role="grid"
+			// Then: Popover with calendar should be visible
+			const calendarElement = await screen.findByRole('grid');
 			expect(calendarElement).toBeVisible();
 		});
 
 		it('should update button text and close popover upon date selection', async () => {
-			// Given: The component is rendered and the calendar popover is open
+			// Given
 			render(<AddTodoForm onAddTodo={() => {}} />);
 			const user = userEvent.setup();
 			const calendarButton = screen.getByRole('button', { name: /open calendar/i });
 			await user.click(calendarButton);
 			const calendarGrid = await screen.findByRole('grid');
-			expect(calendarGrid).toBeVisible(); // Ensure calendar is open
+			expect(calendarGrid).toBeVisible();
 
-			// When: A date is selected from the calendar (e.g., the 15th of the current month)
-			// Note: Selecting a specific date robustly might require knowledge of the current month displayed.
-			// We'll select the button with role 'gridcell' and name '15'.
+			// When: Selecting a date
 			const dateToSelect = screen.getByRole('gridcell', { name: '15' });
 			await user.click(dateToSelect);
 
-			// Then: The popover should close (calendar grid is no longer present)
+			// Then: Popover closes
 			expect(screen.queryByRole('grid')).not.toBeInTheDocument();
 
-			// And: The calendar button should display the selected date formatted
-			// We need to calculate the expected format based on the selected date (15th)
+			// And: Button displays selected date
 			const expectedDate = new Date();
 			expectedDate.setDate(15);
-			const expectedFormat = format(expectedDate, 'PPP'); // e.g., Jul 15th, 2024
+			const expectedFormat = format(expectedDate, 'd MMMM yyyy');
 			expect(calendarButton).toHaveTextContent(expectedFormat);
 		});
 
 		it('should call onAddTodo with title and selected due date when submitted', async () => {
-			// Given: A spy function, the component rendered, and a date selected
+			// Given
 			const mockAddTodo = vi.fn();
 			render(<AddTodoForm onAddTodo={mockAddTodo} />);
 			const user = userEvent.setup();
@@ -138,71 +127,77 @@ describe('AddTodoForm Component', () => {
 			const calendarButton = screen.getByRole('button', { name: /open calendar/i });
 			const submitButton = screen.getByRole('button', { name: /add/i });
 
-			// Select a date (e.g., 20th)
+			// Select a date
 			await user.click(calendarButton);
 			const dateToSelect = await screen.findByRole('gridcell', { name: '20' });
 			await user.click(dateToSelect);
-
-			// Enter a title
 			await user.type(inputElement, 'Todo with due date');
 
-			// When: The form is submitted
+			// When
 			await user.click(submitButton);
 
-			// Then: onAddTodo should be called with title, null priority, and the selected date
-			// The date object passed might be tricky to match exactly due to time component.
-			// We will check the properties are correct, especially the date part.
-			const expectedDate = new Date();
-			expectedDate.setDate(20);
-			expectedDate.setHours(0, 0, 0, 0); // Normalize time for comparison if needed, though type is string
-
+			// Then
 			expect(mockAddTodo).toHaveBeenCalledTimes(1);
 			expect(mockAddTodo).toHaveBeenCalledWith(
 				expect.objectContaining({
 					title: 'Todo with due date',
 					priority: null,
-					// Since the type is string, we expect an ISO string. Let's adjust the expectation.
-					// We'll check if it's a string starting with the correct YYYY-MM-DD part.
-					// Note: This assumes the component converts Date to ISO string before calling onAddTodo.
-					dueDate: expect.stringMatching(/^\d{4}-\d{2}-\d{2}/), // Basic check for ISO date string format
-					// A more precise check might involve parsing the date string from the call arguments
+					dueDate: expect.stringMatching(/^\d{4}-\d{2}-\d{2}/),
 				})
 			);
-
-			// Optional: More precise check on the date passed
 			if (mockAddTodo.mock.calls[0][0].dueDate) {
 				const submittedDate = new Date(mockAddTodo.mock.calls[0][0].dueDate);
 				expect(submittedDate.getDate()).toBe(20);
-				// Potentially check month and year too if needed for robustness
 			}
 		});
 
 		it('should clear due date selection after successful submission', async () => {
-			// Given: The component is rendered
+			// Given
 			render(<AddTodoForm onAddTodo={() => {}} />);
 			const user = userEvent.setup();
 			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			const calendarButton = screen.getByRole('button', { name: /open calendar/i });
 			const submitButton = screen.getByRole('button', { name: /add/i });
 
-			// Enter title and select a date
+			// Select a date and enter title
 			await user.type(inputElement, 'Another Todo');
 			await user.click(calendarButton);
 			const dateToSelect = await screen.findByRole('gridcell', { name: '25' });
 			await user.click(dateToSelect);
-
-			// Verify date is selected initially
 			const expectedDate = new Date();
 			expectedDate.setDate(25);
-			const expectedFormat = format(expectedDate, 'PPP');
+			const expectedFormat = format(expectedDate, 'd MMMM yyyy');
 			expect(calendarButton).toHaveTextContent(expectedFormat);
 
-			// When: The form is submitted
+			// When
 			await user.click(submitButton);
 
-			// Then: The calendar button should reset to its default state ("Due date")
+			// Then
 			expect(calendarButton).not.toHaveTextContent(expectedFormat);
 			expect(calendarButton).toHaveTextContent(/due date/i);
+		});
+
+		it('should allow clearing the selected due date', async () => {
+			// Given
+			render(<AddTodoForm onAddTodo={() => {}} />);
+			const user = userEvent.setup();
+			const calendarButton = screen.getByRole('button', { name: /open calendar/i });
+			await user.click(calendarButton);
+			const dateToSelect = await screen.findByRole('gridcell', { name: '18' });
+			await user.click(dateToSelect);
+			const expectedDate = new Date();
+			expectedDate.setDate(18);
+			const expectedFormat = format(expectedDate, 'd MMMM yyyy');
+			expect(calendarButton).toHaveTextContent(expectedFormat);
+			const clearButton = screen.getByRole('button', { name: /clear due date/i });
+
+			// When
+			await user.click(clearButton);
+
+			// Then
+			expect(calendarButton).not.toHaveTextContent(expectedFormat);
+			expect(calendarButton).toHaveTextContent(/due date/i);
+			expect(screen.queryByRole('button', { name: /clear due date/i })).not.toBeInTheDocument();
 		});
 	});
 
