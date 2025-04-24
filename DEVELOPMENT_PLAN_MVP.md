@@ -122,6 +122,8 @@
 - [ ] AFILT-1: Write tests for advanced filtering (due date, priority)
 - [ ] AFILT-2: Implement advanced filter UI
 - [ ] AFILT-3: Implement advanced filter logic in store
+- [ ] AFILT-INTEG: Write/Update integration tests for advanced filtering (e.g., in TodoContainer)
+- [ ] AFILT-STORY: Create/Update Storybook stories for advanced filters
 - [ ] AFILT-4: Create PR `feat/advanced-filtering` → `dev`
 
 **Feature-Complete Version (v0.3.0)**

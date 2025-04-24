@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { CalendarClock, Image, Plus } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuRadioGroup,
-	DropdownMenuRadioItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { PriorityPicker } from '@/components/ui/PriorityPicker';
 import { AddTodoFormProps, CreateTodoParams, PriorityLevel } from '@/types/todoTypes';
 
 /**
@@ -34,27 +28,14 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 		setPriority(null);
 	};
 
-	const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
-	const getPriorityButtonText = () => {
-		if (priority === null) {
-			return 'Priority';
-		}
-		return capitalize(priority);
-	};
-
-	const handlePriorityChange = (value: string) => {
-		if (value === 'null') {
-			setPriority(null);
-		} else {
-			setPriority(value as PriorityLevel);
-		}
+	const handlePrioritySelect = (selectedPriority: PriorityLevel | null) => {
+		setPriority(selectedPriority);
 	};
 
 	return (
 		<form
 			onSubmit={handleSubmit}
-			className="flex items-center gap-2 mb-4"
+			className="flex flex-col items-center gap-3 mb-8 p-3 bg-amber-100 dark:bg-blue-800 rounded-md border-2 border-amber-200 dark:border-blue-900 shadow-md"
 			aria-label="Add todo form"
 			role="form"
 		>
@@ -62,34 +43,27 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 				type="text"
 				value={title}
 				onChange={e => setTitle(e.target.value)}
-				placeholder="Add a new todo"
-				className="flex-1 text-sm px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+				placeholder="What's on your mind?"
+				className="flex h-10 w-full rounded-md border-2 border-amber-200 dark:border-blue-300 bg-background dark:bg-gray-900 px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
 				aria-label="Todo title"
 			/>
 
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button variant="outline" className="flex items-center gap-1 px-3">
-						{getPriorityButtonText()}
-						<ChevronDown className="h-4 w-4" />
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent className="w-40">
-					<DropdownMenuRadioGroup
-						value={priority === null ? 'null' : priority}
-						onValueChange={handlePriorityChange}
-					>
-						<DropdownMenuRadioItem value="null">None</DropdownMenuRadioItem>
-						<DropdownMenuRadioItem value="low">Low</DropdownMenuRadioItem>
-						<DropdownMenuRadioItem value="medium">Medium</DropdownMenuRadioItem>
-						<DropdownMenuRadioItem value="high">High</DropdownMenuRadioItem>
-					</DropdownMenuRadioGroup>
-				</DropdownMenuContent>
-			</DropdownMenu>
-
-			<Button type="submit" variant="default" className="px-4">
-				Add
-			</Button>
+			<div className="flex gap-2 w-full justify-end">
+				<Button variant="outline" className="cursor-pointer">
+					<Image />
+				</Button>
+				<Button variant="outline" className="cursor-pointer">
+					<CalendarClock />
+				</Button>
+				<PriorityPicker
+					value={priority}
+					onPriorityChange={handlePrioritySelect}
+					ariaLabel="Select priority for new task"
+				/>
+				<Button type="submit" variant="default" className="flex items-center gap-1 cursor-pointer">
+					<Plus className="h-4 w-4" /> <span className="mr-1">Add</span>
+				</Button>
+			</div>
 		</form>
 	);
 }

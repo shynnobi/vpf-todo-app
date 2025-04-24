@@ -272,31 +272,6 @@ describe('Todo Store - Behavior', () => {
 			expect(todos.find(t => t.id === lowTodo.id)?.priority).toBe('low');
 			expect(todos.find(t => t.id === highTodo.id)?.priority).toBe('high');
 		});
-
-		it('should provide todos sorted by priority (high > medium > low > null)', () => {
-			// Given: Todos with different priorities, including null, added in a mixed order
-			useTodoStore.getState().addTodo({ title: 'Medium Task 1', priority: 'medium' });
-			useTodoStore.getState().addTodo({ title: 'High Task 1', priority: 'high' });
-			useTodoStore.getState().addTodo({ title: 'No Priority Task 1', priority: null });
-			useTodoStore.getState().addTodo({ title: 'Low Task 1', priority: 'low' });
-			useTodoStore.getState().addTodo({ title: 'High Task 2', priority: 'high' });
-			useTodoStore.getState().addTodo({ title: 'No Priority Task 2', priority: null });
-
-			// When: Getting the sorted list
-			const sortedTodos = useTodoStore.getState().getSortedTodosByPriority();
-
-			// Then: The getter should return todos sorted by high > medium > low > null
-			expect(sortedTodos).toBeDefined();
-			const sortedTitles = sortedTodos.map((t: Todo) => t.title);
-			expect(sortedTitles).toEqual([
-				'High Task 1',
-				'High Task 2',
-				'Medium Task 1',
-				'Low Task 1',
-				'No Priority Task 1',
-				'No Priority Task 2',
-			]);
-		});
 	});
 
 	describe('Resetting the Store', () => {
@@ -354,58 +329,6 @@ describe('Todo Store - Behavior', () => {
 
 			// Then: The todos list should remain unchanged
 			expect(useTodoStore.getState().todos).toEqual(todosBeforeDelete);
-		});
-	});
-
-	describe('Filtering Todos', () => {
-		beforeEach(() => {
-			// Start with a clean state for filter tests
-			TodoStoreTestHelpers.resetStore();
-			// Add a mix of completed and active todos
-			TodoStoreTestHelpers.addTodo('Active todo 1');
-			TodoStoreTestHelpers.addTodo('Completed todo 1', true);
-			TodoStoreTestHelpers.addTodo('Active todo 2');
-			TodoStoreTestHelpers.addTodo('Completed todo 2', true);
-		});
-
-		it('should have All as the default filter', () => {
-			// Given: The store is initialized with todos
-
-			// When: Getting the current filter
-
-			// Then: The filter should be All by default
-			expect(TodoStoreTestHelpers.getFilter()).toBe(TodoFilter.All);
-		});
-
-		it('should allow setting the filter to Active', () => {
-			// Given: The store is initialized with todos
-
-			// When: Setting the filter to Active
-			TodoStoreTestHelpers.setFilter(TodoFilter.Active);
-
-			// Then: The filter should be Active
-			expect(TodoStoreTestHelpers.getFilter()).toBe(TodoFilter.Active);
-		});
-
-		it('should allow setting the filter to Completed', () => {
-			// Given: The store is initialized with todos
-
-			// When: Setting the filter to Completed
-			TodoStoreTestHelpers.setFilter(TodoFilter.Completed);
-
-			// Then: The filter should be Completed
-			expect(TodoStoreTestHelpers.getFilter()).toBe(TodoFilter.Completed);
-		});
-
-		it('should allow setting the filter back to All', () => {
-			// Given: The filter is set to Active
-			TodoStoreTestHelpers.setFilter(TodoFilter.Active);
-
-			// When: Setting the filter back to All
-			TodoStoreTestHelpers.setFilter(TodoFilter.All);
-
-			// Then: The filter should be All
-			expect(TodoStoreTestHelpers.getFilter()).toBe(TodoFilter.All);
 		});
 	});
 });

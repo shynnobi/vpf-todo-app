@@ -17,7 +17,7 @@ describe('AddTodoForm Component', () => {
 			render(<AddTodoForm onAddTodo={() => {}} />);
 
 			// Then: It should display an input field for the todo title
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			expect(inputElement).toBeInTheDocument();
 
 			// And: It should display a submit button
@@ -33,7 +33,7 @@ describe('AddTodoForm Component', () => {
 			render(<AddTodoForm onAddTodo={mockAddTodo} />);
 
 			// And: A todo title is entered in the input
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			await userEvent.type(inputElement, 'Test Todo');
 
 			// When: The form is submitted
@@ -62,7 +62,7 @@ describe('AddTodoForm Component', () => {
 			render(<AddTodoForm onAddTodo={() => {}} />);
 
 			// And: A todo title is entered in the input
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			fireEvent.change(inputElement, { target: { value: 'Test Todo' } });
 
 			// When: The form is submitted

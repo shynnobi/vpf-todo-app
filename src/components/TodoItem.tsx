@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { Pencil, Trash } from 'lucide-react';
 
 import { EditTodoForm } from './EditTodoForm';
 
@@ -7,10 +7,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PriorityLevel, Todo, TodoItemProps } from '@/types/todoTypes';
 
-// Update signature to accept null, return string | null
+// Return type is string (classes) or null (no badge)
 const getPriorityBadgeClasses = (priority: PriorityLevel | null): string | null => {
 	if (priority === null) {
-		return null; // Return null if no priority, badge won't render styles properly or we hide it
+		// No specific classes if priority is null
+		return null;
 	}
 	switch (priority) {
 		case 'high':
@@ -54,11 +55,12 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 		setIsEditing(false);
 	};
 
-	const badgeClasses = getPriorityBadgeClasses(todo.priority);
+	// Determine badge classes based on priority, handling null/undefined
+	const badgeClasses = getPriorityBadgeClasses(todo.priority ?? null);
 
 	return (
 		<li
-			className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0 hover:bg-muted/50 transition-colors duration-150"
+			className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0 hover:bg-muted/50 transition-colors duration-150 rounded-xl"
 			aria-labelledby={`todo-title-${todo.id}`}
 			role="listitem"
 		>
@@ -76,18 +78,19 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 					/>
 					<div className="flex-1 flex flex-col text-sm py-1">
 						<div className="flex items-center gap-2">
-							{/* Conditionally render the Badge only if priority is not null and classes exist */}
-							{todo.priority && badgeClasses && (
-								<Badge className={`px-1.5 py-0.5 text-xs font-medium ${badgeClasses}`}>
-									{todo.priority}
-								</Badge>
-							)}
 							<span
 								id={`todo-title-${todo.id}`}
 								className={`${todo.completed ? 'text-gray-500 line-through' : ''}`}
 							>
 								{todo.title}
 							</span>
+
+							{/* Conditionally render the Badge only if priority is not null and classes exist */}
+							{todo.priority && badgeClasses && (
+								<Badge className={`px-1.5 py-0.5 text-xs font-medium ${badgeClasses}`}>
+									{todo.priority}
+								</Badge>
+							)}
 						</div>
 						{/* Display description if it exists */}
 						{todo.description && (
@@ -107,18 +110,18 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 							size="icon"
 							onClick={handleEdit}
 							aria-label={`Edit todo: ${todo.title}`}
-							className="h-7 w-7 text-muted-foreground hover:text-blue-600"
+							className="h-7 w-7 text-muted-foreground hover:text-blue-600 cursor-pointer"
 						>
-							<FaEdit className="h-4 w-4" />
+							<Pencil className="h-4 w-4" />
 						</Button>
 						<Button
 							variant="ghost"
 							size="icon"
 							onClick={handleDelete}
 							aria-label={`Delete todo: ${todo.title}`}
-							className="h-7 w-7 text-muted-foreground hover:text-red-600"
+							className="h-7 w-7 text-muted-foreground hover:text-red-600 cursor-pointer"
 						>
-							<FaTrashAlt className="h-4 w-4" />
+							<Trash className="h-4 w-4" />
 						</Button>
 					</div>
 				</div>

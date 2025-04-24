@@ -14,16 +14,18 @@ import { Todo } from '@/types/todoTypes';
 describe('TodoItem Component', () => {
 	const mockIncompleteTodo: Todo = {
 		id: '1',
-		title: 'Learn React',
+		title: 'Incomplete Task',
 		completed: false,
 		priority: 'medium',
+		creationDate: '2023-01-01T10:00:00Z',
 	};
 
 	const mockCompletedTodo: Todo = {
 		id: '2',
-		title: 'Build a todo app',
+		title: 'Completed Task',
 		completed: true,
 		priority: 'high',
+		creationDate: '2023-01-02T11:00:00Z',
 	};
 
 	// Define mock handlers once, typed as functions
@@ -60,7 +62,7 @@ describe('TodoItem Component', () => {
 			);
 
 			// Then: It should display the todo title
-			expect(screen.getByText('Learn React')).toBeInTheDocument();
+			expect(screen.getByText('Incomplete Task')).toBeInTheDocument();
 		});
 
 		it('should render a checkbox with the correct checked state for an incomplete todo', () => {
@@ -110,7 +112,7 @@ describe('TodoItem Component', () => {
 			);
 
 			// Then: The text should have a line-through style for completed todos
-			const titleElement = screen.getByText('Build a todo app');
+			const titleElement = screen.getByText('Completed Task');
 			expect(titleElement).toHaveClass('line-through');
 
 			// Given: An incomplete todo
@@ -125,7 +127,7 @@ describe('TodoItem Component', () => {
 			);
 
 			// Then: The text should not have a line-through style
-			const incompleteTitle = screen.getByText('Learn React');
+			const incompleteTitle = screen.getByText('Incomplete Task');
 			expect(incompleteTitle).not.toHaveClass('line-through');
 		});
 
@@ -142,7 +144,7 @@ describe('TodoItem Component', () => {
 			);
 
 			// Then: It should display a delete button
-			const deleteButton = screen.getByRole('button', { name: /delete todo: learn react/i });
+			const deleteButton = screen.getByRole('button', { name: /delete todo: incomplete task/i });
 			expect(deleteButton).toBeInTheDocument();
 		});
 	});
@@ -181,7 +183,7 @@ describe('TodoItem Component', () => {
 			);
 
 			// When: The delete button is clicked
-			const deleteButton = screen.getByRole('button', { name: /delete todo: learn react/i });
+			const deleteButton = screen.getByRole('button', { name: /delete todo: incomplete task/i });
 			fireEvent.click(deleteButton);
 
 			// Then: onDelete should be called with the todo id
@@ -218,8 +220,8 @@ describe('TodoItem Component', () => {
 			);
 
 			// Then: The delete button should have a descriptive ARIA label
-			const deleteButton = screen.getByRole('button', { name: /delete todo: learn react/i });
-			expect(deleteButton).toHaveAttribute('aria-label', 'Delete todo: Learn React');
+			const deleteButton = screen.getByRole('button', { name: /delete todo: incomplete task/i });
+			expect(deleteButton).toHaveAttribute('aria-label', 'Delete todo: Incomplete Task');
 		});
 	});
 
@@ -238,7 +240,7 @@ describe('TodoItem Component', () => {
 			expect(screen.getByRole('textbox', { name: /edit description/i })).toBeInTheDocument();
 			expect(screen.getByLabelText(/due date/i)).toBeInTheDocument();
 			expect(screen.getByRole('button', { name: /save changes/i })).toBeInTheDocument();
-			expect(screen.getByRole('button', { name: /cancel edit/i })).toBeInTheDocument();
+			expect(screen.getByRole('button', { name: /cancel$/i })).toBeInTheDocument();
 		});
 
 		it('should call onSave with updated data when save button is clicked', async () => {
@@ -260,12 +262,10 @@ describe('TodoItem Component', () => {
 
 			const dueDateInput = screen.getByLabelText(/due date/i);
 			const newDueDate = '2024-12-31';
-			fireEvent.change(dueDateInput, { target: { value: newDueDate } });
+			await userEvent.type(dueDateInput, newDueDate);
 
-			// Use aria-label to find the button reliably
-			const priorityButton = screen.getByRole('button', { name: /edit priority/i });
+			const priorityButton = screen.getByRole('button', { name: /select priority for this task/i });
 			await userEvent.click(priorityButton);
-			// Use correct role 'menuitemradio'
 			const lowOption = await screen.findByRole('menuitemradio', { name: /low/i });
 			await userEvent.click(lowOption);
 
@@ -295,12 +295,12 @@ describe('TodoItem Component', () => {
 			const titleInput = screen.getByRole('textbox', { name: /edit title/i });
 			await userEvent.type(titleInput, 'Temporary Change');
 			const descriptionInput = screen.getByRole('textbox', { name: /edit description/i });
-			fireEvent.change(descriptionInput, { target: { value: 'Temp Desc' } });
+			await userEvent.type(descriptionInput, 'Temp Desc');
 			const dueDateInput = screen.getByLabelText(/due date/i);
-			fireEvent.change(dueDateInput, { target: { value: '2025-01-01' } });
+			await userEvent.type(dueDateInput, '2025-01-01');
 
 			// And: The cancel button is clicked
-			const cancelButton = screen.getByRole('button', { name: /cancel edit/i });
+			const cancelButton = screen.getByRole('button', { name: /cancel$/i });
 			await userEvent.click(cancelButton);
 
 			// Then: The component should exit edit mode
