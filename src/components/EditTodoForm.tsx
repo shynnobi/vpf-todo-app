@@ -14,7 +14,7 @@ type EditTodoFormProps = {
 export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProps) {
 	const [editedTitle, setEditedTitle] = useState(initialData.title);
 	const [editedDescription, setEditedDescription] = useState(initialData.description ?? '');
-	const [editedDueDate, setEditedDueDate] = useState<string | undefined>(initialData.dueDate);
+	const [editedDueDate, setEditedDueDate] = useState<string>(initialData.dueDate ?? '');
 	const [editedPriority, setEditedPriority] = useState<PriorityLevel | null>(
 		initialData.priority ?? null
 	);
