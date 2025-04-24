@@ -20,7 +20,8 @@ export interface TodoState {
 	updateTodo: (id: string, updates: Partial<Omit<Todo, 'id'>>) => Todo | null;
 	deleteTodo: (id: string) => Todo | null;
 	setFilter: (filter: TodoFilter) => void;
-	setSortConfig: (config: Partial<SortConfig>) => void;
+	setSortConfig: (criterion: SortCriterion) => void;
+	toggleSortDirection: () => void;
 	getFilteredAndSortedTodos: () => Todo[];
 	reset: () => void;
 }
@@ -44,6 +45,19 @@ const priorityOrder: Record<string, number> = {
 const initialSortConfig: SortConfig = {
 	criterion: 'creationDate',
 	direction: 'desc',
+};
+
+// Helper to determine default sort direction based on criterion
+const getDefaultSortDirection = (criterion: SortCriterion): SortDirection => {
+	switch (criterion) {
+		case 'creationDate':
+		case 'priority':
+			return 'desc'; // Newest/Highest first
+		case 'title':
+		case 'dueDate':
+		default:
+			return 'asc'; // A-Z / Soonest first
+	}
 };
 
 /**
@@ -101,8 +115,21 @@ export const useTodoStore = create<TodoState>()(
 			setFilter: (filter: TodoFilter): void => {
 				set({ filter });
 			},
-			setSortConfig: (config: Partial<SortConfig>): void => {
-				set(state => ({ sortConfig: { ...state.sortConfig, ...config } }));
+
+			// Sets a new sort criterion and applies its default direction
+			setSortConfig: (criterion: SortCriterion): void => {
+				const newDirection = getDefaultSortDirection(criterion);
+				set({ sortConfig: { criterion, direction: newDirection } });
+			},
+
+			// Toggles the sort direction for the current criterion
+			toggleSortDirection: (): void => {
+				set(state => ({
+					sortConfig: {
+						...state.sortConfig,
+						direction: state.sortConfig.direction === 'asc' ? 'desc' : 'asc',
+					},
+				}));
 			},
 
 			getFilteredAndSortedTodos: (): Todo[] => {

@@ -1,39 +1,18 @@
+import React from 'react'; // Import React for type
+import { CalendarCheck, CalendarPlus, CaseSensitive, Flame } from 'lucide-react'; // Import chosen icons
+
 import { SortCriterion } from '@/store/todoStore';
 
-// Define sort options with labels for the Select component
-// TODO: Potentially add Lucide icons here later
-export const sortOptions: {
-	value: string;
+// Define sort options with labels and icons for the Select component
+// Each option represents a sortable criterion.
+// The direction (asc/desc) will be handled separately by a toggle button.
+export const sortCriteriaOptions: {
+	value: SortCriterion;
 	label: string;
-	criterion: SortCriterion;
-	direction: 'asc' | 'desc';
+	icon: React.ComponentType<{ className?: string }>; // Add icon property
 }[] = [
-	{
-		value: 'creationDate_desc',
-		label: 'Creation Date (Newest)',
-		criterion: 'creationDate',
-		direction: 'desc',
-	},
-	{
-		value: 'creationDate_asc',
-		label: 'Creation Date (Oldest)',
-		criterion: 'creationDate',
-		direction: 'asc',
-	},
-	{
-		value: 'priority_desc',
-		label: 'Priority (High > Low)',
-		criterion: 'priority',
-		direction: 'desc',
-	},
-	{
-		value: 'priority_asc',
-		label: 'Priority (Low > High)',
-		criterion: 'priority',
-		direction: 'asc',
-	},
-	{ value: 'title_asc', label: 'Title (A-Z)', criterion: 'title', direction: 'asc' },
-	{ value: 'title_desc', label: 'Title (Z-A)', criterion: 'title', direction: 'desc' },
-	{ value: 'dueDate_asc', label: 'Due Date (Soonest)', criterion: 'dueDate', direction: 'asc' },
-	{ value: 'dueDate_desc', label: 'Due Date (Latest)', criterion: 'dueDate', direction: 'desc' },
+	{ value: 'creationDate', label: 'By Creation Date', icon: CalendarPlus },
+	{ value: 'priority', label: 'By Priority', icon: Flame },
+	{ value: 'title', label: 'By Title', icon: CaseSensitive },
+	{ value: 'dueDate', label: 'By Due Date', icon: CalendarCheck },
 ];
