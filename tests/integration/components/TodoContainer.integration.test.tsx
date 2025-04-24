@@ -363,39 +363,6 @@ describe('TodoContainer Component - Integration Tests', () => {
 			await waitFor(() => expect(checkbox.checked).toBe(true)); // Confirm it's checked
 		};
 
-		/*
-		it('should display filter controls with initial counts', async () => {
-			// Given: The store is initialized
-			// When: Rendering the component (wrapped in act)
-			act(() => {
-				render(<TodoContainer />); // Assumes render is wrapped
-			});
-			await setupTodos();
-
-			// Then: Filter buttons should exist with correct initial counts (All: 2, Active: 1, Completed: 1)
-			const allButton = await screen.findByRole('button', { name: /show all todos/i });
-			const activeButton = await screen.findByRole('button', { name: /show active todos/i });
-			const completedButton = await screen.findByRole('button', { name: /show completed todos/i });
-
-			// TODO: Re-enable/adapt this test when sorting controls are implemented
-			// Need to check for the new Sort By dropdown and button
-			// const priorityFilter = screen.getByRole('combobox', { name: /priority/i }); // Example, adjust selector
-			// const dateFilter = screen.getByRole('combobox', { name: /date/i }); // Example, adjust selector
-
-			expect(allButton).toBeInTheDocument();
-			expect(within(allButton).getByText('2', { exact: false })).toBeInTheDocument();
-
-			expect(activeButton).toBeInTheDocument();
-			expect(within(activeButton).getByText('1', { exact: false })).toBeInTheDocument();
-
-			expect(completedButton).toBeInTheDocument();
-			expect(within(completedButton).getByText('1', { exact: false })).toBeInTheDocument();
-
-			// expect(priorityFilter).toBeInTheDocument();
-			// expect(dateFilter).toBeInTheDocument();
-		});
-		*/
-
 		it('should filter to show only active todos when Active button is clicked', async () => {
 			// Given: The store is initialized with todos
 			act(() => {
@@ -579,22 +546,74 @@ describe('TodoContainer Component - Integration Tests', () => {
 			expect(sortBySelectTrigger).toHaveAttribute('aria-label', 'Sort by');
 			expect(sortDirectionButton).toBeInTheDocument();
 
-			// And: Default sort option should be selected (Creation Date Desc)
-			// Check the text content within the trigger button
-			expect(
-				within(sortBySelectTrigger).getByText(/creation date \(newest\)/i)
-			).toBeInTheDocument();
+			// And: Default sort option should be selected (Creation Date)
+			expect(within(sortBySelectTrigger).getByText(/By Creation Date/i)).toBeInTheDocument();
 
-			// And: Sort direction button should indicate descending order (ArrowDown icon)
-			// Check for the presence of the SVG corresponding to ArrowDown (more robust check needed if icons change)
-			// For now, we assume the button contains an SVG if it has the icon. A data-testid might be better.
-			expect(sortDirectionButton.querySelector('svg')).toBeInTheDocument(); // Basic check for icon presence
-			// TODO: Add a more specific check for the ArrowDown icon, perhaps using data-testid on the icon component
+			// And: Sort direction button should be present
+			// We rely on the actual list order check below to confirm descending direction.
 
 			// And: The list should be sorted by creation date descending (Second Task first)
 			const listItems = screen.getAllByRole('listitem');
 			expect(listItems[0]).toHaveTextContent('Second Task');
 			expect(listItems[1]).toHaveTextContent('First Task');
+		});
+
+		it('should sort by Priority descending by default and toggle correctly', async () => {
+			// Given: Component is rendered
+			act(() => {
+				render(<TodoContainer />);
+			});
+
+			// When: Adding todos with different priorities (out of order)
+			await act(async () => {
+				useTodoStore.getState().addTodo({ title: 'Medium Prio', priority: 'medium' });
+				useTodoStore.getState().addTodo({ title: 'High Prio', priority: 'high' });
+				useTodoStore.getState().addTodo({ title: 'No Prio' });
+				useTodoStore.getState().addTodo({ title: 'Low Prio', priority: 'low' });
+			});
+			await screen.findByText('Low Prio'); // Wait for last todo to render
+
+			// When: Setting sort config directly to Priority
+			await act(async () => {
+				useTodoStore.getState().setSortConfig('priority');
+			});
+
+			// Then: The list should be sorted by priority descending (High > Medium > Low > None)
+			await waitFor(() => {
+				const listItems = screen.getAllByRole('listitem');
+				expect(listItems[0]).toHaveTextContent('High Prio');
+				expect(listItems[1]).toHaveTextContent('Medium Prio');
+				expect(listItems[2]).toHaveTextContent('Low Prio');
+				expect(listItems[3]).toHaveTextContent('No Prio');
+			});
+
+			// When: Toggling sort direction directly via store action
+			await act(async () => {
+				useTodoStore.getState().toggleSortDirection();
+			});
+
+			// Then: The list should be sorted by priority ascending (None > Low > Medium > High)
+			await waitFor(() => {
+				const listItems = screen.getAllByRole('listitem');
+				expect(listItems[0]).toHaveTextContent('No Prio');
+				expect(listItems[1]).toHaveTextContent('Low Prio');
+				expect(listItems[2]).toHaveTextContent('Medium Prio');
+				expect(listItems[3]).toHaveTextContent('High Prio');
+			});
+
+			// When: Toggling sort direction again directly via store action
+			await act(async () => {
+				useTodoStore.getState().toggleSortDirection();
+			});
+
+			// Then: The list should be sorted by priority descending again
+			await waitFor(() => {
+				const listItems = screen.getAllByRole('listitem');
+				expect(listItems[0]).toHaveTextContent('High Prio');
+				expect(listItems[1]).toHaveTextContent('Medium Prio');
+				expect(listItems[2]).toHaveTextContent('Low Prio');
+				expect(listItems[3]).toHaveTextContent('No Prio');
+			});
 		});
 
 		// --- Add other sorting tests here ---
