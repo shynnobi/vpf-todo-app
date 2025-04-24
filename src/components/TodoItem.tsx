@@ -60,7 +60,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 
 	return (
 		<li
-			className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0 hover:bg-muted/50 transition-colors duration-150"
+			className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0 hover:bg-muted/50 transition-colors duration-150 rounded-xl"
 			aria-labelledby={`todo-title-${todo.id}`}
 			role="listitem"
 		>

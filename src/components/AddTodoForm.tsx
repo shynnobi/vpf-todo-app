@@ -35,7 +35,7 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 	return (
 		<form
 			onSubmit={handleSubmit}
-			className="flex flex-col items-center gap-3 mb-8 p-3 bg-amber-100 rounded-md border border-amber-200 shadow-md"
+			className="flex flex-col items-center gap-3 mb-8 p-3 bg-amber-100 dark:bg-blue-800 rounded-md border-2 border-amber-200 dark:border-blue-900 shadow-md"
 			aria-label="Add todo form"
 			role="form"
 		>
@@ -44,7 +44,7 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 				value={title}
 				onChange={e => setTitle(e.target.value)}
 				placeholder="What's on your mind?"
-				className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 shadow-xs"
+				className="flex h-10 w-full rounded-md border-2 border-amber-200 dark:border-blue-300 bg-background dark:bg-gray-900 px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
 				aria-label="Todo title"
 			/>
 
