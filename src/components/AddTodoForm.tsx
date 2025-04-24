@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
+import { format } from 'date-fns';
 import { CalendarClock, Image, Plus } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { PriorityPicker } from '@/components/ui/PriorityPicker';
 import { AddTodoFormProps, CreateTodoParams, PriorityLevel } from '@/types/todoTypes';
 
 /**
- * A form component for adding new todos, including priority selection.
+ * A form component for adding new todos, including priority selection and due date.
  */
 export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 	const [title, setTitle] = useState('');
 	const [priority, setPriority] = useState<PriorityLevel | null>(null);
+	const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
+	const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -20,12 +25,14 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 		const newTodoParams: CreateTodoParams = {
 			title: title.trim(),
 			priority: priority,
+			dueDate: dueDate ? dueDate.toISOString() : undefined,
 		};
 
 		onAddTodo(newTodoParams);
 
 		setTitle('');
 		setPriority(null);
+		setDueDate(undefined);
 	};
 
 	const handlePrioritySelect = (selectedPriority: PriorityLevel | null) => {
@@ -52,9 +59,29 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 				<Button variant="outline" className="cursor-pointer">
 					<Image />
 				</Button>
-				<Button variant="outline" className="cursor-pointer">
-					<CalendarClock />
-				</Button>
+				<Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+					<PopoverTrigger asChild>
+						<Button
+							variant="outline"
+							className="cursor-pointer w-[160px] justify-start text-left font-normal"
+							aria-label="Open calendar to select due date"
+						>
+							<CalendarClock className="mr-2 h-4 w-4" />
+							{dueDate ? format(dueDate, 'PPP') : <span>Due date</span>}
+						</Button>
+					</PopoverTrigger>
+					<PopoverContent className="w-auto p-0">
+						<Calendar
+							mode="single"
+							selected={dueDate}
+							onSelect={date => {
+								setDueDate(date);
+								setIsCalendarOpen(false);
+							}}
+							initialFocus
+						/>
+					</PopoverContent>
+				</Popover>
 				<PriorityPicker
 					value={priority}
 					onPriorityChange={handlePrioritySelect}
