@@ -25,7 +25,7 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 		const newTodoParams: CreateTodoParams = {
 			title: title.trim(),
 			priority: priority,
-			dueDate: dueDate ? dueDate.toISOString() : undefined,
+			dueDate: dueDate ? format(dueDate, 'yyyy-MM-dd') : null,
 		};
 
 		onAddTodo(newTodoParams);
