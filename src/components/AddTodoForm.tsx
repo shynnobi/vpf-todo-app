@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
-import { CalendarClock, Image, Plus, X } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
+import { DueDatePicker } from '@/components/DueDatePicker';
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { PriorityPicker } from '@/components/ui/PriorityPicker';
 import { AddTodoFormProps, CreateTodoParams, PriorityLevel } from '@/types/todoTypes';
 
@@ -15,7 +14,6 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 	const [title, setTitle] = useState('');
 	const [priority, setPriority] = useState<PriorityLevel | null>(null);
 	const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
-	const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -39,6 +37,10 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 		setPriority(selectedPriority);
 	};
 
+	const handleDateChange = (date?: Date) => {
+		setDueDate(date);
+	};
+
 	return (
 		<form
 			onSubmit={handleSubmit}
@@ -55,50 +57,8 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 				aria-label="Todo title"
 			/>
 
-			<div className="flex gap-2 w-full justify-end">
-				<Button variant="outline" className="cursor-pointer">
-					<Image />
-				</Button>
-				<div className="flex items-center">
-					<Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-						<PopoverTrigger asChild>
-							<Button
-								variant="outline"
-								className="cursor-pointer justify-start text-left font-normal relative"
-								aria-label="Open calendar to select due date"
-							>
-								<CalendarClock className="mr-1 h-4 w-4 flex-shrink-0" />
-								<span className="flex-grow truncate mr-1">
-									{dueDate ? format(dueDate, 'd MMMM yyyy') : <span>Due date</span>}
-								</span>
-								{dueDate && (
-									<span
-										role="button"
-										aria-label="Clear due date"
-										className="ml-auto p-1 rounded-full cursor-pointer flex-shrink-0 bg-gray-200 text-gray-600 hover:text-gray-800 hover:bg-gray-300"
-										onClick={e => {
-											e.stopPropagation();
-											setDueDate(undefined);
-										}}
-									>
-										<X className="h-4 w-4" />
-									</span>
-								)}
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent className="w-auto p-0">
-							<Calendar
-								mode="single"
-								selected={dueDate}
-								onSelect={date => {
-									setDueDate(date);
-									setIsCalendarOpen(false);
-								}}
-								initialFocus
-							/>
-						</PopoverContent>
-					</Popover>
-				</div>
+			<div className="flex flex-wrap gap-2 w-full justify-end">
+				<DueDatePicker value={dueDate} onChange={handleDateChange} />
 				<PriorityPicker
 					value={priority}
 					onPriorityChange={handlePrioritySelect}
