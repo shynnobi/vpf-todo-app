@@ -22,6 +22,7 @@ export function DueDatePicker({ value, onChange }: DueDatePickerProps) {
 	console.log('[DueDatePicker] Rendering with value:', value);
 
 	const handleSelect = (date?: Date) => {
+		// console.log('[DueDatePicker] handleSelect called with date:', date); // Removed debug log
 		onChange(date);
 		setIsCalendarOpen(false); // Close popover on selection
 	};
