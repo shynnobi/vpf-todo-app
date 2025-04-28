@@ -18,7 +18,6 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 	const [editedDescription, setEditedDescription] = useState(initialData.description ?? '');
 	const [editedDueDate, setEditedDueDate] = useState<Date | undefined>(() => {
 		const initialDate = initialData.dueDate ? parseISO(initialData.dueDate) : undefined;
-		console.log('[EditTodoForm] Initial Due Date State:', initialDate);
 		return initialDate && isValid(initialDate) ? initialDate : undefined;
 	});
 	const [editedPriority, setEditedPriority] = useState<PriorityLevel | null>(
@@ -41,11 +40,8 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 	};
 
 	const handleDateChange = (date?: Date) => {
-		console.log('[EditTodoForm] handleDateChange called with:', date);
 		setEditedDueDate(date);
 	};
-
-	console.log('[EditTodoForm] Rendering with editedDueDate:', editedDueDate);
 
 	return (
 		<form
