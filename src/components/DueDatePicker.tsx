@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { format, isBefore, startOfDay } from 'date-fns';
-import { CalendarClock, X } from 'lucide-react';
+import { isBefore, startOfDay, startOfMonth } from 'date-fns';
+import { CalendarIcon, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { formatDate } from '@/utils/dateUtils';
 
 interface DueDatePickerProps {
 	value?: Date;
@@ -34,16 +36,12 @@ export function DueDatePicker({ value, onChange }: DueDatePickerProps) {
 					variant="outline"
 					className="cursor-pointer justify-start text-left font-normal relative w-full sm:w-auto" // Added responsive width
 					aria-label={
-						value
-							? `Selected due date: ${format(value, 'd MMMM yyyy')}. Change due date.`
-							: 'Select due date'
+						value ? `Selected due date: ${formatDate(value)}. Change due date.` : 'Select due date'
 					} // Improved ARIA label
 				>
-					<CalendarClock className="mr-2 h-4 w-4 flex-shrink-0" /> {/* Increased margin */}
-					<span className="flex-grow truncate mr-2">
-						{' '}
-						{/* Increased margin */}
-						{value ? format(value, 'd MMMM yyyy') : <span>Due date</span>}
+					<CalendarIcon className="mr-2 h-4 w-4" />
+					<span className={cn(!value && 'text-muted-foreground')}>
+						{value ? formatDate(value) : <span>Due date</span>}
 					</span>
 					{value && (
 						<span
@@ -63,6 +61,7 @@ export function DueDatePicker({ value, onChange }: DueDatePickerProps) {
 					selected={value}
 					onSelect={handleSelect}
 					disabled={date => isBefore(date, startOfDay(new Date()))}
+					fromDate={startOfMonth(new Date())}
 					initialFocus
 				/>
 			</PopoverContent>
