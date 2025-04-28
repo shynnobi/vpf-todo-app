@@ -10,6 +10,8 @@ RUN sudo apt-get update && sudo apt-get install -y \
     libx11-xcb1 libxcursor1 libgtk-3-0 \
     # Third set (likely for WebKit) from third attempt
     libwoff1 libopus0 flite \
+    # Fourth set from runtime error
+    libharfbuzz-icu0 libenchant-2-2 libsecret-1-0 libhyphen0 libmanette-0.2-0 libunwind8 libdw1 libegl1 libglx0 libgudev-1.0-0 libgles2 libx264-160 \
     # Clean up apt lists to reduce image size
     && sudo rm -rf /var/lib/apt/lists/*
 
