@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { format } from 'date-fns';
+import { format, isBefore, startOfDay } from 'date-fns';
 import { CalendarClock, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -58,7 +58,13 @@ export function DueDatePicker({ value, onChange }: DueDatePickerProps) {
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className="w-auto p-0">
-				<Calendar mode="single" selected={value} onSelect={handleSelect} initialFocus />
+				<Calendar
+					mode="single"
+					selected={value}
+					onSelect={handleSelect}
+					disabled={date => isBefore(date, startOfDay(new Date()))}
+					initialFocus
+				/>
 			</PopoverContent>
 		</Popover>
 	);
