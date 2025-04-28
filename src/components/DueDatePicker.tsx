@@ -19,6 +19,8 @@ interface DueDatePickerProps {
 export function DueDatePicker({ value, onChange }: DueDatePickerProps) {
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
+	console.log('[DueDatePicker] Rendering with value:', value);
+
 	const handleSelect = (date?: Date) => {
 		onChange(date);
 		setIsCalendarOpen(false); // Close popover on selection
