@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { CalendarClock, Image, Plus } from 'lucide-react';
+import { format } from 'date-fns';
+import { Plus } from 'lucide-react';
 
+import { DueDatePicker } from '@/components/DueDatePicker';
 import { Button } from '@/components/ui/button';
 import { PriorityPicker } from '@/components/ui/PriorityPicker';
 import { AddTodoFormProps, CreateTodoParams, PriorityLevel } from '@/types/todoTypes';
 
 /**
- * A form component for adding new todos, including priority selection.
+ * A form component for adding new todos, including priority selection and due date.
  */
 export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 	const [title, setTitle] = useState('');
 	const [priority, setPriority] = useState<PriorityLevel | null>(null);
+	const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -20,16 +23,22 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 		const newTodoParams: CreateTodoParams = {
 			title: title.trim(),
 			priority: priority,
+			dueDate: dueDate ? format(dueDate, 'yyyy-MM-dd') : null,
 		};
 
 		onAddTodo(newTodoParams);
 
 		setTitle('');
 		setPriority(null);
+		setDueDate(undefined);
 	};
 
 	const handlePrioritySelect = (selectedPriority: PriorityLevel | null) => {
 		setPriority(selectedPriority);
+	};
+
+	const handleDateChange = (date?: Date) => {
+		setDueDate(date);
 	};
 
 	return (
@@ -48,13 +57,8 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 				aria-label="Todo title"
 			/>
 
-			<div className="flex gap-2 w-full justify-end">
-				<Button variant="outline" className="cursor-pointer">
-					<Image />
-				</Button>
-				<Button variant="outline" className="cursor-pointer">
-					<CalendarClock />
-				</Button>
+			<div className="flex flex-wrap gap-2 w-full justify-end">
+				<DueDatePicker value={dueDate} onChange={handleDateChange} />
 				<PriorityPicker
 					value={priority}
 					onPriorityChange={handlePrioritySelect}

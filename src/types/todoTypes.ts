@@ -6,7 +6,7 @@ export interface Todo {
 	completed: boolean;
 	creationDate: string;
 	description?: string;
-	dueDate?: string;
+	dueDate?: string | null;
 	priority?: PriorityLevel | null;
 }
 
@@ -20,7 +20,7 @@ export type CreateTodoParams = {
 	title: string;
 	completed?: boolean;
 	description?: string;
-	dueDate?: string;
+	dueDate?: string | null;
 	priority?: PriorityLevel | null;
 };
 
