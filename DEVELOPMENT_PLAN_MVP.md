@@ -125,7 +125,7 @@
 - [x] DATE-3: Ensure store logic correctly handles `dueDate` on addition and update.
 - [x] DATE-4: Write/Adapt stable unit tests for `DueDatePicker` component.
 - [x] DATE-5: Write/Adapt relevant integration tests covering date addition/editing.
-- [ ] DATE-6: Create PR `feat/add-due-date` → `dev`
+- [x] DATE-6: Create PR `feat/add-due-date` → `dev`
 
 **Branch: `feat/todo-detail-modal`** (Moved from Phase 4)
 
