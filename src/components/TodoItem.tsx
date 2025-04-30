@@ -6,6 +6,7 @@ import { EditTodoForm } from './EditTodoForm';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PriorityLevel, Todo, TodoItemProps } from '@/types/todoTypes';
+import { formatDate } from '@/utils/dateUtils';
 
 // Return type is string (classes) or null (no badge)
 const getPriorityBadgeClasses = (priority: PriorityLevel | null): string | null => {
@@ -63,6 +64,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 			className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0 hover:bg-muted/50 transition-colors duration-150 rounded-xl"
 			aria-labelledby={`todo-title-${todo.id}`}
 			role="listitem"
+			data-testid={`todo-item-${todo.id}`}
 		>
 			{isEditing ? (
 				<EditTodoForm initialData={todo} onSave={handleSave} onCancel={handleCancel} />
@@ -99,7 +101,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 						{/* Display due date if it exists */}
 						{todo.dueDate && (
 							<span className="text-xs text-muted-foreground mt-1">
-								Due: {new Date(todo.dueDate).toLocaleDateString()}
+								Due: {formatDate(todo.dueDate)}
 							</span>
 						)}
 					</div>

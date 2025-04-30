@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { formatISO } from 'date-fns';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { TodoItem } from '@/components/TodoItem';
@@ -260,10 +261,36 @@ describe('TodoItem Component', () => {
 			await userEvent.clear(descriptionInput);
 			await userEvent.type(descriptionInput, newDescription);
 
-			const dueDateInput = screen.getByLabelText(/due date/i);
-			const newDueDate = '2024-12-31';
-			await userEvent.type(dueDateInput, newDueDate);
+			// When: A date is selected from the date picker
+			const dueDateButton = screen.getByRole('button', { name: /due date/i });
+			await userEvent.click(dueDateButton);
+			const calendarGrid = await screen.findByRole('grid');
 
+			// Select a specific date that we know is enabled (today's date to be safe)
+			// First, format today's date as a string to find in the calendar
+			const today = new Date();
+			const dayOfMonth = today.getDate().toString(); // get current day number as string
+
+			// Find the correct day button: role='gridcell', not disabled, contains the day number
+			const dayCells = await within(calendarGrid).findAllByRole('gridcell');
+			const targetCell = dayCells.find(cell => {
+				// Check if the button inside the cell is not disabled and has the correct text content
+				const button = cell as HTMLButtonElement; // Cast needed for disabled check
+				return !button.disabled && button.textContent === dayOfMonth;
+			});
+
+			if (!targetCell) {
+				throw new Error(`Could not find an enabled gridcell button for day ${dayOfMonth}`);
+			}
+
+			await userEvent.click(targetCell);
+
+			// Extract the selected date for assertion
+			const expectedDate = new Date();
+			expectedDate.setHours(0, 0, 0, 0); // Set to start of day
+			const expectedIsoDate = formatISO(expectedDate);
+
+			// When: The priority is changed
 			const priorityButton = screen.getByRole('button', { name: /select priority for this task/i });
 			await userEvent.click(priorityButton);
 			const lowOption = await screen.findByRole('menuitemradio', { name: /low/i });
@@ -277,7 +304,7 @@ describe('TodoItem Component', () => {
 			expect(mockHandlers.onSave).toHaveBeenCalledWith(mockIncompleteTodo.id, {
 				title: newTitle,
 				description: newDescription,
-				dueDate: newDueDate,
+				dueDate: expectedIsoDate, // Use the dynamically determined ISO date
 				priority: 'low',
 			});
 
@@ -296,8 +323,7 @@ describe('TodoItem Component', () => {
 			await userEvent.type(titleInput, 'Temporary Change');
 			const descriptionInput = screen.getByRole('textbox', { name: /edit description/i });
 			await userEvent.type(descriptionInput, 'Temp Desc');
-			const dueDateInput = screen.getByLabelText(/due date/i);
-			await userEvent.type(dueDateInput, '2025-01-01');
+			// No need to interact with date picker for cancel test
 
 			// And: The cancel button is clicked
 			const cancelButton = screen.getByRole('button', { name: /cancel$/i });

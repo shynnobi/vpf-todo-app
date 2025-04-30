@@ -1,6 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { formatISO, isValid, parseISO } from 'date-fns';
 import { Save, X } from 'lucide-react';
 
+import { DueDatePicker } from '@/components/DueDatePicker';
 import { Button } from '@/components/ui/button';
 import { PriorityPicker } from '@/components/ui/PriorityPicker';
 import { PriorityLevel, Todo } from '@/types/todoTypes';
@@ -14,7 +16,10 @@ type EditTodoFormProps = {
 export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProps) {
 	const [editedTitle, setEditedTitle] = useState(initialData.title);
 	const [editedDescription, setEditedDescription] = useState(initialData.description ?? '');
-	const [editedDueDate, setEditedDueDate] = useState<string>(initialData.dueDate ?? '');
+	const [editedDueDate, setEditedDueDate] = useState<Date | undefined>(() => {
+		const initialDate = initialData.dueDate ? parseISO(initialData.dueDate) : undefined;
+		return initialDate && isValid(initialDate) ? initialDate : undefined;
+	});
 	const [editedPriority, setEditedPriority] = useState<PriorityLevel | null>(
 		initialData.priority ?? null
 	);
@@ -24,7 +29,7 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 		const updates: Partial<Omit<Todo, 'id'>> = {
 			title: editedTitle,
 			description: editedDescription || undefined,
-			dueDate: editedDueDate || undefined,
+			dueDate: editedDueDate ? formatISO(editedDueDate) : undefined,
 			priority: editedPriority,
 		};
 		onSave(initialData.id, updates);
@@ -32,6 +37,10 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 
 	const handlePrioritySelect = (selectedPriority: PriorityLevel | null) => {
 		setEditedPriority(selectedPriority);
+	};
+
+	const handleDateChange = (date?: Date) => {
+		setEditedDueDate(date);
 	};
 
 	return (
@@ -72,34 +81,18 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 			</div>
 
 			{/* Due Date and Priority Row */}
-			<div className="flex items-center gap-4">
-				{/* Due Date Input */}
-				<div className="relative">
-					<label htmlFor={`edit-date-${initialData.id}`} className="text-xs text-gray-600 mr-1">
-						Due Date
-					</label>
-					<input
-						id={`edit-date-${initialData.id}`}
-						type="date"
+			<div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+				{/* Due Date Picker */}
+				<div className="w-full sm:w-auto">
+					<DueDatePicker
+						key={editedDueDate ? editedDueDate.toISOString() : 'no-date'}
 						value={editedDueDate}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setEditedDueDate(e.target.value)}
-						className="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+						onChange={handleDateChange}
 					/>
-					{editedDueDate && (
-						<button
-							type="button"
-							onClick={() => setEditedDueDate('')}
-							className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-destructive cursor-pointer"
-							aria-label="Clear due date"
-						>
-							<X className="h-4 w-4" />
-						</button>
-					)}
 				</div>
 
 				{/* Priority Dropdown */}
-				<div>
-					{/* <label className="text-xs text-gray-600 mr-1">Priority</label> */}
+				<div className="w-full sm:w-auto">
 					<PriorityPicker
 						value={editedPriority}
 						onPriorityChange={handlePrioritySelect}

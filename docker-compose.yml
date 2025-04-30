@@ -10,6 +10,8 @@ services:
       # Mount the project directory into the container at /workspaces/vpf-todo-app
       # The :cached flag improves performance on macOS/Windows
       - .:/workspaces/vpf-todo-app:cached
+      # Mount the named volume for Playwright cache persistence (for the 'node' user)
+      - playwright_cache:/home/node/.cache/ms-playwright
 
     environment:
       # Inject the GitHub token from the .env file located at the project root
@@ -23,3 +25,7 @@ services:
     # Keep the container alive indefinitely.
     # Dev Containers will handle executing commands inside.
     command: sleep infinity
+
+# Define the named volume for Playwright cache
+volumes:
+  playwright_cache: {}
