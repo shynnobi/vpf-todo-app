@@ -123,7 +123,7 @@
 - [ ] DATE-1: Finalize `DatePicker` integration in `AddTodoForm`.
 - [ ] DATE-2: Finalize `DatePicker` integration in `TodoItem` edit mode.
 - [ ] DATE-3: Ensure store logic correctly handles `dueDate` on addition and update.
-- [ ] DATE-4: Write/Adapt stable unit tests for `AddTodoForm` & `TodoItem` edit form with `DatePicker` (addressing stability/mocking issues).
+- [x] DATE-4: Write/Adapt stable unit tests for `DueDatePicker` component.
 - [ ] DATE-5: Write/Adapt relevant integration tests covering date addition/editing.
 - [ ] DATE-6: Create PR `feat/add-due-date` → `dev`
 
