@@ -16,7 +16,8 @@ const meta = {
 		layout: 'centered',
 		docs: {
 			description: {
-				component: 'Form for adding new todos with validation and submission handling',
+				component:
+					'Form for adding new todos with title input and priority selection (defaults to no priority). Handles validation and submission.',
 			},
 		},
 	},
@@ -30,6 +31,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Default state of the AddTodoForm component
+ * Default state of the AddTodoForm, ready for input.
+ * Priority defaults to 'None' (null).
  */
-export const Default: Story = {};
+export const InitialState: Story = {
+	args: {
+		// No specific args needed, shows default state
+	},
+};

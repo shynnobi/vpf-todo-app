@@ -99,18 +99,31 @@
 
 **Branch: `feat/prioritization`**
 
-- [ ] PRIO-1: Extend Todo model with priority levels
-- [ ] PRIO-2: Write tests for priority features
-- [ ] PRIO-3: Implement priority selector in forms
-- [ ] PRIO-4: Implement priority display in TodoItem
-- [ ] PRIO-5: Implement sorting by priority
-- [ ] PRIO-6: Create PR `feat/prioritization` → `dev`
+- [x] PRIO-1: Write tests for priority features (add, edit, sort)
+- [x] PRIO-2: Extend Todo model with priority levels
+- [x] PRIO-3: Implement sorting by priority (in store)
+- [x] PRIO-4: Implement priority selector in forms
+- [x] PRIO-5: Implement priority display in TodoItem
+- [x] PRIO-STORY: Create/Update Storybook stories for AddTodoForm & TodoItem
+- [x] PRIO-6: Create PR `feat/prioritization` → `dev`
+
+**Branch: `feat/optional-priority`**
+
+- [x] OPT-PRIO-1: Adapt tests for optional priority (add, edit, sort, display)
+- [x] OPT-PRIO-2: Update Todo model & types (`priority?: PriorityLevel | null`)
+- [x] OPT-PRIO-3: Adapt store logic (add/edit/sort) to handle `null` priority
+- [x] OPT-PRIO-4: Update forms to allow selecting "No Priority" (`null`)
+- [x] OPT-PRIO-5: Update display components to handle `null` priority
+- [x] OPT-PRIO-STORY: Update Storybook stories (AddTodoForm, TodoItem) for optional priority
+- [ ] OPT-PRIO-6: Create PR `feat/optional-priority` → `dev`
 
 **Branch: `feat/advanced-filtering`**
 
 - [ ] AFILT-1: Write tests for advanced filtering (due date, priority)
 - [ ] AFILT-2: Implement advanced filter UI
 - [ ] AFILT-3: Implement advanced filter logic in store
+- [ ] AFILT-INTEG: Write/Update integration tests for advanced filtering (e.g., in TodoContainer)
+- [ ] AFILT-STORY: Create/Update Storybook stories for advanced filters
 - [ ] AFILT-4: Create PR `feat/advanced-filtering` → `dev`
 
 **Feature-Complete Version (v0.3.0)**

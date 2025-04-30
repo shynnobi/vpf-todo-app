@@ -12,9 +12,27 @@ import { Todo } from '@/types/todoTypes';
  */
 describe('TodoList Component', () => {
 	const mockTodos: Todo[] = [
-		{ id: '1', title: 'Learn React', completed: false },
-		{ id: '2', title: 'Build a todo app', completed: true },
-		{ id: '3', title: 'Master TypeScript', completed: false },
+		{
+			id: '1',
+			title: 'Learn React',
+			completed: false,
+			priority: 'medium',
+			creationDate: '2023-01-01T10:00:00Z',
+		},
+		{
+			id: '2',
+			title: 'Build a todo app',
+			completed: true,
+			priority: 'high',
+			creationDate: '2023-01-02T11:00:00Z',
+		},
+		{
+			id: '3',
+			title: 'Master TypeScript',
+			completed: false,
+			priority: 'low',
+			creationDate: '2023-01-03T12:00:00Z',
+		},
 	];
 
 	describe('Initial Rendering', () => {
