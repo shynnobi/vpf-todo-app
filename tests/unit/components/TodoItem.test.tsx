@@ -271,10 +271,19 @@ describe('TodoItem Component', () => {
 			const today = new Date();
 			const dayOfMonth = today.getDate().toString(); // get current day number as string
 
-			// Find the button containing today's date and click it
-			// We need to find the cell that contains the button with today's date
-			const dayCell = await within(calendarGrid).findByRole('gridcell', { name: dayOfMonth });
-			await userEvent.click(dayCell);
+			// Find the correct day button: role='gridcell', not disabled, contains the day number
+			const dayCells = await within(calendarGrid).findAllByRole('gridcell');
+			const targetCell = dayCells.find(cell => {
+				// Check if the button inside the cell is not disabled and has the correct text content
+				const button = cell as HTMLButtonElement; // Cast needed for disabled check
+				return !button.disabled && button.textContent === dayOfMonth;
+			});
+
+			if (!targetCell) {
+				throw new Error(`Could not find an enabled gridcell button for day ${dayOfMonth}`);
+			}
+
+			await userEvent.click(targetCell);
 
 			// Extract the selected date for assertion
 			const expectedDate = new Date();
