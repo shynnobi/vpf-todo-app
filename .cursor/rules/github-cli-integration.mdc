@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
 - Always use `--json` flag with GitHub CLI commands to produce structured output
@@ -10,3 +10,4 @@ alwaysApply: true
 - When showing PR details, use targeted queries instead of full views (e.g., commits only, files only)
 - Format complex outputs as single-line JSON objects to prevent terminal overflow
 - Test GitHub CLI commands with small result sets before running broader queries
+- For complex or multi-line PR bodies with `gh pr create`, use the `--body-file` flag with a temporary file to avoid escaping issues (e.g., `gh pr create --body-file temp_pr_body.md && rm temp_pr_body.md`).

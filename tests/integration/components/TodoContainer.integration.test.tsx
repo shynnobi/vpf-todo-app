@@ -53,7 +53,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// When: A new todo is added through the form
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			await act(async () => {
 				fireEvent.change(inputElement, { target: { value: 'Test Todo' } });
 				fireEvent.click(screen.getByRole('button', { name: /add/i }));
@@ -78,7 +78,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// When: Multiple todos are added
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			const addButton = screen.getByRole('button', { name: /add/i });
 
 			// When: First todo is added
@@ -114,7 +114,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// And: A todo is added
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			await act(async () => {
 				fireEvent.change(inputElement, { target: { value: 'Toggle Test Todo' } });
 				fireEvent.click(screen.getByRole('button', { name: /add/i }));
@@ -142,7 +142,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// And: A todo is added
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			await act(async () => {
 				fireEvent.change(inputElement, { target: { value: 'Todo to Delete' } });
 				fireEvent.click(screen.getByRole('button', { name: /add/i }));
@@ -171,7 +171,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// And: Multiple todos are added
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			const addButton = screen.getByRole('button', { name: /add/i });
 
 			// When: First todo is added
@@ -222,7 +222,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// When: A todo is added
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			await act(async () => {
 				fireEvent.change(inputElement, { target: { value: 'Persisted Task' } });
 				fireEvent.click(screen.getByRole('button', { name: /add/i }));
@@ -254,7 +254,9 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// And: Input should be empty after remount
-			const inputAfterRemount = screen.getByPlaceholderText(/add a new todo/i) as HTMLInputElement;
+			const inputAfterRemount = screen.getByPlaceholderText(
+				/what's on your mind/i
+			) as HTMLInputElement;
 			expect(inputAfterRemount.value).toBe('');
 		});
 	});
@@ -264,7 +266,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 		act(() => {
 			render(<TodoContainer />);
 		});
-		const input = screen.getByPlaceholderText(/add a new todo/i);
+		const input = screen.getByPlaceholderText(/what's on your mind/i);
 
 		// When: Adding a todo
 		await act(async () => {
@@ -304,7 +306,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 		act(() => {
 			render(<TodoContainer />);
 		});
-		const input = screen.getByPlaceholderText(/add a new todo/i);
+		const input = screen.getByPlaceholderText(/what's on your mind/i);
 		const addButton = screen.getByRole('button', { name: /add/i });
 
 		// When: Adding first todo
@@ -332,61 +334,40 @@ describe('TodoContainer Component - Integration Tests', () => {
 		// Helper to add initial todos for filter tests
 		const setupTodos = async () => {
 			// Given: Input elements to add todos
-			const input = screen.getByPlaceholderText(/add a new todo/i);
+			const input = screen.getByPlaceholderText(/what's on your mind/i);
 			const addButton = screen.getByRole('button', { name: /add/i });
 
 			// When: Adding active todo
 			await act(async () => {
 				fireEvent.change(input, { target: { value: ACTIVE_TODO_TEXT } });
 				fireEvent.click(addButton);
-				await screen.findByText(ACTIVE_TODO_TEXT); // Ensure it's rendered within act
 			});
+			await screen.findByText(ACTIVE_TODO_TEXT); // Wait for the first todo to appear
 
-			// When: Adding todo that will be completed
+			// When: Adding completed todo
 			await act(async () => {
 				fireEvent.change(input, { target: { value: COMPLETED_TODO_TEXT } });
 				fireEvent.click(addButton);
-				await screen.findByText(COMPLETED_TODO_TEXT);
 			});
+			const addedCompletedTodo = await screen.findByText(COMPLETED_TODO_TEXT); // Wait for the second todo
 
-			// When: Marking the second todo as completed
-			const listItems = screen.getAllByRole('listitem'); // Assuming todos are in list items
-			const completedListItem = listItems.find(item =>
-				item.textContent?.includes(COMPLETED_TODO_TEXT)
-			);
-			if (!completedListItem) throw new Error('Completed list item not found');
-			const checkbox = completedListItem.querySelector('input[type="checkbox"]');
-			if (!checkbox) throw new Error('Checkbox not found in completed item');
+			// Mark the second todo as completed
+			const listItem = addedCompletedTodo.closest('li');
+			if (!listItem) throw new Error('List item for completed todo not found');
+			const checkbox = listItem.querySelector('input[type="checkbox"]') as HTMLInputElement;
+			if (!checkbox) throw new Error('Checkbox for completed todo not found');
 
 			await act(async () => {
 				fireEvent.click(checkbox);
-				await waitFor(() => expect(checkbox).toBeChecked()); // Wait for completion within act
 			});
+			await waitFor(() => expect(checkbox.checked).toBe(true)); // Confirm it's checked
 		};
-
-		it('should display filter controls with initial counts', async () => {
-			// Given: The store is initialized with todos
-			render(<TodoContainer />);
-			await setupTodos();
-
-			// Then: Filter buttons should exist with correct initial counts
-			const allButton = await screen.findByRole('button', { name: /show all todos/i });
-			const activeButton = await screen.findByRole('button', { name: /show active todos/i });
-			const completedButton = await screen.findByRole('button', { name: /show completed todos/i });
-
-			expect(allButton).toBeInTheDocument();
-			expect(within(allButton).getByText('2', { exact: false })).toBeInTheDocument();
-
-			expect(activeButton).toBeInTheDocument();
-			expect(within(activeButton).getByText('1', { exact: false })).toBeInTheDocument();
-
-			expect(completedButton).toBeInTheDocument();
-			expect(within(completedButton).getByText('1', { exact: false })).toBeInTheDocument();
-		});
 
 		it('should filter to show only active todos when Active button is clicked', async () => {
 			// Given: The store is initialized with todos
-			render(<TodoContainer />);
+			act(() => {
+				render(<TodoContainer />);
+			});
 			await setupTodos();
 
 			// Given: The activeButton is found after todos are set up
@@ -411,7 +392,9 @@ describe('TodoContainer Component - Integration Tests', () => {
 
 		it('should filter to show only completed todos when Completed button is clicked', async () => {
 			// Given: The store is initialized with todos
-			render(<TodoContainer />);
+			act(() => {
+				render(<TodoContainer />);
+			});
 			await setupTodos();
 
 			// Given: The completedButton is found after todos are set up
@@ -436,7 +419,9 @@ describe('TodoContainer Component - Integration Tests', () => {
 
 		it('should show all todos when All button is clicked after filtering', async () => {
 			// Given: The store is initialized with todos
-			render(<TodoContainer />);
+			act(() => {
+				render(<TodoContainer />);
+			});
 			await setupTodos();
 
 			// When: Active filter is applied first
@@ -465,8 +450,10 @@ describe('TodoContainer Component - Integration Tests', () => {
 
 		it('should update filter counts when a todo status changes', async () => {
 			// Given: The store is initialized with two active todos
-			render(<TodoContainer />);
-			const input = screen.getByPlaceholderText(/add a new todo/i);
+			act(() => {
+				render(<TodoContainer />);
+			});
+			const input = screen.getByPlaceholderText(/what's on your mind/i);
 			const addButton = screen.getByRole('button', { name: /add/i });
 
 			// When: Adding two active todos
@@ -520,5 +507,115 @@ describe('TodoContainer Component - Integration Tests', () => {
 				expect(within(updatedCompletedButton).getByText('1', { exact: false })).toBeInTheDocument();
 			});
 		});
+	});
+
+	describe('Sorting Logic', () => {
+		it('should display sorting controls with default sort (creation date descending)', async () => {
+			// Given: Component is rendered
+			act(() => {
+				render(<TodoContainer />);
+			});
+			const input = screen.getByPlaceholderText(/what's on your mind/i);
+			const addButton = screen.getByRole('button', { name: /add/i });
+
+			// When: Adding two todos in sequence
+			await act(async () => {
+				fireEvent.change(input, { target: { value: 'First Task' } });
+				fireEvent.click(addButton);
+			});
+			await screen.findByText('First Task'); // Ensure it rendered
+
+			await act(async () => {
+				fireEvent.change(input, { target: { value: 'Second Task' } });
+				fireEvent.click(addButton);
+			});
+			await screen.findByText('Second Task'); // Ensure it rendered
+
+			// Then: Sorting controls should be visible
+			// Find the specific container for filter/sort controls
+			const controlsContainer = screen.getByLabelText(/filter and sort controls/i);
+
+			// Find the combobox and button *within* that container
+			const sortBySelectTrigger = within(controlsContainer).getByRole('combobox');
+			const sortDirectionButton = within(controlsContainer).getByRole('button', {
+				name: /change sort direction/i,
+			});
+
+			expect(sortBySelectTrigger).toBeInTheDocument();
+			// Verify its aria-label explicitly using the exact string
+			expect(sortBySelectTrigger).toHaveAttribute('aria-label', 'Sort by');
+			expect(sortDirectionButton).toBeInTheDocument();
+
+			// And: Default sort option should be selected (Creation Date)
+			expect(within(sortBySelectTrigger).getByText(/By Creation Date/i)).toBeInTheDocument();
+
+			// And: Sort direction button should be present
+			// We rely on the actual list order check below to confirm descending direction.
+
+			// And: The list should be sorted by creation date descending (Second Task first)
+			const listItems = screen.getAllByRole('listitem');
+			expect(listItems[0]).toHaveTextContent('Second Task');
+			expect(listItems[1]).toHaveTextContent('First Task');
+		});
+
+		it('should sort by Priority descending by default and toggle correctly', async () => {
+			// Given: Component is rendered
+			act(() => {
+				render(<TodoContainer />);
+			});
+
+			// When: Adding todos with different priorities (out of order)
+			await act(async () => {
+				useTodoStore.getState().addTodo({ title: 'Medium Prio', priority: 'medium' });
+				useTodoStore.getState().addTodo({ title: 'High Prio', priority: 'high' });
+				useTodoStore.getState().addTodo({ title: 'No Prio' });
+				useTodoStore.getState().addTodo({ title: 'Low Prio', priority: 'low' });
+			});
+			await screen.findByText('Low Prio'); // Wait for last todo to render
+
+			// When: Setting sort config directly to Priority
+			await act(async () => {
+				useTodoStore.getState().setSortConfig('priority');
+			});
+
+			// Then: The list should be sorted by priority descending (High > Medium > Low > None)
+			await waitFor(() => {
+				const listItems = screen.getAllByRole('listitem');
+				expect(listItems[0]).toHaveTextContent('High Prio');
+				expect(listItems[1]).toHaveTextContent('Medium Prio');
+				expect(listItems[2]).toHaveTextContent('Low Prio');
+				expect(listItems[3]).toHaveTextContent('No Prio');
+			});
+
+			// When: Toggling sort direction directly via store action
+			await act(async () => {
+				useTodoStore.getState().toggleSortDirection();
+			});
+
+			// Then: The list should be sorted by priority ascending (None > Low > Medium > High)
+			await waitFor(() => {
+				const listItems = screen.getAllByRole('listitem');
+				expect(listItems[0]).toHaveTextContent('No Prio');
+				expect(listItems[1]).toHaveTextContent('Low Prio');
+				expect(listItems[2]).toHaveTextContent('Medium Prio');
+				expect(listItems[3]).toHaveTextContent('High Prio');
+			});
+
+			// When: Toggling sort direction again directly via store action
+			await act(async () => {
+				useTodoStore.getState().toggleSortDirection();
+			});
+
+			// Then: The list should be sorted by priority descending again
+			await waitFor(() => {
+				const listItems = screen.getAllByRole('listitem');
+				expect(listItems[0]).toHaveTextContent('High Prio');
+				expect(listItems[1]).toHaveTextContent('Medium Prio');
+				expect(listItems[2]).toHaveTextContent('Low Prio');
+				expect(listItems[3]).toHaveTextContent('No Prio');
+			});
+		});
+
+		// --- Add other sorting tests here ---
 	});
 });

@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
 import { AddTodoForm } from '@/components/AddTodoForm';
@@ -16,7 +17,7 @@ describe('AddTodoForm Component', () => {
 			render(<AddTodoForm onAddTodo={() => {}} />);
 
 			// Then: It should display an input field for the todo title
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			expect(inputElement).toBeInTheDocument();
 
 			// And: It should display a submit button
@@ -26,21 +27,21 @@ describe('AddTodoForm Component', () => {
 	});
 
 	describe('Form Interaction', () => {
-		it('should call onAddTodo with entered title when form is submitted', () => {
+		it('should call onAddTodo with entered title when form is submitted', async () => {
 			// Given: A spy function for onAddTodo and the component is rendered
 			const mockAddTodo = vi.fn();
 			render(<AddTodoForm onAddTodo={mockAddTodo} />);
 
 			// And: A todo title is entered in the input
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
-			fireEvent.change(inputElement, { target: { value: 'Test Todo' } });
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
+			await userEvent.type(inputElement, 'Test Todo');
 
 			// When: The form is submitted
 			const buttonElement = screen.getByRole('button', { name: /add/i });
-			fireEvent.click(buttonElement);
+			await userEvent.click(buttonElement);
 
-			// Then: onAddTodo should be called with the entered title
-			expect(mockAddTodo).toHaveBeenCalledWith({ title: 'Test Todo' });
+			// Then: onAddTodo should be called with the entered title and default priority (null)
+			expect(mockAddTodo).toHaveBeenCalledWith({ title: 'Test Todo', priority: null });
 		});
 
 		it('should not call onAddTodo when form is submitted with empty input', () => {
@@ -61,7 +62,7 @@ describe('AddTodoForm Component', () => {
 			render(<AddTodoForm onAddTodo={() => {}} />);
 
 			// And: A todo title is entered in the input
-			const inputElement = screen.getByPlaceholderText(/add a new todo/i);
+			const inputElement = screen.getByPlaceholderText(/what's on your mind/i);
 			fireEvent.change(inputElement, { target: { value: 'Test Todo' } });
 
 			// When: The form is submitted

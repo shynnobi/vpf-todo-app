@@ -148,7 +148,7 @@ describe('TodoContainer - Filtering', () => {
 		});
 
 		// When: Adding a new active todo using the AddTodoForm within TodoContainer
-		const addInput = screen.getByPlaceholderText(/add a new todo/i);
+		const addInput = screen.getByPlaceholderText(/what's on your mind/i);
 		const addButton = screen.getByRole('button', { name: /add/i });
 
 		// act is needed for user interactions triggering state changes

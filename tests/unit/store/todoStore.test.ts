@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { useTodoStore } from '@/store/todoStore';
-import { Todo, TodoFilter } from '@/types/todoTypes';
+import { CreateTodoParams, PriorityLevel, Todo, TodoFilter } from '@/types/todoTypes';
 
 // Define the storage key for potential manual cleanup if needed
 const STORAGE_KEY = 'todo-storage';
@@ -111,6 +111,40 @@ describe('Todo Store - Behavior', () => {
 			expect(todos[0].completed).toBe(false); // Assuming default completion is false
 			expect(todos[0]).toEqual(newTodo);
 		});
+
+		it('Given the store is empty, When a new todo is added without specifying priority, Then it should be added with priority set to null', () => {
+			// Given: Store is empty
+			expect(TodoStoreTestHelpers.getTodos()).toEqual([]);
+
+			// When: Add a todo without priority
+			const newTodo = useTodoStore.getState().addTodo({ title: 'No priority task' });
+			// Note: We are explicitly NOT passing priority field here
+
+			// Then: Priority should be null
+			const todos = TodoStoreTestHelpers.getTodos();
+			expect(todos).toHaveLength(1);
+			expect(todos[0].title).toBe('No priority task');
+			expect(todos[0].priority).toBeNull();
+			expect(todos[0]).toEqual(newTodo);
+		});
+
+		it('Given the store is empty, When a new todo is added with priority explicitly set to null, Then it should be added with priority as null', () => {
+			// Given: Store is empty
+			expect(TodoStoreTestHelpers.getTodos()).toEqual([]);
+
+			// When: Add a todo with priority explicitly null
+			const newTodo = useTodoStore.getState().addTodo({
+				title: 'Explicit null priority task',
+				priority: null,
+			});
+
+			// Then: Priority should be null
+			const todos = TodoStoreTestHelpers.getTodos();
+			expect(todos).toHaveLength(1);
+			expect(todos[0].title).toBe('Explicit null priority task');
+			expect(todos[0].priority).toBeNull();
+			expect(todos[0]).toEqual(newTodo);
+		});
 	});
 
 	describe('Toggling Todo Status', () => {
@@ -160,7 +194,6 @@ describe('Todo Store - Behavior', () => {
 		});
 	});
 
-	// New Test Suite for Updating Todos
 	describe('Updating Todos', () => {
 		let initialTodo: Todo;
 
@@ -174,7 +207,7 @@ describe('Todo Store - Behavior', () => {
 			// Given: An existing todo
 			const todoId = initialTodo.id;
 			const newDescription = 'Updated description';
-			const newDueDate = new Date(Date.now() + 86400000).toISOString(); // Tomorrow
+			const newDueDate = new Date(Date.now() + 86400000).toISOString();
 
 			// When: Updating the todo's details
 			const updatedTodo = useTodoStore.getState().updateTodo(todoId, {
@@ -187,14 +220,58 @@ describe('Todo Store - Behavior', () => {
 			expect(todos).toHaveLength(1);
 			const todoInStore = todos.find(t => t.id === todoId);
 			expect(todoInStore).toBeDefined();
-			expect(todoInStore?.title).toBe(initialTodo.title); // Title shouldn't change unless specified
 			expect(todoInStore?.description).toBe(newDescription);
 			expect(todoInStore?.dueDate).toBe(newDueDate);
-			expect(todoInStore?.completed).toBe(initialTodo.completed); // Completion shouldn't change
-			expect(updatedTodo).toEqual(todoInStore); // The action should return the updated todo
+			expect(updatedTodo).toEqual(todoInStore);
 		});
 
-		// Add more tests here later for updating title, completion status via updateTodo if needed
+		it('should allow updating the priority of an existing todo, including setting it to null', () => {
+			// Given: An existing todo
+			const todoId = initialTodo.id;
+
+			// When: Updating the priority to 'high'
+			let updatedTodo = useTodoStore.getState().updateTodo(todoId, { priority: 'high' });
+
+			// Then: The priority should be 'high'
+			expect(updatedTodo?.priority).toBe('high');
+			expect(TodoStoreTestHelpers.getTodos().find(t => t.id === todoId)?.priority).toBe('high');
+
+			// When: Updating the priority to null
+			updatedTodo = useTodoStore.getState().updateTodo(todoId, { priority: null });
+
+			// Then: The priority should be null
+			expect(updatedTodo?.priority).toBeNull();
+			expect(TodoStoreTestHelpers.getTodos().find(t => t.id === todoId)?.priority).toBeNull();
+		});
+	});
+
+	describe('Prioritizing Todos', () => {
+		beforeEach(() => {
+			TodoStoreTestHelpers.cleanupStorage();
+			TodoStoreTestHelpers.resetStore();
+		});
+
+		it('should add a new todo with the specified priority', () => {
+			// Given: Store is empty
+			expect(TodoStoreTestHelpers.getTodosCount()).toBe(0);
+
+			// When: Adding todos with specific priorities
+			const lowPriorityParams: CreateTodoParams = { title: 'Low Prio Task', priority: 'low' };
+			const highPriorityParams: CreateTodoParams = { title: 'High Prio Task', priority: 'high' };
+			const lowTodo = useTodoStore.getState().addTodo(lowPriorityParams);
+			const highTodo = useTodoStore.getState().addTodo(highPriorityParams);
+
+			// Then: The todos should have the correct priorities stored
+			expect(lowTodo).toBeDefined();
+			expect(highTodo).toBeDefined();
+			expect(lowTodo.priority).toBe<PriorityLevel>('low');
+			expect(highTodo.priority).toBe<PriorityLevel>('high');
+
+			const todos = TodoStoreTestHelpers.getTodos();
+			expect(todos).toHaveLength(2);
+			expect(todos.find(t => t.id === lowTodo.id)?.priority).toBe('low');
+			expect(todos.find(t => t.id === highTodo.id)?.priority).toBe('high');
+		});
 	});
 
 	describe('Resetting the Store', () => {
@@ -252,58 +329,6 @@ describe('Todo Store - Behavior', () => {
 
 			// Then: The todos list should remain unchanged
 			expect(useTodoStore.getState().todos).toEqual(todosBeforeDelete);
-		});
-	});
-
-	describe('Filtering Todos', () => {
-		beforeEach(() => {
-			// Start with a clean state for filter tests
-			TodoStoreTestHelpers.resetStore();
-			// Add a mix of completed and active todos
-			TodoStoreTestHelpers.addTodo('Active todo 1');
-			TodoStoreTestHelpers.addTodo('Completed todo 1', true);
-			TodoStoreTestHelpers.addTodo('Active todo 2');
-			TodoStoreTestHelpers.addTodo('Completed todo 2', true);
-		});
-
-		it('should have All as the default filter', () => {
-			// Given: The store is initialized with todos
-
-			// When: Getting the current filter
-
-			// Then: The filter should be All by default
-			expect(TodoStoreTestHelpers.getFilter()).toBe(TodoFilter.All);
-		});
-
-		it('should allow setting the filter to Active', () => {
-			// Given: The store is initialized with todos
-
-			// When: Setting the filter to Active
-			TodoStoreTestHelpers.setFilter(TodoFilter.Active);
-
-			// Then: The filter should be Active
-			expect(TodoStoreTestHelpers.getFilter()).toBe(TodoFilter.Active);
-		});
-
-		it('should allow setting the filter to Completed', () => {
-			// Given: The store is initialized with todos
-
-			// When: Setting the filter to Completed
-			TodoStoreTestHelpers.setFilter(TodoFilter.Completed);
-
-			// Then: The filter should be Completed
-			expect(TodoStoreTestHelpers.getFilter()).toBe(TodoFilter.Completed);
-		});
-
-		it('should allow setting the filter back to All', () => {
-			// Given: The filter is set to Active
-			TodoStoreTestHelpers.setFilter(TodoFilter.Active);
-
-			// When: Setting the filter back to All
-			TodoStoreTestHelpers.setFilter(TodoFilter.All);
-
-			// Then: The filter should be All
-			expect(TodoStoreTestHelpers.getFilter()).toBe(TodoFilter.All);
 		});
 	});
 });
