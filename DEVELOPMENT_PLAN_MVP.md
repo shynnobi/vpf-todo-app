@@ -129,13 +129,23 @@
 
 **Branch: `feat/todo-detail-modal`** (Moved from Phase 4)
 
-- [ ] MODAL-4: Write unit tests for the `TodoDetailModal` component (displaying details, initial state).
-- [ ] MODAL-1: Implement `TodoDetailModal` component UI to make unit tests pass.
-- [ ] MODAL-5: Write/Adapt integration tests for modal triggering and data display.
-- [ ] MODAL-3: Integrate modal triggering from `TodoItem` and manage modal state.
-- [ ] MODAL-2: [Covered by TDD] Ensure logic correctly displays full todo details.
-- [ ] MODAL-STORY: Create Storybook stories for the Modal.
-- [ ] MODAL-6: Create PR `feat/todo-detail-modal` → `dev`
+- [x] MODAL-4: Write unit tests for the `TodoDetailModal` component (displaying details, initial state).
+- [x] MODAL-1: Implement `TodoDetailModal` component UI to make unit tests pass.
+- [x] MODAL-5: Write/Adapt integration tests for modal triggering and data display.
+- [x] MODAL-3: Integrate modal triggering from `TodoItem` and manage modal state.
+- [x] MODAL-2: [Covered by TDD] Ensure logic correctly displays full todo details.
+- [x] MODAL-STORY: Create Storybook stories for the Modal.
+- [x] MODAL-6: Create PR `feat/todo-detail-modal` → `dev`
+
+**Branch: `feat/interactive-todo-modal`**
+
+- [x] INTERACTIVE-MODAL-1: Refactor `TodoDetailModal` to use a Notion-like interactive editing approach.
+- [x] INTERACTIVE-MODAL-2: Replace edit mode with inline editing for title, description and other fields.
+- [x] INTERACTIVE-MODAL-3: Implement auto-save for field changes.
+- [x] INTERACTIVE-MODAL-4: Replace edit button with eye button for previewing tasks in the list view.
+- [x] INTERACTIVE-MODAL-5: Update unit tests for the interactive modal approach.
+- [x] INTERACTIVE-MODAL-6: Update E2E tests for the interactive modal approach.
+- [ ] INTERACTIVE-MODAL-7: Create PR `feat/interactive-todo-modal` → `dev`
 
 **Advanced Data Features & Interactions Version (v0.3.0)** (Target)
 
