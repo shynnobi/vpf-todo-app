@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Pencil, Trash } from 'lucide-react';
 
-import { EditTodoForm } from './EditTodoForm';
+import { TodoDetailModal } from './TodoDetailModal';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -33,7 +33,8 @@ const getPriorityBadgeClasses = (priority: PriorityLevel | null): string | null 
  * Can switch to an editing mode using EditTodoForm.
  */
 export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
-	const [isEditing, setIsEditing] = useState(false);
+	const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+	const [startInEditMode, setStartInEditMode] = useState(false);
 
 	const handleToggle = () => {
 		onToggle(todo.id);
@@ -44,32 +45,42 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 	};
 
 	const handleEdit = () => {
-		setIsEditing(true);
+		setStartInEditMode(true);
+		setIsDetailModalOpen(true);
 	};
 
-	const handleSave = (id: string, updates: Partial<Omit<Todo, 'id'>>) => {
-		onSave(id, updates);
-		setIsEditing(false);
+	const handleOpenDetailModal = () => {
+		setStartInEditMode(false);
+		setIsDetailModalOpen(true);
 	};
 
-	const handleCancel = () => {
-		setIsEditing(false);
+	const handleCloseDetailModal = () => {
+		setIsDetailModalOpen(false);
+		setStartInEditMode(false);
+	};
+
+	const handleSaveFromModal = (updatedTodo: Todo) => {
+		onSave(updatedTodo.id, {
+			title: updatedTodo.title,
+			description: updatedTodo.description,
+			priority: updatedTodo.priority,
+			dueDate: updatedTodo.dueDate,
+			completed: updatedTodo.completed,
+		});
+		setIsDetailModalOpen(false);
 	};
 
 	// Determine badge classes based on priority, handling null/undefined
 	const badgeClasses = getPriorityBadgeClasses(todo.priority ?? null);
 
 	return (
-		<li
-			className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0 hover:bg-muted/50 transition-colors duration-150 rounded-xl"
-			aria-labelledby={`todo-title-${todo.id}`}
-			role="listitem"
-			data-testid={`todo-item-${todo.id}`}
-		>
-			{isEditing ? (
-				<EditTodoForm initialData={todo} onSave={handleSave} onCancel={handleCancel} />
-			) : (
-				// Display mode
+		<>
+			<li
+				className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0 hover:bg-slate-50 hover:border-blue-200 hover:shadow-sm cursor-pointer transition-all duration-150 rounded-xl"
+				aria-labelledby={`todo-title-${todo.id}`}
+				role="listitem"
+				data-testid={`todo-item-${todo.id}`}
+			>
 				<div className="flex items-center gap-2 w-full px-2">
 					<input
 						type="checkbox"
@@ -77,8 +88,12 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 						onChange={handleToggle}
 						className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-2 focus:ring-primary"
 						aria-labelledby={`todo-title-${todo.id}`}
+						onClick={e => e.stopPropagation()} // Empêche l'ouverture de la modal
 					/>
-					<div className="flex-1 flex flex-col text-sm py-1">
+					<div
+						className="flex-1 flex flex-col text-sm py-1"
+						onClick={handleOpenDetailModal} // Ouvre la modal au clic
+					>
 						<div className="flex items-center gap-2">
 							<span
 								id={`todo-title-${todo.id}`}
@@ -127,7 +142,16 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 						</Button>
 					</div>
 				</div>
-			)}
-		</li>
+			</li>
+
+			{/* Modal de détails */}
+			<TodoDetailModal
+				isOpen={isDetailModalOpen}
+				onClose={handleCloseDetailModal}
+				todo={todo}
+				onSave={handleSaveFromModal}
+				initialEditMode={startInEditMode}
+			/>
+		</>
 	);
 }
