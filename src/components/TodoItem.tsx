@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import { Pencil, Trash } from 'lucide-react';
 
-import { TodoDetailModal } from './TodoDetailModal';
+import { EditTodoForm } from './EditTodoForm';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -32,10 +31,14 @@ const getPriorityBadgeClasses = (priority: PriorityLevel | null): string | null 
  * A component that renders a single todo item with checkbox, edit and delete buttons.
  * Can switch to an editing mode using EditTodoForm.
  */
-export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
-	const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-	const [startInEditMode, setStartInEditMode] = useState(false);
-
+export function TodoItem({
+	todo,
+	onToggle,
+	onDelete,
+	onSave,
+	isEditing, // Receive isEditing from props
+	onSetEditing, // Receive onSetEditing from props
+}: TodoItemProps) {
 	const handleToggle = () => {
 		onToggle(todo.id);
 	};
@@ -45,29 +48,16 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 	};
 
 	const handleEdit = () => {
-		setStartInEditMode(true);
-		setIsDetailModalOpen(true);
+		onSetEditing(todo.id); // Call prop function to set this ID as editing
 	};
 
-	const handleOpenDetailModal = () => {
-		setStartInEditMode(false);
-		setIsDetailModalOpen(true);
+	const handleCancelEdit = () => {
+		onSetEditing(null); // Call prop function to clear editing ID
 	};
 
-	const handleCloseDetailModal = () => {
-		setIsDetailModalOpen(false);
-		setStartInEditMode(false);
-	};
-
-	const handleSaveFromModal = (updatedTodo: Todo) => {
-		onSave(updatedTodo.id, {
-			title: updatedTodo.title,
-			description: updatedTodo.description,
-			priority: updatedTodo.priority,
-			dueDate: updatedTodo.dueDate,
-			completed: updatedTodo.completed,
-		});
-		setIsDetailModalOpen(false);
+	const handleSaveEdit = (id: string, updates: Partial<Omit<Todo, 'id'>>) => {
+		onSave(id, updates);
+		onSetEditing(null); // Call prop function to clear editing ID after save
 	};
 
 	// Determine badge classes based on priority, handling null/undefined
@@ -75,83 +65,86 @@ export function TodoItem({ todo, onToggle, onDelete, onSave }: TodoItemProps) {
 
 	return (
 		<>
-			<li
-				className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0 hover:bg-slate-50 hover:border-blue-200 hover:shadow-sm cursor-pointer transition-all duration-150 rounded-xl"
-				aria-labelledby={`todo-title-${todo.id}`}
-				role="listitem"
-				data-testid={`todo-item-${todo.id}`}
-			>
-				<div className="flex items-center gap-2 w-full px-2">
-					<input
-						type="checkbox"
-						checked={todo.completed}
-						onChange={handleToggle}
-						className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-2 focus:ring-primary"
-						aria-labelledby={`todo-title-${todo.id}`}
-						onClick={e => e.stopPropagation()} // Empêche l'ouverture de la modal
-					/>
-					<div
-						className="flex-1 flex flex-col text-sm py-1"
-						onClick={handleOpenDetailModal} // Ouvre la modal au clic
-					>
-						<div className="flex items-center gap-2">
-							<span
-								id={`todo-title-${todo.id}`}
-								className={`${todo.completed ? 'text-gray-500 line-through' : ''}`}
-							>
-								{todo.title}
-							</span>
+			{isEditing ? (
+				<li className="py-2 border-b border-gray-100 last:border-0 bg-slate-50 shadow-sm rounded-xl">
+					<EditTodoForm initialData={todo} onSave={handleSaveEdit} onCancel={handleCancelEdit} />
+				</li>
+			) : (
+				<li
+					className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0 hover:bg-slate-50 hover:border-blue-100 hover:shadow-sm transition-all duration-150 rounded-xl group cursor-pointer"
+					aria-labelledby={`todo-title-${todo.id}`}
+					role="listitem"
+					data-testid={`todo-item-${todo.id}`}
+					onClick={handleEdit}
+				>
+					<div className="flex items-center gap-2 w-full px-2">
+						<input
+							type="checkbox"
+							checked={todo.completed}
+							onChange={e => {
+								e.stopPropagation();
+								handleToggle();
+							}}
+							className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-2 focus:ring-primary cursor-pointer"
+							aria-labelledby={`todo-title-${todo.id}`}
+							onClick={e => e.stopPropagation()}
+						/>
+						<div className="flex-1 flex flex-col text-sm py-1 cursor-default">
+							<div className="flex items-center gap-2 flex-wrap">
+								<span
+									id={`todo-title-${todo.id}`}
+									className={`${todo.completed ? 'text-gray-500 line-through' : ''}`}
+								>
+									{todo.title}
+								</span>
 
-							{/* Conditionally render the Badge only if priority is not null and classes exist */}
-							{todo.priority && badgeClasses && (
-								<Badge className={`px-1.5 py-0.5 text-xs font-medium ${badgeClasses}`}>
-									{todo.priority}
-								</Badge>
+								{/* Display Priority Badge */}
+								{badgeClasses && (
+									<Badge className={`px-1.5 py-0.5 text-xs font-medium ${badgeClasses}`}>
+										{todo.priority}
+									</Badge>
+								)}
+							</div>
+							{/* Display description snippet if it exists */}
+							{/* Display description if it exists */}
+							{/* We might display a snippet here if needed, or just in edit mode */}
+							{/* Display due date if it exists */}
+							{todo.dueDate && (
+								<span className="text-xs text-muted-foreground mt-1">
+									Due: {formatDate(todo.dueDate)}
+								</span>
 							)}
 						</div>
-						{/* Display description if it exists */}
-						{todo.description && (
-							<span className="text-xs text-muted-foreground mt-1">{todo.description}</span>
-						)}
-						{/* Display due date if it exists */}
-						{todo.dueDate && (
-							<span className="text-xs text-muted-foreground mt-1">
-								Due: {formatDate(todo.dueDate)}
-							</span>
-						)}
+						{/* Action Buttons */}
+						<div className="flex items-center">
+							<Button
+								variant="ghost"
+								size="icon"
+								onClick={e => {
+									e.stopPropagation();
+									handleEdit();
+								}}
+								aria-label={`Edit todo: ${todo.title}`}
+								className="h-7 w-7 text-muted-foreground hover:text-blue-600 cursor-pointer"
+							>
+								<Pencil className="h-4 w-4" />
+							</Button>
+							<Button
+								variant="ghost"
+								size="icon"
+								onClick={e => {
+									e.stopPropagation();
+									handleDelete();
+								}}
+								aria-label={`Delete todo: ${todo.title}`}
+								className="h-7 w-7 text-muted-foreground hover:text-red-600 cursor-pointer"
+							>
+								<Trash className="h-4 w-4" />
+							</Button>
+						</div>
 					</div>
-					{/* Action Buttons in display mode */}
-					<div className="flex items-center">
-						<Button
-							variant="ghost"
-							size="icon"
-							onClick={handleEdit}
-							aria-label={`Edit todo: ${todo.title}`}
-							className="h-7 w-7 text-muted-foreground hover:text-blue-600 cursor-pointer"
-						>
-							<Pencil className="h-4 w-4" />
-						</Button>
-						<Button
-							variant="ghost"
-							size="icon"
-							onClick={handleDelete}
-							aria-label={`Delete todo: ${todo.title}`}
-							className="h-7 w-7 text-muted-foreground hover:text-red-600 cursor-pointer"
-						>
-							<Trash className="h-4 w-4" />
-						</Button>
-					</div>
-				</div>
-			</li>
-
-			{/* Modal de détails */}
-			<TodoDetailModal
-				isOpen={isDetailModalOpen}
-				onClose={handleCloseDetailModal}
-				todo={todo}
-				onSave={handleSaveFromModal}
-				initialEditMode={startInEditMode}
-			/>
+				</li>
+			)}
 		</>
 	);
 }
