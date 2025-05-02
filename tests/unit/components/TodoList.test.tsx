@@ -45,6 +45,8 @@ describe('TodoList Component', () => {
 					onToggleTodo={() => {}}
 					onDeleteTodo={() => {}}
 					onSaveTodo={() => {}}
+					editingTodoId={null}
+					onSetEditingTodo={() => {}}
 				/>
 			);
 
@@ -63,6 +65,8 @@ describe('TodoList Component', () => {
 					onToggleTodo={() => {}}
 					onDeleteTodo={() => {}}
 					onSaveTodo={() => {}}
+					editingTodoId={null}
+					onSetEditingTodo={() => {}}
 				/>
 			);
 
@@ -79,6 +83,8 @@ describe('TodoList Component', () => {
 					onToggleTodo={() => {}}
 					onDeleteTodo={() => {}}
 					onSaveTodo={() => {}}
+					editingTodoId={null}
+					onSetEditingTodo={() => {}}
 				/>
 			);
 
@@ -101,6 +107,8 @@ describe('TodoList Component', () => {
 					onToggleTodo={mockToggleTodo}
 					onDeleteTodo={() => {}}
 					onSaveTodo={() => {}}
+					editingTodoId={null}
+					onSetEditingTodo={() => {}}
 				/>
 			);
 
@@ -121,6 +129,8 @@ describe('TodoList Component', () => {
 					onToggleTodo={() => {}}
 					onDeleteTodo={mockDeleteTodo}
 					onSaveTodo={() => {}}
+					editingTodoId={null}
+					onSetEditingTodo={() => {}}
 				/>
 			);
 
@@ -142,6 +152,8 @@ describe('TodoList Component', () => {
 					onToggleTodo={() => {}}
 					onDeleteTodo={() => {}}
 					onSaveTodo={() => {}}
+					editingTodoId={null}
+					onSetEditingTodo={() => {}}
 				/>
 			);
 
