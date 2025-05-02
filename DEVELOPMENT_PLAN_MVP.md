@@ -129,11 +129,11 @@
 
 **Branch: `feat/todo-detail-modal`** (Moved from Phase 4)
 
-- [ ] MODAL-1: Design and implement Todo Detail Modal component UI.
-- [ ] MODAL-2: Implement logic to fetch/display full todo details.
-- [ ] MODAL-3: Integrate modal triggering (e.g., from TodoItem).
-- [ ] MODAL-4: Write unit tests for the Modal component.
-- [ ] MODAL-5: Adapt integration tests if necessary.
+- [ ] MODAL-4: Write unit tests for the `TodoDetailModal` component (displaying details, initial state).
+- [ ] MODAL-1: Implement `TodoDetailModal` component UI to make unit tests pass.
+- [ ] MODAL-5: Write/Adapt integration tests for modal triggering and data display.
+- [ ] MODAL-3: Integrate modal triggering from `TodoItem` and manage modal state.
+- [ ] MODAL-2: [Covered by TDD] Ensure logic correctly displays full todo details.
 - [ ] MODAL-STORY: Create Storybook stories for the Modal.
 - [ ] MODAL-6: Create PR `feat/todo-detail-modal` → `dev`
 
