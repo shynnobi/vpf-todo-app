@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { formatISO, isValid, parseISO } from 'date-fns';
-import { Calendar, Clock, Save, Tag, X } from 'lucide-react';
+import { Calendar, CalendarPlus, History, Save, Tag, X } from 'lucide-react';
 
 import { DueDatePicker } from '@/components/DueDatePicker';
 import { Button } from '@/components/ui/button';
@@ -158,21 +158,25 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 
 					{/* Creation Date (Read-only) */}
 					<div className="pt-4 border-t border-gray-200">
-						<label className="flex items-center text-sm font-medium text-gray-700 mb-1">
-							<Clock className="h-4 w-4 mr-1" />
+						<label className="flex items-center text-xs font-medium text-muted-foreground mb-1">
+							<CalendarPlus className="h-3 w-3 mr-1" />
 							Created
 						</label>
-						<div className="text-sm text-gray-500">{formatDate(initialData.creationDate)}</div>
+						<div className="text-xs text-muted-foreground">
+							{formatDate(initialData.creationDate)}
+						</div>
 					</div>
 
 					{/* Last Modified Date (if available) */}
 					{initialData.lastModified && (
 						<div>
-							<label className="flex items-center text-sm font-medium text-gray-700 mb-1">
-								<Clock className="h-4 w-4 mr-1" />
+							<label className="flex items-center text-xs font-medium text-muted-foreground mb-1">
+								<History className="h-3 w-3 mr-1" />
 								Last Modified
 							</label>
-							<div className="text-sm text-gray-500">{formatDate(initialData.lastModified)}</div>
+							<div className="text-xs text-muted-foreground">
+								{formatDate(initialData.lastModified)}
+							</div>
 						</div>
 					)}
 				</div>
