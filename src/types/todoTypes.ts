@@ -8,6 +8,7 @@ export interface Todo {
 	description?: string;
 	dueDate?: string | null;
 	priority?: PriorityLevel | null;
+	lastModified?: string; // ISO date string for last modification time
 }
 
 export enum TodoFilter {
@@ -43,6 +44,8 @@ export interface TodoItemProps {
 	onToggle: (id: string) => void;
 	onDelete: (id: string) => void;
 	onSave: (id: string, updates: Partial<Omit<Todo, 'id'>>) => void;
+	isEditing: boolean;
+	onSetEditing: (id: string | null) => void;
 }
 
 export interface TodoListProps {
@@ -50,6 +53,8 @@ export interface TodoListProps {
 	onToggleTodo: (id: string) => void;
 	onDeleteTodo: (id: string) => void;
 	onSaveTodo: (id: string, updates: Partial<Omit<Todo, 'id'>>) => void;
+	editingTodoId: string | null;
+	onSetEditingTodo: (id: string | null) => void;
 }
 
 export interface AddTodoFormProps {

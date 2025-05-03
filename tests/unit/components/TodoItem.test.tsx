@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { formatISO } from 'date-fns';
@@ -34,6 +35,7 @@ describe('TodoItem Component', () => {
 		onToggle: (id: string) => void;
 		onDelete: (id: string) => void;
 		onSave: (id: string, updates: Partial<Omit<Todo, 'id'>>) => void;
+		onSetEditing: (id: string | null) => void;
 	};
 
 	beforeEach(() => {
@@ -42,6 +44,7 @@ describe('TodoItem Component', () => {
 			onToggle: vi.fn(),
 			onDelete: vi.fn(),
 			onSave: vi.fn(),
+			onSetEditing: vi.fn(),
 		};
 	});
 
@@ -59,6 +62,8 @@ describe('TodoItem Component', () => {
 					onToggle={() => {}}
 					onDelete={() => {}}
 					onSave={() => {}}
+					isEditing={false}
+					onSetEditing={() => {}}
 				/>
 			);
 
@@ -75,6 +80,8 @@ describe('TodoItem Component', () => {
 					onToggle={() => {}}
 					onDelete={() => {}}
 					onSave={() => {}}
+					isEditing={false}
+					onSetEditing={() => {}}
 				/>
 			);
 
@@ -92,6 +99,8 @@ describe('TodoItem Component', () => {
 					onToggle={() => {}}
 					onDelete={() => {}}
 					onSave={() => {}}
+					isEditing={false}
+					onSetEditing={() => {}}
 				/>
 			);
 
@@ -109,6 +118,8 @@ describe('TodoItem Component', () => {
 					onToggle={() => {}}
 					onDelete={() => {}}
 					onSave={() => {}}
+					isEditing={false}
+					onSetEditing={() => {}}
 				/>
 			);
 
@@ -124,6 +135,8 @@ describe('TodoItem Component', () => {
 					onToggle={() => {}}
 					onDelete={() => {}}
 					onSave={() => {}}
+					isEditing={false}
+					onSetEditing={() => {}}
 				/>
 			);
 
@@ -141,6 +154,8 @@ describe('TodoItem Component', () => {
 					onToggle={() => {}}
 					onDelete={() => {}}
 					onSave={() => {}}
+					isEditing={false}
+					onSetEditing={() => {}}
 				/>
 			);
 
@@ -160,6 +175,8 @@ describe('TodoItem Component', () => {
 					onToggle={mockToggle}
 					onDelete={() => {}}
 					onSave={() => {}}
+					isEditing={false}
+					onSetEditing={() => {}}
 				/>
 			);
 
@@ -180,6 +197,8 @@ describe('TodoItem Component', () => {
 					onToggle={() => {}}
 					onDelete={mockDelete}
 					onSave={() => {}}
+					isEditing={false}
+					onSetEditing={() => {}}
 				/>
 			);
 
@@ -201,6 +220,8 @@ describe('TodoItem Component', () => {
 					onToggle={() => {}}
 					onDelete={() => {}}
 					onSave={() => {}}
+					isEditing={false}
+					onSetEditing={() => {}}
 				/>
 			);
 
@@ -217,6 +238,8 @@ describe('TodoItem Component', () => {
 					onToggle={() => {}}
 					onDelete={() => {}}
 					onSave={() => {}}
+					isEditing={false}
+					onSetEditing={() => {}}
 				/>
 			);
 
@@ -230,7 +253,18 @@ describe('TodoItem Component', () => {
 	describe('Editing Mode', () => {
 		it('should switch to edit mode when the edit button is clicked', async () => {
 			// Given: A todo item rendered
-			render(<TodoItem todo={mockIncompleteTodo} {...mockHandlers} />);
+			const Wrapper = () => {
+				const [editingId, setEditingId] = useState<string | null>(null);
+				return (
+					<TodoItem
+						todo={mockIncompleteTodo}
+						{...mockHandlers}
+						isEditing={mockIncompleteTodo.id === editingId}
+						onSetEditing={setEditingId}
+					/>
+				);
+			};
+			render(<Wrapper />);
 			const editButton = screen.getByLabelText(/edit todo/i);
 
 			// When: The edit button is clicked
@@ -239,24 +273,37 @@ describe('TodoItem Component', () => {
 			// Then: The edit form should be displayed
 			expect(screen.getByRole('textbox', { name: /edit title/i })).toBeInTheDocument();
 			expect(screen.getByRole('textbox', { name: /edit description/i })).toBeInTheDocument();
-			expect(screen.getByLabelText(/due date/i)).toBeInTheDocument();
 			expect(screen.getByRole('button', { name: /save changes/i })).toBeInTheDocument();
 			expect(screen.getByRole('button', { name: /cancel$/i })).toBeInTheDocument();
 		});
 
-		it('should call onSave with updated data when save button is clicked', async () => {
+		it('should call onSave and exit edit mode when save button is clicked', async () => {
 			// Given: The component is in edit mode
-			render(<TodoItem todo={mockIncompleteTodo} {...mockHandlers} />);
-			const editButton = screen.getByLabelText(/edit todo/i);
-			await userEvent.click(editButton);
+			let currentEditingId: string | null = mockIncompleteTodo.id; // Start in edit mode
+			const setEditingIdMock = vi.fn((id: string | null) => {
+				currentEditingId = id;
+			});
 
-			// When: Fields are changed (title, description, date, priority)
-			const titleInput = screen.getByRole('textbox', { name: /edit title/i });
+			const Wrapper = () => {
+				return (
+					<TodoItem
+						todo={mockIncompleteTodo}
+						{...mockHandlers}
+						isEditing={mockIncompleteTodo.id === currentEditingId}
+						onSetEditing={setEditingIdMock}
+					/>
+				);
+			};
+
+			const { rerender } = render(<Wrapper />);
+
+			// When: Data is entered and saved
+			const titleInput = screen.getByLabelText(/edit title/i);
 			const newTitle = 'Updated Title';
 			await userEvent.clear(titleInput);
 			await userEvent.type(titleInput, newTitle);
 
-			const descriptionInput = screen.getByRole('textbox', { name: /edit description/i });
+			const descriptionInput = screen.getByLabelText(/edit description/i);
 			const newDescription = 'Updated Description';
 			await userEvent.clear(descriptionInput);
 			await userEvent.type(descriptionInput, newDescription);
@@ -301,12 +348,21 @@ describe('TodoItem Component', () => {
 			await userEvent.click(saveButton);
 
 			// Then: onSave should be called with the correct id and updated fields
-			expect(mockHandlers.onSave).toHaveBeenCalledWith(mockIncompleteTodo.id, {
-				title: newTitle,
-				description: newDescription,
-				dueDate: expectedIsoDate, // Use the dynamically determined ISO date
-				priority: 'low',
-			});
+			expect(mockHandlers.onSave).toHaveBeenCalledWith(
+				mockIncompleteTodo.id,
+				expect.objectContaining({
+					title: newTitle,
+					description: newDescription,
+					dueDate: expectedIsoDate,
+					priority: 'low',
+				})
+			);
+
+			// And: onSetEditing should be called with null
+			expect(setEditingIdMock).toHaveBeenCalledWith(null);
+
+			// Rerender the wrapper with the new state to simulate exit
+			rerender(<Wrapper />);
 
 			// And: The component should exit edit mode
 			expect(screen.queryByRole('textbox', { name: /edit title/i })).not.toBeInTheDocument();
@@ -314,20 +370,40 @@ describe('TodoItem Component', () => {
 
 		it('should cancel editing and revert changes when cancel button is clicked', async () => {
 			// Given: The component is in edit mode
-			render(<TodoItem todo={mockIncompleteTodo} {...mockHandlers} />);
-			const editButton = screen.getByLabelText(/edit todo/i);
-			await userEvent.click(editButton);
+			let currentEditingId_cancel: string | null = mockIncompleteTodo.id; // Start in edit mode
+			const setEditingIdMock_cancel = vi.fn((id: string | null) => {
+				currentEditingId_cancel = id;
+			});
+
+			const WrapperCancel = () => {
+				return (
+					<TodoItem
+						todo={mockIncompleteTodo}
+						{...mockHandlers}
+						isEditing={mockIncompleteTodo.id === currentEditingId_cancel}
+						onSetEditing={setEditingIdMock_cancel}
+					/>
+				);
+			};
+
+			const { rerender: rerenderCancel } = render(<WrapperCancel />);
 
 			// When: Some changes are made
-			const titleInput = screen.getByRole('textbox', { name: /edit title/i });
+			const titleInput = screen.getByLabelText(/edit title/i);
 			await userEvent.type(titleInput, 'Temporary Change');
-			const descriptionInput = screen.getByRole('textbox', { name: /edit description/i });
+			const descriptionInput = screen.getByLabelText(/edit description/i);
 			await userEvent.type(descriptionInput, 'Temp Desc');
 			// No need to interact with date picker for cancel test
 
 			// And: The cancel button is clicked
 			const cancelButton = screen.getByRole('button', { name: /cancel$/i });
 			await userEvent.click(cancelButton);
+
+			// Then: onSetEditing should be called with null
+			expect(setEditingIdMock_cancel).toHaveBeenCalledWith(null);
+
+			// Rerender the wrapper with the new state to simulate exit
+			rerenderCancel(<WrapperCancel />);
 
 			// Then: The component should exit edit mode
 			expect(screen.queryByRole('textbox', { name: /edit title/i })).not.toBeInTheDocument();

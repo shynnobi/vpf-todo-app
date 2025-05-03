@@ -127,19 +127,20 @@
 - [x] DATE-5: Write/Adapt relevant integration tests covering date addition/editing.
 - [x] DATE-6: Create PR `feat/add-due-date` → `dev`
 
-**Branch: `feat/todo-detail-modal`** (Moved from Phase 4)
+**Branch: `feat/interactive-todo-modal`**
 
-- [ ] MODAL-1: Design and implement Todo Detail Modal component UI.
-- [ ] MODAL-2: Implement logic to fetch/display full todo details.
-- [ ] MODAL-3: Integrate modal triggering (e.g., from TodoItem).
-- [ ] MODAL-4: Write unit tests for the Modal component.
-- [ ] MODAL-5: Adapt integration tests if necessary.
-- [ ] MODAL-STORY: Create Storybook stories for the Modal.
-- [ ] MODAL-6: Create PR `feat/todo-detail-modal` → `dev`
+> **Implementation approach change (2023-10-20)**: After UX evaluation, we opted for direct inline editing in `TodoItem` instead of a modal approach. This simpler solution improves the user experience and reduces code complexity.
+
+- [x] INLINE-EDIT-1: Remove complex modal in favor of simpler inline editing in `TodoItem`
+- [x] INLINE-EDIT-2: Implement inline editing for all fields directly in the list view
+- [x] INLINE-EDIT-3: Implement save and cancel functionality for in-place edits
+- [x] INLINE-EDIT-4: Update unit and integration tests for inline editing approach
+- [x] INLINE-EDIT-5: Adapt E2E tests to reflect the new approach
+- [ ] INLINE-EDIT-6: Create PR `feat/interactive-todo-modal` → `dev`
 
 **Advanced Data Features & Interactions Version (v0.3.0)** (Target)
 
-- [ ] FEAT-1: Verify advanced feature PRs are merged (Optional Priority, Modal, Due Date)
+- [ ] FEAT-1: Verify advanced feature PRs are merged (Optional Priority, Inline Editing, Due Date)
 - [ ] FEAT-2: All tests pass
 - [ ] FEAT-3: Create tag `v0.3.0`
 

@@ -17,6 +17,8 @@ const meta: Meta<typeof TodoItem> = {
 		onToggle: { action: 'toggled' },
 		onDelete: { action: 'deleted' },
 		onSave: { action: 'saved' },
+		isEditing: { control: 'boolean' },
+		onSetEditing: { action: 'setEditing' },
 	},
 	decorators: [
 		(Story: () => React.ReactNode) => (
@@ -29,6 +31,8 @@ const meta: Meta<typeof TodoItem> = {
 		onToggle: fn(),
 		onDelete: fn(),
 		onSave: fn(),
+		isEditing: false,
+		onSetEditing: fn(),
 	},
 };
 
@@ -45,6 +49,8 @@ export const Default: Story = {
 			dueDate: undefined,
 			priority: 'medium',
 		},
+		isEditing: false,
+		onSetEditing: fn(),
 	},
 };
 
@@ -58,6 +64,8 @@ export const Completed: Story = {
 			dueDate: new Date().toISOString(),
 			priority: 'low',
 		},
+		isEditing: false,
+		onSetEditing: fn(),
 	},
 };
 
@@ -69,6 +77,8 @@ export const Minimal: Story = {
 			completed: false,
 			priority: 'medium',
 		},
+		isEditing: false,
+		onSetEditing: fn(),
 	},
 };
 
@@ -82,6 +92,8 @@ export const NoPriority: Story = {
 			dueDate: undefined,
 			priority: null,
 		},
+		isEditing: false,
+		onSetEditing: fn(),
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
@@ -95,6 +107,8 @@ export const Interactive: Story = {
 	render: args => {
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const [interactiveTodo, setInteractiveTodo] = useState<Todo>(args.todo);
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		const [isEditingState, setIsEditingState] = useState(args.isEditing);
 
 		const handleToggle = (id: string) => {
 			args.onToggle(id);
@@ -111,12 +125,19 @@ export const Interactive: Story = {
 			setInteractiveTodo(prev => ({ ...prev, ...updates }));
 		};
 
+		const handleSetEditing = (id: string | null) => {
+			setIsEditingState(id === interactiveTodo.id);
+			args.onSetEditing(id);
+		};
+
 		return (
 			<TodoItem
 				todo={interactiveTodo}
 				onToggle={handleToggle}
 				onDelete={handleDelete}
 				onSave={handleSave}
+				isEditing={isEditingState}
+				onSetEditing={handleSetEditing}
 			/>
 		);
 	},
@@ -128,6 +149,8 @@ export const Interactive: Story = {
 			description: 'Try editing me!',
 			priority: 'high',
 		},
+		isEditing: false,
+		onSetEditing: fn(),
 	},
 	play: async ({ canvasElement, args }) => {
 		const canvas = within(canvasElement);

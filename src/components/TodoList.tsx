@@ -4,7 +4,14 @@ import { TodoListProps } from '@/types/todoTypes';
 /**
  * A component that renders a list of todo items
  */
-export function TodoList({ todos, onToggleTodo, onDeleteTodo, onSaveTodo }: TodoListProps) {
+export function TodoList({
+	todos,
+	onToggleTodo,
+	onDeleteTodo,
+	onSaveTodo,
+	editingTodoId,
+	onSetEditingTodo,
+}: TodoListProps) {
 	if (todos.length === 0) {
 		return <div className="text-center py-4 text-gray-500">No todos to display</div>;
 	}
@@ -18,6 +25,8 @@ export function TodoList({ todos, onToggleTodo, onDeleteTodo, onSaveTodo }: Todo
 					onToggle={onToggleTodo}
 					onDelete={onDeleteTodo}
 					onSave={onSaveTodo}
+					isEditing={todo.id === editingTodoId}
+					onSetEditing={onSetEditingTodo}
 				/>
 			))}
 		</ul>
