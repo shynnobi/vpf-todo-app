@@ -136,7 +136,7 @@
 - [x] INLINE-EDIT-3: Implement save and cancel functionality for in-place edits
 - [x] INLINE-EDIT-4: Update unit and integration tests for inline editing approach
 - [x] INLINE-EDIT-5: Adapt E2E tests to reflect the new approach
-- [ ] INLINE-EDIT-6: Create PR `feat/interactive-todo-modal` → `dev`
+- [x] INLINE-EDIT-6: Create PR `feat/interactive-todo-modal` → `dev`
 
 **Advanced Data Features & Interactions Version (v0.3.0)** (Target)
 
