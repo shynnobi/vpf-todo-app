@@ -8,6 +8,7 @@ export interface Todo {
 	description?: string;
 	dueDate?: string | null;
 	priority?: PriorityLevel | null;
+	lastModified?: string; // ISO date string for last modification time
 }
 
 export enum TodoFilter {

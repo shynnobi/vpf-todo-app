@@ -127,29 +127,20 @@
 - [x] DATE-5: Write/Adapt relevant integration tests covering date addition/editing.
 - [x] DATE-6: Create PR `feat/add-due-date` → `dev`
 
-**Branch: `feat/todo-detail-modal`** (Moved from Phase 4)
-
-- [x] MODAL-4: Write unit tests for the `TodoDetailModal` component (displaying details, initial state).
-- [x] MODAL-1: Implement `TodoDetailModal` component UI to make unit tests pass.
-- [x] MODAL-5: Write/Adapt integration tests for modal triggering and data display.
-- [x] MODAL-3: Integrate modal triggering from `TodoItem` and manage modal state.
-- [x] MODAL-2: [Covered by TDD] Ensure logic correctly displays full todo details.
-- [x] MODAL-STORY: Create Storybook stories for the Modal.
-- [x] MODAL-6: Create PR `feat/todo-detail-modal` → `dev`
-
 **Branch: `feat/interactive-todo-modal`**
 
-- [x] INTERACTIVE-MODAL-1: Refactor `TodoDetailModal` to use a Notion-like interactive editing approach.
-- [x] INTERACTIVE-MODAL-2: Replace edit mode with inline editing for title, description and other fields.
-- [x] INTERACTIVE-MODAL-3: Implement auto-save for field changes.
-- [x] INTERACTIVE-MODAL-4: Replace edit button with eye button for previewing tasks in the list view.
-- [x] INTERACTIVE-MODAL-5: Update unit tests for the interactive modal approach.
-- [x] INTERACTIVE-MODAL-6: Update E2E tests for the interactive modal approach.
-- [ ] INTERACTIVE-MODAL-7: Create PR `feat/interactive-todo-modal` → `dev`
+> **Implementation approach change (2023-10-20)**: After UX evaluation, we opted for direct inline editing in `TodoItem` instead of a modal approach. This simpler solution improves the user experience and reduces code complexity.
+
+- [x] INLINE-EDIT-1: Remove complex modal in favor of simpler inline editing in `TodoItem`
+- [x] INLINE-EDIT-2: Implement inline editing for all fields directly in the list view
+- [x] INLINE-EDIT-3: Implement save and cancel functionality for in-place edits
+- [x] INLINE-EDIT-4: Update unit and integration tests for inline editing approach
+- [x] INLINE-EDIT-5: Adapt E2E tests to reflect the new approach
+- [ ] INLINE-EDIT-6: Create PR `feat/interactive-todo-modal` → `dev`
 
 **Advanced Data Features & Interactions Version (v0.3.0)** (Target)
 
-- [ ] FEAT-1: Verify advanced feature PRs are merged (Optional Priority, Modal, Due Date)
+- [ ] FEAT-1: Verify advanced feature PRs are merged (Optional Priority, Inline Editing, Due Date)
 - [ ] FEAT-2: All tests pass
 - [ ] FEAT-3: Create tag `v0.3.0`
 

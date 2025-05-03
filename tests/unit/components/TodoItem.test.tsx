@@ -348,12 +348,15 @@ describe('TodoItem Component', () => {
 			await userEvent.click(saveButton);
 
 			// Then: onSave should be called with the correct id and updated fields
-			expect(mockHandlers.onSave).toHaveBeenCalledWith(mockIncompleteTodo.id, {
-				title: newTitle,
-				description: newDescription,
-				dueDate: expectedIsoDate, // Use the dynamically determined ISO date
-				priority: 'low',
-			});
+			expect(mockHandlers.onSave).toHaveBeenCalledWith(
+				mockIncompleteTodo.id,
+				expect.objectContaining({
+					title: newTitle,
+					description: newDescription,
+					dueDate: expectedIsoDate,
+					priority: 'low',
+				})
+			);
 
 			// And: onSetEditing should be called with null
 			expect(setEditingIdMock).toHaveBeenCalledWith(null);
