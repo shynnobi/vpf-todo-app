@@ -98,9 +98,9 @@ describe('TodoContainer Component - Integration Tests', () => {
 			expect(screen.getByText('Test Todo')).toBeInTheDocument();
 
 			// And: A checkbox should be present
-			const checkbox = screen.getByRole('checkbox');
+			const checkbox = screen.getByRole('checkbox', { hidden: true });
 			expect(checkbox).toBeInTheDocument();
-			expect(checkbox).not.toBeChecked();
+			expect(checkbox).toHaveAttribute('data-state', 'unchecked');
 		});
 
 		it('should be able to add multiple todos', async () => {
@@ -133,7 +133,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			expect(screen.getByText('Second Todo')).toBeInTheDocument();
 
 			// And: Two checkboxes should be present
-			const checkboxes = screen.getAllByRole('checkbox');
+			const checkboxes = screen.getAllByRole('checkbox', { hidden: true });
 			expect(checkboxes).toHaveLength(2);
 		});
 	});
@@ -153,14 +153,14 @@ describe('TodoContainer Component - Integration Tests', () => {
 			});
 
 			// When: The checkbox is clicked
-			const checkbox = screen.getByRole('checkbox');
-			expect(checkbox).not.toBeChecked();
+			const checkbox = screen.getByRole('checkbox', { hidden: true });
+			expect(checkbox).toHaveAttribute('data-state', 'unchecked');
 			await act(async () => {
 				fireEvent.click(checkbox);
 			});
 
 			// Then: The todo should be marked as completed
-			expect(checkbox).toBeChecked();
+			expect(checkbox).toHaveAttribute('data-state', 'checked');
 
 			// And: The todo text should have the completed style
 			const todoText = screen.getByText('Toggle Test Todo');
@@ -311,14 +311,14 @@ describe('TodoContainer Component - Integration Tests', () => {
 		expect(todoItem).toBeInTheDocument();
 
 		// When: Toggling completion
-		const checkbox = await screen.findByRole('checkbox');
+		const checkbox = await screen.findByRole('checkbox', { hidden: true });
 		await act(async () => {
 			fireEvent.click(checkbox);
 		});
 
 		// Then: The todo should be marked as completed
 		await waitFor(() => {
-			expect(checkbox).toBeChecked();
+			expect(checkbox).toHaveAttribute('data-state', 'checked');
 		});
 
 		// When: Deleting the todo
@@ -386,13 +386,13 @@ describe('TodoContainer Component - Integration Tests', () => {
 			// Mark the second todo as completed
 			const listItem = addedCompletedTodo.closest('li');
 			if (!listItem) throw new Error('List item for completed todo not found');
-			const checkbox = listItem.querySelector('input[type="checkbox"]') as HTMLInputElement;
+			const checkbox = listItem.querySelector('button[role="checkbox"]') as HTMLButtonElement;
 			if (!checkbox) throw new Error('Checkbox for completed todo not found');
 
 			await act(async () => {
 				fireEvent.click(checkbox);
 			});
-			await waitFor(() => expect(checkbox.checked).toBe(true)); // Confirm it's checked
+			await waitFor(() => expect(checkbox).toHaveAttribute('data-state', 'checked')); // Confirm it's checked
 		};
 
 		it('should filter to show only active todos when Active button is clicked', async () => {
@@ -519,7 +519,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 			const listItems = screen.getAllByRole('listitem');
 			const secondListItem = listItems.find(item => item.textContent?.includes('Second Active'));
 			if (!secondListItem) throw new Error('Second list item not found');
-			const checkbox = secondListItem.querySelector('input[type="checkbox"]');
+			const checkbox = secondListItem.querySelector('button[role="checkbox"]') as HTMLButtonElement;
 			if (!checkbox) throw new Error('Checkbox not found in second item');
 
 			await act(async () => {

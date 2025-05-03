@@ -4,6 +4,7 @@ import { EditTodoForm } from './EditTodoForm';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { PriorityLevel, Todo, TodoItemProps } from '@/types/todoTypes';
 import { formatDate } from '@/utils/dateUtils';
 
@@ -75,21 +76,21 @@ export function TodoItem({
 					aria-labelledby={`todo-title-${todo.id}`}
 					role="listitem"
 					data-testid={`todo-item-${todo.id}`}
-					onClick={handleEdit}
 				>
-					<div className="flex items-center gap-2 w-full px-2">
-						<input
-							type="checkbox"
+					<div className="flex items-center gap-3 w-full px-2">
+						<Checkbox
+							id={`checkbox-${todo.id}`}
 							checked={todo.completed}
-							onChange={e => {
-								e.stopPropagation();
-								handleToggle();
+							onCheckedChange={checked => {
+								if (typeof checked === 'boolean') {
+									handleToggle();
+								}
 							}}
-							className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-2 focus:ring-primary cursor-pointer"
 							aria-labelledby={`todo-title-${todo.id}`}
 							onClick={e => e.stopPropagation()}
+							className="cursor-pointer"
 						/>
-						<div className="flex-1 flex flex-col text-sm py-1 cursor-default">
+						<div className="flex-1 flex flex-col text-sm py-1 cursor-pointer" onClick={handleEdit}>
 							<div className="flex items-center gap-2 flex-wrap">
 								<span
 									id={`todo-title-${todo.id}`}
