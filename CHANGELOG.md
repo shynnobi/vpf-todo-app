@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.2.0] - 2023-10-25
+## [0.3.0] - 2023-10-25
 
 ### Added
 
@@ -18,18 +18,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Updated development plan to correct version inconsistencies
-- **Historical Note**: There was confusion in commit history between v0.3.0 and v1.2.0. This project started at v1.1.0 and has been bumped to v1.2.0. Any references to v0.3.0 in commit messages should be disregarded.
 
-## [1.1.0] - (Initial version)
+## [0.2.0] - 2023-10-18
 
 ### Features
 
-- Basic Todo functionality
-- Add, edit, delete Todos
-- Todo prioritization
-- Due date support
-- Filtering by status
+- Implemented persistence with localStorage
+- Added todo deletion functionality
+- Implemented basic filtering (active/completed)
 
-[Unreleased]: https://github.com/shynnobi/vpf-todo-app/compare/v1.2.0...HEAD
-[1.2.0]: https://github.com/shynnobi/vpf-todo-app/compare/v1.1.0...v1.2.0
-[1.1.0]: https://github.com/shynnobi/vpf-todo-app/releases/tag/v1.1.0
+## [0.1.1-core-assembled] - 2023-10-10
+
+### Features
+
+- Integrated AddTodoForm and TodoList into TodoContainer
+- Rendered container in App.tsx
+- Added basic integration tests
+
+## [0.1.0-core] - 2023-10-05
+
+### Features
+
+- Basic Todo functionality (initial core implementation)
+- Add and complete Todos
+- Simple Todo model implementation
+
+[Unreleased]: https://github.com/shynnobi/vpf-todo-app/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/shynnobi/vpf-todo-app/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/shynnobi/vpf-todo-app/compare/v0.1.1-core-assembled...v0.2.0
+[0.1.1-core-assembled]: https://github.com/shynnobi/vpf-todo-app/compare/v0.1.0-core...v0.1.1-core-assembled
+[0.1.0-core]: https://github.com/shynnobi/vpf-todo-app/releases/tag/v0.1.0-core

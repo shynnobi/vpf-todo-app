@@ -138,11 +138,11 @@
 - [x] INLINE-EDIT-5: Adapt E2E tests to reflect the new approach
 - [x] INLINE-EDIT-6: Create PR `feat/interactive-todo-modal` → `dev`
 
-**Advanced Data Features & Interactions Version (v1.2.0)**
+**Advanced Data Features & Interactions Version (v0.3.0)**
 
 - [x] FEAT-1: Verify advanced feature PRs are merged (Optional Priority, Inline Editing, Due Date)
 - [x] FEAT-2: All tests pass
-- [x] FEAT-3: Create tag `v1.2.0`
+- [x] FEAT-3: Create tag `v0.3.0`
 
 ## Phase 4: Refinements & Polish
 
