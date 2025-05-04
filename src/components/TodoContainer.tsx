@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { SortAsc, SortDesc } from 'lucide-react';
 
 import { AddTodoForm } from '@/components/AddTodoForm';
@@ -35,6 +35,9 @@ export function TodoContainer() {
 	const setSortConfig = useTodoStore(state => state.setSortConfig);
 	const toggleSortDirection = useTodoStore(state => state.toggleSortDirection);
 
+	// State to track which todo item is being edited
+	const [editingTodoId, setEditingTodoId] = useState<string | null>(null);
+
 	// Use useMemo to call the utility function only when dependencies change
 	const filteredAndSortedTodos = useMemo(() => {
 		return getFilteredAndSortedTodosUtil(todos, filter, sortConfig);
@@ -60,44 +63,54 @@ export function TodoContainer() {
 				aria-label="Filter and sort controls"
 			>
 				{/* Status Filter */}
-				<TodoFilter currentFilter={filter} onFilterChange={setFilter} counts={counts} />
+				<div className="flex flex-col">
+					<p className="text-sm text-gray-500 mb-1">Filter by status</p>
+					<TodoFilter currentFilter={filter} onFilterChange={setFilter} counts={counts} />
+				</div>
 
 				{/* Sorting Controls */}
-				<div className="flex items-center gap-2">
-					<Select
-						value={sortConfig.criterion}
-						onValueChange={(value: SortCriterion) => setSortConfig(value)}
-					>
-						<SelectTrigger className="w-[180px] [&>svg]:hidden cursor-pointer" aria-label="Sort by">
-							<SelectValue placeholder="Sort by..." />
-						</SelectTrigger>
-						<SelectContent>
-							{sortCriteriaOptions.map(option => {
-								const Icon = option.icon;
-								return (
-									<SelectItem key={option.value} value={option.value} className="cursor-pointer">
-										<div className="flex items-center gap-2">
-											<Icon className="h-4 w-4" />
-											<span>{option.label}</span>
-										</div>
-									</SelectItem>
-								);
-							})}
-						</SelectContent>
-					</Select>
-					<Button
-						variant="outline"
-						size="icon"
-						onClick={toggleSortDirection}
-						aria-label="Change sort direction"
-						className="cursor-pointer"
-					>
-						{sortConfig.direction === 'asc' ? (
-							<SortAsc className="h-4 w-4" />
-						) : (
-							<SortDesc className="h-4 w-4" />
-						)}
-					</Button>
+
+				<div className="flex flex-col">
+					<p className="text-sm text-gray-500 mb-1">Sort by</p>
+					<div className="flex items-center gap-2">
+						<Select
+							value={sortConfig.criterion}
+							onValueChange={(value: SortCriterion) => setSortConfig(value)}
+						>
+							<SelectTrigger
+								className="w-[180px] [&>svg]:hidden cursor-pointer"
+								aria-label="Sort by"
+							>
+								<SelectValue placeholder="Sort by..." />
+							</SelectTrigger>
+							<SelectContent>
+								{sortCriteriaOptions.map(option => {
+									const Icon = option.icon;
+									return (
+										<SelectItem key={option.value} value={option.value} className="cursor-pointer">
+											<div className="flex items-center gap-2">
+												<Icon className="h-4 w-4" />
+												<span>{option.label}</span>
+											</div>
+										</SelectItem>
+									);
+								})}
+							</SelectContent>
+						</Select>
+						<Button
+							variant="outline"
+							size="icon"
+							onClick={toggleSortDirection}
+							aria-label="Change sort direction"
+							className="cursor-pointer"
+						>
+							{sortConfig.direction === 'asc' ? (
+								<SortAsc className="h-4 w-4" data-testid="SortAsc" />
+							) : (
+								<SortDesc className="h-4 w-4" data-testid="SortDesc" />
+							)}
+						</Button>
+					</div>
 				</div>
 			</div>
 
@@ -107,6 +120,8 @@ export function TodoContainer() {
 				onToggleTodo={toggleTodo}
 				onDeleteTodo={deleteTodo}
 				onSaveTodo={updateTodo}
+				editingTodoId={editingTodoId}
+				onSetEditingTodo={setEditingTodoId}
 			/>
 
 			{/* Footer Count */}

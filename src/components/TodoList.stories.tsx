@@ -9,6 +9,7 @@ import { TodoList } from './TodoList';
 import { Todo } from '@/types/todoTypes';
 
 // Decorator to manage state for interactive TodoList stories
+/* // Remove the unused decorator
 const InteractiveTodoListDecorator: Decorator = (_Story, context) => {
 	const initialTodos = [...(context.args.todos as Todo[])];
 	const [todos, setTodos] = useState(initialTodos);
@@ -43,6 +44,7 @@ const InteractiveTodoListDecorator: Decorator = (_Story, context) => {
 		</div>
 	);
 };
+*/
 
 const meta: Meta<typeof TodoList> = {
 	title: 'Todo/TodoList',
@@ -53,11 +55,15 @@ const meta: Meta<typeof TodoList> = {
 		onToggleTodo: { action: 'toggled' },
 		onDeleteTodo: { action: 'deleted' },
 		onSaveTodo: { action: 'saved' },
+		editingTodoId: { control: 'text' },
+		onSetEditingTodo: { action: 'setEditingTodo' },
 	},
 	args: {
 		onToggleTodo: fn(),
 		onDeleteTodo: fn(),
 		onSaveTodo: fn(),
+		editingTodoId: null,
+		onSetEditingTodo: fn(),
 	},
 };
 
@@ -106,6 +112,8 @@ export const Default: Story = {
 		onToggleTodo: action('onToggleTodo'),
 		onDeleteTodo: action('onDeleteTodo'),
 		onSaveTodo: action('onSaveTodo'),
+		editingTodoId: null,
+		onSetEditingTodo: action('onSetEditingTodo'),
 	},
 };
 
@@ -115,7 +123,55 @@ export const Empty: Story = {
 		onToggleTodo: action('onToggleTodo'),
 		onDeleteTodo: action('onDeleteTodo'),
 		onSaveTodo: action('onSaveTodo'),
+		editingTodoId: null,
+		onSetEditingTodo: action('onSetEditingTodo'),
 	},
+};
+
+// Modify the Interactive decorator to handle editing state
+const InteractiveTodoListDecoratorUpdated: Decorator = (_Story, context) => {
+	const initialTodos = [...(context.args.todos as Todo[])];
+	const [todos, setTodos] = useState(initialTodos);
+	const [editingId, setEditingId] = useState<string | null>(
+		context.args.editingTodoId as string | null
+	);
+
+	const handleToggleTodo = (id: string) => {
+		setTodos(prevTodos =>
+			prevTodos.map(todo => (todo.id === id ? { ...todo, completed: !todo.completed } : todo))
+		);
+		(context.args.onToggleTodo as ReturnType<typeof fn>)(id);
+	};
+
+	const handleDeleteTodo = (id: string) => {
+		setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+		(context.args.onDeleteTodo as ReturnType<typeof fn>)(id);
+	};
+
+	const handleSaveTodo = (id: string, updates: Partial<Omit<Todo, 'id'>>) => {
+		setTodos(prevTodos => prevTodos.map(todo => (todo.id === id ? { ...todo, ...updates } : todo)));
+		setEditingId(null); // Exit edit mode on save
+		(context.args.onSaveTodo as ReturnType<typeof fn>)(id, updates);
+		(context.args.onSetEditingTodo as ReturnType<typeof fn>)(null); // Also call the prop action
+	};
+
+	const handleSetEditingTodo = (id: string | null) => {
+		setEditingId(id);
+		(context.args.onSetEditingTodo as ReturnType<typeof fn>)(id);
+	};
+
+	return (
+		<div className="w-80 border rounded-md p-4">
+			<TodoList
+				todos={todos}
+				onToggleTodo={handleToggleTodo}
+				onDeleteTodo={handleDeleteTodo}
+				onSaveTodo={handleSaveTodo}
+				editingTodoId={editingId}
+				onSetEditingTodo={handleSetEditingTodo}
+			/>
+		</div>
+	);
 };
 
 export const WithTodos: Story = {
@@ -151,8 +207,10 @@ export const WithTodos: Story = {
 			},
 		],
 		// onSaveTodo uses default arg
+		editingTodoId: null,
+		onSetEditingTodo: action('onSetEditingTodo'),
 	},
-	decorators: [InteractiveTodoListDecorator], // Apply decorator for interactivity
+	decorators: [InteractiveTodoListDecoratorUpdated], // Apply updated decorator
 };
 
 export const ManyTodos: Story = {
@@ -216,6 +274,8 @@ export const ManyTodos: Story = {
 			},
 		],
 		// onSaveTodo uses default arg
+		editingTodoId: null,
+		onSetEditingTodo: action('onSetEditingTodo'),
 	},
-	decorators: [InteractiveTodoListDecorator], // Apply decorator for interactivity
+	decorators: [InteractiveTodoListDecoratorUpdated], // Apply updated decorator
 };

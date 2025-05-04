@@ -127,110 +127,64 @@
 - [x] DATE-5: Write/Adapt relevant integration tests covering date addition/editing.
 - [x] DATE-6: Create PR `feat/add-due-date` → `dev`
 
-**Branch: `feat/todo-detail-modal`** (Moved from Phase 4)
+**Branch: `feat/interactive-todo-modal`**
 
-- [ ] MODAL-1: Design and implement Todo Detail Modal component UI.
-- [ ] MODAL-2: Implement logic to fetch/display full todo details.
-- [ ] MODAL-3: Integrate modal triggering (e.g., from TodoItem).
-- [ ] MODAL-4: Write unit tests for the Modal component.
-- [ ] MODAL-5: Adapt integration tests if necessary.
-- [ ] MODAL-STORY: Create Storybook stories for the Modal.
-- [ ] MODAL-6: Create PR `feat/todo-detail-modal` → `dev`
+> **Implementation approach change (2023-10-20)**: After UX evaluation, we opted for direct inline editing in `TodoItem` instead of a modal approach. This simpler solution improves the user experience and reduces code complexity.
 
-**Advanced Data Features & Interactions Version (v0.3.0)** (Target)
+- [x] INLINE-EDIT-1: Remove complex modal in favor of simpler inline editing in `TodoItem`
+- [x] INLINE-EDIT-2: Implement inline editing for all fields directly in the list view
+- [x] INLINE-EDIT-3: Implement save and cancel functionality for in-place edits
+- [x] INLINE-EDIT-4: Update unit and integration tests for inline editing approach
+- [x] INLINE-EDIT-5: Adapt E2E tests to reflect the new approach
+- [x] INLINE-EDIT-6: Create PR `feat/interactive-todo-modal` → `dev`
 
-- [ ] FEAT-1: Verify advanced feature PRs are merged (Optional Priority, Modal, Due Date)
+**Advanced Data Features & Interactions Version (v0.3.0)**
+
+- [ ] FEAT-1: Verify advanced feature PRs are merged (Optional Priority, Inline Editing, Due Date)
 - [ ] FEAT-2: All tests pass
 - [ ] FEAT-3: Create tag `v0.3.0`
 
-## Phase 4: Strategic Refactoring & Feature Enhancements
+## Phase 4: Refinements & Polish
 
-**Branch: `refactor/behavioral-tests-review`** (Improve Test Robustness)
+**Branch: `enhance/ui-refinements`**
 
-- [ ] BEHAV-TEST-1: Review `AddTodoForm.test.tsx` for behavioral focus. Refactor if needed.
-- [ ] BEHAV-TEST-2: Review `TodoList.test.tsx` for behavioral focus. Refactor if needed.
-- [ ] BEHAV-TEST-3: Review `TodoItem.test.tsx` for behavioral focus (consider date picker mock stability). Refactor if needed.
-- [ ] BEHAV-TEST-4: Review `TodoFilter.test.tsx` for behavioral focus. Refactor if needed.
-- [ ] BEHAV-TEST-5: Review `TodoContainer.test.tsx` (integration) - Coordinate with `refactor/integration-tests`.
-- [ ] BEHAV-TEST-6: Create PR `refactor/behavioral-tests-review` → `dev`
+- [x] UI-1: Replace native checkbox with shadcn/ui Checkbox component
+- [x] UI-2: Make creation/modification dates more discreet in edit form
+- [ ] UI-3: Finalize `lucide-react` icon standardization throughout the application
+- [ ] UI-4: Ensure consistent spacing, margins and visual style
+- [ ] UI-5: Improve responsive design for mobile devices
+- [ ] UI-6: Create PR `enhance/ui-refinements` → `dev`
 
-**Branch: `refactor/integration-tests`** (Simplify Integration Tests)
+**Branch: `enhance/test-coverage`**
 
-- [ ] INTEG-REF-1: Apply simplifications/removals to `TodoContainer.integration.test.tsx` as per TESTING_REFACTOR_PLAN.
-  - **Keep:** Initial rendering test.
-  - **Simplify:** Addition (check text/checkbox, remove counter).
-  - **Simplify:** Multiple additions (check text, remove counter).
-  - **Simplify:** Toggle completion (check text/style, remove counter).
-  - **Simplify:** Deletion (check disappearance/empty state, remove counter).
-  - **Simplify:** Delete one of multiple (check disappearance/presence, remove counter).
-  - **Simplify:** Persistence (keep main logic, remove counter).
-  - **Simplify:** Filter controls presence (remove count/aria-pressed checks).
-  - **Simplify:** Filtering logic (check item presence/absence, remove aria-pressed checks).
-  - **Simplify:** Clear completed (check item presence/absence, remove counter checks).
-  - **Remove:** Redundant full UI flow test.
-  - **Remove:** Tests focusing solely on counters.
-- [ ] INTEG-REF-2: Verify the integration test suite passes after changes.
-- [ ] INTEG-REF-3: Document identified E2E candidates clearly (See E2E tests below).
-- [ ] INTEG-REF-4: Create PR `refactor/integration-tests` → `dev`
+- [ ] TEST-1: Review test coverage and identify critical gaps (if any)
+- [ ] TEST-2: Add targeted tests for any uncovered scenarios
+- [ ] TEST-3: Ensure all E2E tests match the current application behavior
+- [ ] TEST-4: Create PR `enhance/test-coverage` → `dev`
 
-**Branch: `feat/e2e-tests`** (Implement End-to-End Tests)
+**Refined Version (v0.4.0)**
 
-- [ ] E2E-SETUP-1: Choose and install E2E framework (e.g., Playwright).
-- [ ] E2E-SETUP-2: Configure base setup, scripts, and CI integration if possible.
-- [ ] E2E-IMPL-SCENARIOS: Implement E2E tests for identified candidates:
-  - Precise validation of counters (`TodoStats`, filter buttons) after actions.
-  - Verification of `aria-pressed` state on filter buttons.
-  - Full user flow: Add -> Complete -> Filter (Active) -> All -> Clear Completed -> Delete last.
-  - Testing editing, including real DatePicker interaction.
-  - Testing deletion confirmation dialog flow.
-- [ ] E2E-5: Create PR `feat/e2e-tests` → `dev`
+- [ ] REFINE-1: Verify UI and test enhancement PRs are merged
+- [ ] REFINE-2: All test suites (Unit, Integration, E2E) pass
+- [ ] REFINE-3: Create tag `v0.4.0`
 
-**Branch: `refactor/ui-harmonization`** (Improve UI Consistency)
-
-- [ ] UI-HARM-1: Finalize `lucide-react` icon standardization.
-- [ ] UI-HARM-2: Ensure consistent `cursor: pointer` on interactive elements.
-- [ ] UI-HARM-3: Harmonize filter/sort button icons & visual styles.
-- [ ] UI-HARM-4: Visually verify UI consistency. Adapt snapshots/tests if needed.
-- [ ] UI-HARM-5: Create PR `refactor/ui-harmonization` → `dev`
-
-**Branch: `feat/clear-form-fields`** (Reset Add Form Date/Priority)
-
-- [ ] CLEAR-FORM-1: Add 'Clear' button/icon to `AddTodoForm` for Date and Priority fields.
-- [ ] CLEAR-FORM-2: Implement logic to reset Date and Priority state in the form.
-- [ ] CLEAR-FORM-3: Add unit tests for the clear functionality in `AddTodoForm`.
-- [ ] CLEAR-FORM-4: Create PR `feat/clear-form-fields` → `dev`
-
-**Refactored & Enhanced Version (v0.4.0)** (Target)
-
-- [ ] REFACTOR-1: Verify refactoring and new feature PRs are merged.
-- [ ] REFACTOR-2: All test suites (Unit, Integration, E2E) pass.
-- [ ] REFACTOR-3: Create tag `v0.4.0`
-
-## Phase 5: Polish & Production Readiness
-
-**Branch: `enhance/ui-polish`**
-
-- [ ] POL-1: Implement responsive design improvements.
-- [ ] POL-2: Add subtle animations and transitions.
-- [ ] POL-3: Improve empty states and loading/error handling visuals.
-- [ ] POL-4: Create PR `enhance/ui-polish` → `dev`
-
-**Branch: `enhance/accessibility`**
-
-- [ ] A11Y-1: Thoroughly test and implement keyboard navigation.
-- [ ] A11Y-2: Verify and ensure proper ARIA attributes across components.
-- [ ] A11Y-3: Test and improve screen reader compatibility.
-- [ ] A11Y-4: Create PR `enhance/accessibility` → `dev`
+## Phase 5: Final Production Readiness
 
 **Branch: `enhance/documentation`**
 
-- [ ] DOC-1: Update README with comprehensive usage instructions and feature list.
-- [ ] DOC-2: Add/Improve JSDoc comments throughout the codebase.
-- [ ] DOC-3: Create architecture overview document if needed.
-- [ ] DOC-4: Create PR `enhance/documentation` → `dev`
+- [ ] DOC-1: Update README with comprehensive usage instructions and feature list
+- [ ] DOC-2: Add/Improve JSDoc comments throughout the codebase
+- [ ] DOC-3: Create PR `enhance/documentation` → `dev`
 
-**Production Ready Version (v1.0.0)** (Target)
+**Branch: `enhance/accessibility`**
 
-- [ ] PROD-1: Verify polish and documentation PRs are merged.
-- [ ] PROD-2: Final round of testing across all levels.
+- [ ] A11Y-1: Verify keyboard navigation throughout the application
+- [ ] A11Y-2: Ensure proper ARIA attributes across components
+- [ ] A11Y-3: Test and improve screen reader compatibility
+- [ ] A11Y-4: Create PR `enhance/accessibility` → `dev`
+
+**Production Ready Version (v1.0.0)**
+
+- [ ] PROD-1: Verify documentation and accessibility PRs are merged
+- [ ] PROD-2: Final round of testing across all levels
 - [ ] PROD-3: Create tag `v1.0.0`
