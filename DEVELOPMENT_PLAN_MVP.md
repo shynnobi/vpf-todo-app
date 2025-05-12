@@ -153,20 +153,20 @@
 - [x] UI-3: Finalize `lucide-react` icon standardization throughout the application
 - [x] UI-4: Ensure consistent spacing, margins and visual style
 - [x] UI-5: Improve responsive design for mobile devices
-- [ ] UI-6: Create PR `feat/responsive-improvements` → `dev`
+- [x] UI-6: Create PR `feat/responsive-improvements` → `dev`
 
 **Branch: `enhance/test-coverage`**
 
-- [ ] TEST-1: Review test coverage and identify critical gaps (if any)
-- [ ] TEST-2: Add targeted tests for any uncovered scenarios
-- [ ] TEST-3: Ensure all E2E tests match the current application behavior
-- [ ] TEST-4: Create PR `enhance/test-coverage` → `dev`
+- [x] TEST-1: Review test coverage and identify critical gaps (if any)
+- [x] TEST-2: Add targeted tests for any uncovered scenarios
+- [x] TEST-3: Ensure all E2E tests match the current application behavior
+- [x] TEST-4: Create PR `enhance/test-coverage` → `dev`
 
 **Refined Version (v0.4.0)**
 
-- [ ] REFINE-1: Verify UI and test enhancement PRs are merged
-- [ ] REFINE-2: All test suites (Unit, Integration, E2E) pass
-- [ ] REFINE-3: Create tag `v0.4.0`
+- [x] REFINE-1: Verify UI and test enhancement PRs are merged
+- [x] REFINE-2: All test suites (Unit, Integration, E2E) pass
+- [x] REFINE-3: Create tag `v0.4.0`
 
 ## Phase 5: Final Production Readiness
 
