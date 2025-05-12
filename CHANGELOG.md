@@ -13,6 +13,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [0.4.0] - 2024-11-03
+
+### Added
+
+- Comprehensive test suite for utility functions (todoUtils, dateUtils, logger)
+- Mobile-optimized responsive design for all components
+- Dropdown select for filters on mobile screens
+- Better touch interactions for small screens
+
+### Changed
+
+- Improved form layouts for mobile viewing
+- Enhanced button sizing and spacing for touch interactions
+- Optimized UI element positioning on small screens
+- Standardized visual styles across screen sizes
+
+### Internal
+
+- Reorganized test structure to follow source code organization
+- Improved E2E test reliability on different screen sizes
+- Enhanced test coverage for critical business logic
+
 ## [0.3.0] - 2024-10-10
 
 ### Added
