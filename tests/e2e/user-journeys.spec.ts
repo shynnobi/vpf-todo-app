@@ -7,18 +7,18 @@ async function applyFilter(page: Page, filterName: string) {
 	const isMobile = viewportSize && viewportSize.width < 640; // sm breakpoint in Tailwind
 
 	if (isMobile) {
-		// Sur mobile, utiliser les data-testid
-		// 1. Ouvrir le dropdown
+		// On mobile, use the data-testid attributes
+		// 1. Open the dropdown
 		await page.locator('[data-testid="mobile-filter-trigger"]').click();
 
-		// 2. Attendre que le contenu du dropdown soit visible
+		// 2. Wait for the dropdown content to be visible
 		await page.waitForSelector('[data-testid="mobile-filter-content"]', { state: 'visible' });
 
-		// 3. Cliquer sur l'option appropriée
+		// 3. Click on the appropriate option
 		const testId = `mobile-filter-${filterName.toLowerCase()}`;
 		await page.locator(`[data-testid="${testId}"]`).click();
 
-		// 4. Attendre que l'UI se mette à jour
+		// 4. Wait for the UI to update
 		await page.waitForTimeout(300);
 	} else {
 		// On desktop, use the buttons

@@ -58,12 +58,12 @@ export function TodoContainer() {
 			<AddTodoForm onAddTodo={addTodo} />
 
 			{/* Filter and Sort Controls Row */}
-			{/* Version mobile : Select pour le filtre et le tri sur une seule ligne */}
+			{/* Mobile version: Select dropdown for filter and sort controls in a single row */}
 			<div
 				className="my-4 flex flex-row gap-2 w-full sm:hidden"
 				aria-label="Filter and sort controls (mobile)"
 			>
-				{/* Select pour le filtre */}
+				{/* Filter select dropdown */}
 				<Select
 					value={filter}
 					onValueChange={(value: FilterType) => setFilter(value as FilterType)}
@@ -89,7 +89,7 @@ export function TodoContainer() {
 					</SelectContent>
 				</Select>
 
-				{/* Select pour le tri (déjà existant) */}
+				{/* Sort select dropdown (already existing) */}
 				<Select
 					value={sortConfig.criterion}
 					onValueChange={(value: SortCriterion) => setSortConfig(value)}
@@ -127,7 +127,7 @@ export function TodoContainer() {
 				</Button>
 			</div>
 
-			{/* Version desktop : filtres classiques + tri */}
+			{/* Desktop version: standard filters + sort controls */}
 			<div
 				className="my-4 hidden sm:flex flex-col sm:flex-row sm:gap-3 sm:justify-between sm:items-end"
 				aria-label="Filter and sort controls (desktop)"
