@@ -92,5 +92,18 @@ export const LongTitle: Story = {
 	},
 };
 
+// Responsive testing story
+export const MobileView: Story = {
+	args: {
+		initialData: defaultInitialData,
+	},
+	parameters: {
+		viewport: {
+			defaultViewport: 'mobile1',
+		},
+		chromatic: { viewports: [320, 480] },
+	},
+};
+
 // TODO: Add interactive tests using the play function if needed
 // Example: test typing in fields and clicking save/cancel

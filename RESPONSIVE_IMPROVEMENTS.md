@@ -48,15 +48,15 @@ This document lists the improvements needed to optimize the mobile experience an
 
 ### 4. EditTodoForm.tsx
 
-- [ ] **Issue**: Two-column layout poorly adapted to mobile screens
+- [x] **Issue**: Two-column layout poorly adapted to mobile screens
 
-  - [ ] Revise structure for more fluid presentation on mobile
-  - [ ] Optimize width and layout of controls (dates, priority)
-  - [ ] Improve presentation of metadata fields
+  - [x] Revise structure for more fluid presentation on mobile
+  - [x] Optimize width and layout of controls (dates, priority)
+  - [x] Improve presentation of metadata fields
 
-- [ ] **Issue**: Spacing and field sizes potentially inappropriate on mobile
-  - [ ] Adjust field height and width for better ergonomics
-  - [ ] Optimize contrast and readability of labels and information
+- [x] **Issue**: Spacing and field sizes potentially inappropriate on mobile
+  - [x] Adjust field height and width for better ergonomics
+  - [x] Optimize contrast and readability of labels and information
 
 ### 5. Global - UI Components
 
@@ -78,7 +78,7 @@ This document lists the improvements needed to optimize the mobile experience an
 
 3. **Phase 3: Complex Forms**
 
-   - [ ] Refactor EditTodoForm.tsx for better mobile experience
+   - [x] Refactor EditTodoForm.tsx for better mobile experience
 
 4. **Phase 4: Testing and Finalization**
    - [x] Test all components on different screen sizes
