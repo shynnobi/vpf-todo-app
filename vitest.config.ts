@@ -42,16 +42,16 @@ export default defineConfig({
 			reporter: ['text', 'json', 'html'],
 			include: ['src/**/*.{ts,tsx}'],
 			exclude: [
-				// Exclusions de base
+				// Basic exclusions
 				'**/*.d.ts',
 				'**/*.test.{ts,tsx}',
 				'**/*.spec.{ts,tsx}',
 
-				// Fichiers Storybook
+				// Storybook files
 				'**/*.stories.{ts,tsx}',
 				'**/.storybook/**',
 
-				// Composants UI shadcn qui sont principalement des wrappers
+				// ShadCN UI components that are mainly wrappers
 				'**/components/ui/alert-dialog.tsx',
 				'**/components/ui/dialog.tsx',
 				'**/components/ui/input.tsx',
@@ -59,18 +59,18 @@ export default defineConfig({
 				'**/components/ui/spinner.tsx',
 				'**/components/ui/textarea.tsx',
 
-				// Fichiers de configuration et de routage
+				// Configuration and routing files
 				'src/main.tsx',
 				'src/lib/router/**',
 				'src/pages/**',
 
-				// Context providers qui sont généralement testés via d'autres tests
+				// Context providers that are usually tested through other tests
 				'src/context/theme/ThemeProvider.tsx',
 
-				// Librairies externes et utilitaires déjà testés
+				// External libraries and already tested utilities
 				'src/lib/todos/**',
 			],
-			// Seuils minimaux de couverture pour les fichiers non exclus
+			// Minimum coverage thresholds for non-excluded files
 			thresholds: {
 				lines: 80,
 				functions: 75,
