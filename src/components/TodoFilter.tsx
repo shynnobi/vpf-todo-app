@@ -41,9 +41,11 @@ export function TodoFilter({ currentFilter, onFilterChange, counts }: TodoFilter
 		<div className="flex items-center justify-center space-x-2 rounded-md text-muted-foreground">
 			{filterButtons.map(({ label, value, count, aria, icon: Icon }) => {
 				const isPressed = currentFilter === value;
-				const buttonClass = isPressed
-					? 'flex items-center gap-2 px-4 py-2 rounded-md bg-blue-500 text-white text-sm cursor-pointer'
-					: 'flex items-center gap-2 px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm cursor-pointer';
+				const buttonClass =
+					'flex flex-col sm:flex-row items-center gap-1 sm:gap-2 px-4 py-2 rounded-md text-xs sm:text-sm ' +
+					(isPressed
+						? 'bg-blue-500 text-white cursor-pointer'
+						: 'bg-gray-200 text-gray-700 hover:bg-gray-300 cursor-pointer');
 
 				return (
 					<button
@@ -53,10 +55,10 @@ export function TodoFilter({ currentFilter, onFilterChange, counts }: TodoFilter
 						className={buttonClass}
 						onClick={() => onFilterChange(value)}
 					>
-						<Icon className="h-4 w-4 flex-shrink-0" />
-						<span>
+						<Icon className="h-5 w-5 mb-0.5 sm:mb-0" />
+						<span className="text-center">
 							{label}
-							<span className="ml-1 text-sm font-bold">{count}</span>
+							<span className="ml-1 font-bold">{count}</span>
 						</span>
 					</button>
 				);
