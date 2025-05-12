@@ -150,9 +150,9 @@
 
 - [x] UI-1: Replace native checkbox with shadcn/ui Checkbox component
 - [x] UI-2: Make creation/modification dates more discreet in edit form
-- [ ] UI-3: Finalize `lucide-react` icon standardization throughout the application
-- [ ] UI-4: Ensure consistent spacing, margins and visual style
-- [ ] UI-5: Improve responsive design for mobile devices
+- [x] UI-3: Finalize `lucide-react` icon standardization throughout the application
+- [x] UI-4: Ensure consistent spacing, margins and visual style
+- [x] UI-5: Improve responsive design for mobile devices
 - [ ] UI-6: Create PR `enhance/ui-refinements` → `dev`
 
 **Branch: `enhance/test-coverage`**
