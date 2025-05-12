@@ -1,4 +1,31 @@
-import { expect, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
+
+// Helper function for applying filters that works on both mobile and desktop
+async function applyFilter(page: Page, filterName: string) {
+	// Check if we're on mobile by checking viewport width
+	const viewportSize = page.viewportSize();
+	const isMobile = viewportSize && viewportSize.width < 640; // sm breakpoint in Tailwind
+
+	if (isMobile) {
+		// Sur mobile, utiliser les data-testid
+		// 1. Ouvrir le dropdown
+		await page.locator('[data-testid="mobile-filter-trigger"]').click();
+
+		// 2. Attendre que le contenu du dropdown soit visible
+		await page.waitForSelector('[data-testid="mobile-filter-content"]', { state: 'visible' });
+
+		// 3. Cliquer sur l'option appropriée
+		const testId = `mobile-filter-${filterName.toLowerCase()}`;
+		await page.locator(`[data-testid="${testId}"]`).click();
+
+		// 4. Attendre que l'UI se mette à jour
+		await page.waitForTimeout(300);
+	} else {
+		// On desktop, use the buttons
+		await page.getByRole('button', { name: new RegExp(`show ${filterName} todos`, 'i') }).click();
+		await page.waitForTimeout(300);
+	}
+}
 
 test.describe('Complete User Journeys', () => {
 	test('Basic journey: create, mark as completed, then delete a task', async ({ page }) => {
@@ -101,15 +128,17 @@ test.describe('Complete User Journeys', () => {
 		await expect(page.getByText(modifiedTask)).toBeVisible();
 
 		// 3. Filter tasks
+		// Use a more robust approach that works on both mobile and desktop
+		// Try to find the desktop filter buttons first, if not found use the mobile dropdown
+
 		// Activate the filter for active tasks
-		await page.getByRole('button', { name: /active/i }).click();
-		await page.waitForTimeout(300);
+		await applyFilter(page, 'active');
 
 		// Verify that the task is visible in active filter
 		await expect(page.getByText(modifiedTask)).toBeVisible();
 
 		// Go to All filter
-		await page.getByRole('button', { name: /all/i }).click();
+		await applyFilter(page, 'all');
 		await page.waitForTimeout(300);
 
 		// 4. Delete the task
@@ -148,7 +177,7 @@ test.describe('Complete User Journeys', () => {
 		}
 
 		// Use the "Active" filter
-		await page.getByRole('button', { name: /active/i }).click();
+		await applyFilter(page, 'active');
 		await page.waitForTimeout(200);
 
 		// Verify that only one task is visible
@@ -157,7 +186,7 @@ test.describe('Complete User Journeys', () => {
 		await expect(page.getByText(tasks[1])).not.toBeVisible();
 
 		// Use the "Completed" filter
-		await page.getByRole('button', { name: /completed/i }).click();
+		await applyFilter(page, 'completed');
 		await page.waitForTimeout(200);
 
 		// Verify that the first two tasks are visible
@@ -166,7 +195,7 @@ test.describe('Complete User Journeys', () => {
 		await expect(page.getByText(tasks[2])).not.toBeVisible();
 
 		// Return to the "All" filter
-		await page.getByRole('button', { name: /all/i }).click();
+		await applyFilter(page, 'all');
 		await page.waitForTimeout(200);
 
 		// Verify that all tasks are visible

@@ -562,19 +562,22 @@ describe('TodoContainer Component - Integration Tests', () => {
 				useTodoStore.getState().setSortConfig('creationDate');
 			});
 
-			// Then: Sort controls should be present within the labelled container
-			const controlsContainer = screen.getByLabelText(/filter and sort controls/i);
+			// Then: Get the desktop controls container
+			const controlsContainer = screen.getByLabelText(/filter and sort controls \(desktop\)/i);
 			expect(controlsContainer).toBeInTheDocument();
 
 			// Find the combobox and button *within* that container
-			const sortBySelectTrigger = screen.getByRole('combobox', { name: /sort by/i });
+			const sortBySelectTrigger = within(controlsContainer).getByRole('combobox', {
+				name: /sort by/i,
+			});
 			expect(sortBySelectTrigger).toBeInTheDocument();
 
 			// And: Default sort option should be selected (Creation Date)
 			expect(within(sortBySelectTrigger).getByText(/Creation Date/i)).toBeInTheDocument();
 
 			// And: Sort direction button should be present
-			const sortDirectionButton = screen.getByLabelText(/change sort direction/i);
+			const sortDirectionButton =
+				within(controlsContainer).getByLabelText(/change sort direction/i);
 			expect(sortDirectionButton).toBeInTheDocument();
 
 			// And: Default direction should be descending (newer first)
