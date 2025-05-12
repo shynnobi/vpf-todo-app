@@ -41,7 +41,42 @@ export default defineConfig({
 			provider: 'v8',
 			reporter: ['text', 'json', 'html'],
 			include: ['src/**/*.{ts,tsx}'],
-			exclude: ['**/*.d.ts', '**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+			exclude: [
+				// Exclusions de base
+				'**/*.d.ts',
+				'**/*.test.{ts,tsx}',
+				'**/*.spec.{ts,tsx}',
+
+				// Fichiers Storybook
+				'**/*.stories.{ts,tsx}',
+				'**/.storybook/**',
+
+				// Composants UI shadcn qui sont principalement des wrappers
+				'**/components/ui/alert-dialog.tsx',
+				'**/components/ui/dialog.tsx',
+				'**/components/ui/input.tsx',
+				'**/components/ui/dropdown-menu.tsx',
+				'**/components/ui/spinner.tsx',
+				'**/components/ui/textarea.tsx',
+
+				// Fichiers de configuration et de routage
+				'src/main.tsx',
+				'src/lib/router/**',
+				'src/pages/**',
+
+				// Context providers qui sont généralement testés via d'autres tests
+				'src/context/theme/ThemeProvider.tsx',
+
+				// Librairies externes et utilitaires déjà testés
+				'src/lib/todos/**',
+			],
+			// Seuils minimaux de couverture pour les fichiers non exclus
+			thresholds: {
+				lines: 80,
+				functions: 75,
+				branches: 70,
+				statements: 80,
+			},
 		},
 	},
 });
