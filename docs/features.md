@@ -1,41 +1,52 @@
 # Features
 
-Vite PowerFlow comes with a comprehensive set of features to help you build modern React applications:
+vpf-todo-app is a feature-rich task management application built with modern web technologies. Here's what it offers:
 
-## Core Technologies
+## Todo Management Features
 
-- ⚡️ [Vite](https://vitejs.dev/) (v6) - Lightning fast build tool
-- ⚛️ [React](https://react.dev/) (v19) - UI library
-- 📝 [TypeScript](https://www.typescriptlang.org/) (v5) - Type safety
+- ✏️ **Create & Edit Tasks** - Create new tasks and edit existing ones
+- ✅ **Task Completion** - Mark tasks as complete or incomplete with a simple checkbox
+- 🚫 **Task Deletion** - Remove unwanted tasks from your list
+- 📝 **Task Details** - Add descriptions to provide more context about your tasks
+- 🔍 **Filtering** - Filter tasks by status (All, Active, Completed)
+- 🔢 **Sorting Options** - Sort tasks by:
+  - Title (alphabetically)
+  - Priority (high to low or low to high)
+  - Due date (earliest to latest or latest to earliest)
+  - Creation date (newest to oldest or oldest to newest)
+- ⭐ **Priority Levels** - Assign Low, Medium, or High priority to tasks
+- 📅 **Due Dates** - Set due dates for your tasks with a date picker
+- 🎯 **Visual Indicators** - Color-coded priorities and strikethrough for completed tasks
+- 📱 **Responsive Design** - Optimized for both desktop and mobile devices
+- 🌓 **Theme Switching** - Toggle between light and dark themes
 
-## UI & Styling
+## Persistent Storage
 
-- 🎨 [Tailwind CSS](https://tailwindcss.com/) (v4) - Utility-first CSS framework
-- 🎭 [shadcn/ui](https://ui.shadcn.com/) - Reusable components
-- 🌓 Dark mode support with theme switching
-- 📚 [Storybook](https://storybook.js.org/) (v8) - Component documentation
+- 💾 **Local Storage** - Your todos are saved in the browser's local storage
+- 🔄 **Automatic Saving** - Changes are automatically persisted
 
-## State & Data Management
+## Technical Implementation
 
-- 📦 [Zustand](https://zustand-demo.pmnd.rs/) (v5) - State management
-- 🚀 [TanStack Query](https://tanstack.com/query/latest) - Data fetching and caching
+### Core Technologies
 
-## Development Tools
+- ⚡️ [Vite](https://vitejs.dev/) (v6+) - Lightning fast build tool
+- ⚛️ [React](https://react.dev/) (v19+) - UI library with functional components and hooks
+- 📝 [TypeScript](https://www.typescriptlang.org/) - Type safety throughout the codebase
 
-- 🔄 Hot Module Replacement (HMR)
-- 🎯 Path aliases for clean imports
-- 🔒 Environment variables management
-- 📦 Optimized production builds
+### UI & Styling
 
-## Quality Assurance
+- 🎨 [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- 🎭 [shadcn/ui](https://ui.shadcn.com/) - Accessible and customizable components
+- 🌓 Dark mode with system preference detection
 
-- 🧪 [Vitest](https://vitest.dev/) (v3) - Unit and integration testing
-- 🎭 [Playwright](https://playwright.dev/) (v1) - E2E testing
-- 📝 [ESLint](https://eslint.org/) (v9) - Code linting with flat config
-- 💅 [Prettier](https://prettier.io/) - Code formatting
+### State Management
 
-## Git Integration
+- 📦 [Zustand](https://zustand-demo.pmnd.rs/) - Simple, fast state management
+- 🔄 Optimized rendering with useMemo and selective state subscriptions
 
-- 🔍 [Husky](https://typicode.github.io/husky/) - Git hooks
-- 📋 [lint-staged](https://github.com/okonet/lint-staged) - Staged files linting
-- 📊 [commitlint](https://commitlint.js.org/) - Standardized commits
+### Code Quality
+
+- 🧪 Unit and integration tests with [Vitest](https://vitest.dev/)
+- 🎭 End-to-end testing with [Playwright](https://playwright.dev/)
+- 📝 [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) for code quality
+- 📚 Extensive JSDoc comments for better code documentation
