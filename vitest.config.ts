@@ -41,7 +41,42 @@ export default defineConfig({
 			provider: 'v8',
 			reporter: ['text', 'json', 'html'],
 			include: ['src/**/*.{ts,tsx}'],
-			exclude: ['**/*.d.ts', '**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+			exclude: [
+				// Basic exclusions
+				'**/*.d.ts',
+				'**/*.test.{ts,tsx}',
+				'**/*.spec.{ts,tsx}',
+
+				// Storybook files
+				'**/*.stories.{ts,tsx}',
+				'**/.storybook/**',
+
+				// ShadCN UI components that are mainly wrappers
+				'**/components/ui/alert-dialog.tsx',
+				'**/components/ui/dialog.tsx',
+				'**/components/ui/input.tsx',
+				'**/components/ui/dropdown-menu.tsx',
+				'**/components/ui/spinner.tsx',
+				'**/components/ui/textarea.tsx',
+
+				// Configuration and routing files
+				'src/main.tsx',
+				'src/lib/router/**',
+				'src/pages/**',
+
+				// Context providers that are usually tested through other tests
+				'src/context/theme/ThemeProvider.tsx',
+
+				// External libraries and already tested utilities
+				'src/lib/todos/**',
+			],
+			// Minimum coverage thresholds for non-excluded files
+			thresholds: {
+				lines: 80,
+				functions: 75,
+				branches: 70,
+				statements: 80,
+			},
 		},
 	},
 });

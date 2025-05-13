@@ -146,27 +146,27 @@
 
 ## Phase 4: Refinements & Polish
 
-**Branch: `enhance/ui-refinements`**
+**Branch: `feat/responsive-improvements`**
 
 - [x] UI-1: Replace native checkbox with shadcn/ui Checkbox component
 - [x] UI-2: Make creation/modification dates more discreet in edit form
-- [ ] UI-3: Finalize `lucide-react` icon standardization throughout the application
-- [ ] UI-4: Ensure consistent spacing, margins and visual style
-- [ ] UI-5: Improve responsive design for mobile devices
-- [ ] UI-6: Create PR `enhance/ui-refinements` → `dev`
+- [x] UI-3: Finalize `lucide-react` icon standardization throughout the application
+- [x] UI-4: Ensure consistent spacing, margins and visual style
+- [x] UI-5: Improve responsive design for mobile devices
+- [x] UI-6: Create PR `feat/responsive-improvements` → `dev`
 
 **Branch: `enhance/test-coverage`**
 
-- [ ] TEST-1: Review test coverage and identify critical gaps (if any)
-- [ ] TEST-2: Add targeted tests for any uncovered scenarios
-- [ ] TEST-3: Ensure all E2E tests match the current application behavior
-- [ ] TEST-4: Create PR `enhance/test-coverage` → `dev`
+- [x] TEST-1: Review test coverage and identify critical gaps (if any)
+- [x] TEST-2: Add targeted tests for any uncovered scenarios
+- [x] TEST-3: Ensure all E2E tests match the current application behavior
+- [x] TEST-4: Create PR `enhance/test-coverage` → `dev`
 
-**Refined Version (v1.3.0)**
+**Refined Version (v0.4.0)**
 
-- [ ] REFINE-1: Verify UI and test enhancement PRs are merged
-- [ ] REFINE-2: All test suites (Unit, Integration, E2E) pass
-- [ ] REFINE-3: Create tag `v1.3.0`
+- [x] REFINE-1: Verify UI and test enhancement PRs are merged
+- [x] REFINE-2: All test suites (Unit, Integration, E2E) pass
+- [x] REFINE-3: Create tag `v0.4.0`
 
 ## Phase 5: Final Production Readiness
 
@@ -183,8 +183,8 @@
 - [ ] A11Y-3: Test and improve screen reader compatibility
 - [ ] A11Y-4: Create PR `enhance/accessibility` → `dev`
 
-**Production Ready Version (v2.0.0)**
+**Production Ready Version (v1.0.0)**
 
 - [ ] PROD-1: Verify documentation and accessibility PRs are merged
 - [ ] PROD-2: Final round of testing across all levels
-- [ ] PROD-3: Create tag `v2.0.0`
+- [ ] PROD-3: Create tag `v1.0.0`
