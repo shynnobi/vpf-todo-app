@@ -21,12 +21,18 @@ test.describe('Complete User Journeys', () => {
 		// Verify that the task is marked as completed
 		await expect(checkbox).toBeChecked();
 
-		// Delete the task
+		// Click the delete button to open the confirmation dialog
 		await page
 			.locator(`li`)
 			.filter({ hasText: uniqueTask })
 			.getByRole('button', { name: /delete/i })
 			.click();
+
+		// Verify the confirmation dialog is shown
+		await expect(page.getByRole('heading', { name: 'Are you sure?' })).toBeVisible();
+
+		// Confirm deletion
+		await page.getByRole('button', { name: 'Delete' }).click();
 
 		// Verify that the task has been deleted
 		await expect(element).not.toBeVisible();
@@ -110,6 +116,12 @@ test.describe('Complete User Journeys', () => {
 			.getByRole('button', { name: /delete/i })
 			.click();
 
+		// Verify the confirmation dialog is shown
+		await expect(page.getByRole('heading', { name: 'Are you sure?' })).toBeVisible();
+
+		// Confirm deletion
+		await page.getByRole('button', { name: 'Delete' }).click();
+
 		// Verify that the task has been deleted
 		await expect(page.getByText(modifiedTask)).not.toBeVisible();
 	});
@@ -174,6 +186,10 @@ test.describe('Complete User Journeys', () => {
 				.filter({ hasText: task })
 				.getByRole('button', { name: /delete/i })
 				.click();
+
+			// Confirm deletion in the dialog
+			await page.getByRole('button', { name: 'Delete' }).click();
+
 			// Add a small delay between deletions
 			await page.waitForTimeout(200);
 		}

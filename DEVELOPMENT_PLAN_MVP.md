@@ -68,7 +68,7 @@
 - [x] DEL-1: Write tests for "Delete Todo" feature
 - [x] DEL-2: Implement delete button in TodoItem
 - [x] DEL-3: Implement store integration for deleting
-- [ ] DEL-CONFIRM-TESTS: Verify/Adapt tests for deletion confirmation dialog (Post-implementation check from REFACTORING_PLAN#1)
+- [x] DEL-CONFIRM-TESTS: Verify/Adapt tests for deletion confirmation dialog (Post-implementation check from REFACTORING_PLAN#1)
 - [x] DEL-4: Create PR `feat/todo-deletion` → `dev` (Dialog added later)
 
 **Branch: `feat/basic-filtering`**
@@ -172,9 +172,9 @@
 
 **Branch: `enhance/documentation`**
 
-- [ ] DOC-1: Update README with comprehensive usage instructions and feature list
-- [ ] DOC-2: Add/Improve JSDoc comments throughout the codebase
-- [ ] DOC-3: Create PR `enhance/documentation` → `dev`
+- [x] DOC-1: Update README with comprehensive usage instructions and feature list
+- [x] DOC-2: Add/Improve JSDoc comments throughout the codebase
+- [x] DOC-3: Create PR `enhance/documentation` → `dev`
 
 **Branch: `enhance/accessibility`**
 
