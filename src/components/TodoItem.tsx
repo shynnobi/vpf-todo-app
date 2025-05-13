@@ -8,7 +8,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { PriorityLevel, Todo, TodoItemProps } from '@/types/todoTypes';
 import { formatDate } from '@/utils/dateUtils';
 
-// Return type is string (classes) or null (no badge)
+/**
+ * Determines the CSS classes for priority badges based on priority level
+ *
+ * @param priority - The priority level of the todo
+ * @returns A string containing CSS classes for the badge or null if no priority
+ */
 const getPriorityBadgeClasses = (priority: PriorityLevel | null): string | null => {
 	if (priority === null) {
 		// No specific classes if priority is null
@@ -29,36 +34,67 @@ const getPriorityBadgeClasses = (priority: PriorityLevel | null): string | null 
 };
 
 /**
- * A component that renders a single todo item with checkbox, edit and delete buttons.
- * Can switch to an editing mode using EditTodoForm.
+ * TodoItem component that renders a single todo with its details and actions
+ *
+ * Features:
+ * - Display todo title, priority badge, and due date
+ * - Toggle completion status with checkbox
+ * - Edit todo with inline form
+ * - Delete todo
+ * - Visual indicators for completed todos
+ *
+ * @param todo - The todo item to display
+ * @param onToggle - Callback function for toggling completion status
+ * @param onDelete - Callback function for deleting the todo
+ * @param onSave - Callback function for saving updates to the todo
+ * @param isEditing - Whether the todo is currently in edit mode
+ * @param onSetEditing - Callback to set which todo is being edited
  */
 export function TodoItem({
 	todo,
 	onToggle,
 	onDelete,
 	onSave,
-	isEditing, // Receive isEditing from props
-	onSetEditing, // Receive onSetEditing from props
+	isEditing,
+	onSetEditing,
 }: TodoItemProps) {
+	/**
+	 * Toggles the completion status of the todo
+	 */
 	const handleToggle = () => {
 		onToggle(todo.id);
 	};
 
+	/**
+	 * Deletes the todo
+	 */
 	const handleDelete = () => {
 		onDelete(todo.id);
 	};
 
+	/**
+	 * Puts the todo into edit mode
+	 */
 	const handleEdit = () => {
-		onSetEditing(todo.id); // Call prop function to set this ID as editing
+		onSetEditing(todo.id);
 	};
 
+	/**
+	 * Cancels editing mode without saving changes
+	 */
 	const handleCancelEdit = () => {
-		onSetEditing(null); // Call prop function to clear editing ID
+		onSetEditing(null);
 	};
 
+	/**
+	 * Saves changes to the todo and exits edit mode
+	 *
+	 * @param id - ID of the todo being edited
+	 * @param updates - Object containing the updated properties
+	 */
 	const handleSaveEdit = (id: string, updates: Partial<Omit<Todo, 'id'>>) => {
 		onSave(id, updates);
-		onSetEditing(null); // Call prop function to clear editing ID after save
+		onSetEditing(null);
 	};
 
 	// Determine badge classes based on priority, handling null/undefined
@@ -106,9 +142,6 @@ export function TodoItem({
 									</Badge>
 								)}
 							</div>
-							{/* Display description snippet if it exists */}
-							{/* Display description if it exists */}
-							{/* We might display a snippet here if needed, or just in edit mode */}
 							{/* Display due date if it exists */}
 							{todo.dueDate && (
 								<span className="text-xs text-muted-foreground mt-1">
