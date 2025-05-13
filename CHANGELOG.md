@@ -2,16 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-
-### Added
-
-### Changed
-
-### Fixed
 
 ## [0.4.0] - 2024-11-03
 
@@ -44,12 +38,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced editing capabilities with inline editing support
 - Improved date handling with DueDatePicker component integration
 - Advanced sorting functionality (by priority, creation date, due date)
+- Integration of shadcn/ui Checkbox component
+- Made creation/modification dates more discreet in edit form
+- Standardized development plan versioning
 
 ### Changed
 
 - Simplified UI by replacing modal approach with inline editing in TodoItem
 - Improved form components for better user experience
 - Enhanced visual presentation of todo items with priority indicators
+
+### Fixed
+
+- Updated development plan to correct version inconsistencies
 
 ### Internal
 
@@ -60,21 +61,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Todo list persistence using LocalStorage (`feat/persistence`).
-- Ability to delete individual todo items (`feat/todo-deletion`).
-- Basic filtering functionality (All, Active, Completed) (`feat/basic-filtering`).
-- Storybook stories for the `TodoFilter` component.
-
-### Changed
-
-- Updated dependencies based on Dependabot alerts (multiple updates).
-- Refactored unit tests (`TodoContainer`, `todoStore`) for improved maintainability.
-- Refactored component prop interfaces and type definitions for better organization.
-- Simplified `todoStore` implementation.
-
-### Internal
-
-- Updated test configurations and integration tests to accommodate new features.
+- Implemented persistence with localStorage
+- Added todo deletion functionality
+- Implemented basic filtering (active/completed)
 
 ## [0.1.1-core-assembled] - 2024-04-16
 
@@ -96,3 +85,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Storybook setup with interactive stories for core components
 - Initial project structure based on Vite PowerFlow starter
 - Comprehensive CI/CD workflow and Git hooks
+
+[Unreleased]: https://github.com/shynnobi/vpf-todo-app/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/shynnobi/vpf-todo-app/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/shynnobi/vpf-todo-app/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/shynnobi/vpf-todo-app/compare/v0.1.1-core-assembled...v0.2.0
+[0.1.1-core-assembled]: https://github.com/shynnobi/vpf-todo-app/compare/v0.1.0-core...v0.1.1-core-assembled
+[0.1.0-core]: https://github.com/shynnobi/vpf-todo-app/releases/tag/v0.1.0-core

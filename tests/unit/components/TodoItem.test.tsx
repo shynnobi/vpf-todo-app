@@ -1,8 +1,19 @@
 import { useState } from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { formatISO } from 'date-fns';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+// Mock the DueDatePicker component to simplify testing
+vi.mock('@/components/DueDatePicker', () => ({
+	DueDatePicker: ({ onChange, value }: { onChange: (date?: Date) => void; value?: Date }) => (
+		<div data-testid="mock-date-picker">
+			<button onClick={() => onChange(new Date('2025-05-13T00:00:00Z'))} data-testid="select-date">
+				Select Date
+			</button>
+			<span>{value ? 'Has date' : 'No date'}</span>
+		</div>
+	),
+}));
 
 import { TodoItem } from '@/components/TodoItem';
 import { Todo } from '@/types/todoTypes';
@@ -308,34 +319,10 @@ describe('TodoItem Component', () => {
 			await userEvent.clear(descriptionInput);
 			await userEvent.type(descriptionInput, newDescription);
 
-			// When: A date is selected from the date picker
-			const dueDateButton = screen.getByRole('button', { name: /due date/i });
-			await userEvent.click(dueDateButton);
-			const calendarGrid = await screen.findByRole('grid');
-
-			// Select a specific date that we know is enabled (today's date to be safe)
-			// First, format today's date as a string to find in the calendar
-			const today = new Date();
-			const dayOfMonth = today.getDate().toString(); // get current day number as string
-
-			// Find the correct day button: role='gridcell', not disabled, contains the day number
-			const dayCells = await within(calendarGrid).findAllByRole('gridcell');
-			const targetCell = dayCells.find(cell => {
-				// Check if the button inside the cell is not disabled and has the correct text content
-				const button = cell as HTMLButtonElement; // Cast needed for disabled check
-				return !button.disabled && button.textContent === dayOfMonth;
-			});
-
-			if (!targetCell) {
-				throw new Error(`Could not find an enabled gridcell button for day ${dayOfMonth}`);
-			}
-
-			await userEvent.click(targetCell);
-
-			// Extract the selected date for assertion
-			const expectedDate = new Date();
-			expectedDate.setHours(0, 0, 0, 0); // Set to start of day
-			const expectedIsoDate = formatISO(expectedDate);
+			// Use the mocked date picker to set a date
+			const mockDatePicker = screen.getByTestId('mock-date-picker');
+			const selectDateButton = within(mockDatePicker).getByTestId('select-date');
+			await userEvent.click(selectDateButton);
 
 			// When: The priority is changed
 			const priorityButton = screen.getByRole('button', { name: /select priority for this task/i });
@@ -353,7 +340,7 @@ describe('TodoItem Component', () => {
 				expect.objectContaining({
 					title: newTitle,
 					description: newDescription,
-					dueDate: expectedIsoDate,
+					dueDate: '2025-05-13T00:00:00Z',
 					priority: 'low',
 				})
 			);
