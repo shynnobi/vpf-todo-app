@@ -5,6 +5,9 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
+// Définir les types explicites pour les composants d'icônes
+type IconProps = React.HTMLAttributes<SVGElement> & { className?: string };
+
 function Calendar({
 	className,
 	classNames,
@@ -55,10 +58,10 @@ function Calendar({
 				...classNames,
 			}}
 			components={{
-				IconLeft: ({ className, ...props }) => (
+				IconLeft: ({ className, ...props }: IconProps) => (
 					<ChevronLeft className={cn('size-4', className)} {...props} />
 				),
-				IconRight: ({ className, ...props }) => (
+				IconRight: ({ className, ...props }: IconProps) => (
 					<ChevronRight className={cn('size-4', className)} {...props} />
 				),
 			}}
