@@ -311,11 +311,10 @@ describe('TodoItem Component', () => {
 			// When: Data is entered and saved
 			const titleInput = screen.getByLabelText(/edit title/i);
 			const newTitle = 'Updated Title';
-			await userEvent.clear(titleInput);
-			await userEvent.type(titleInput, newTitle);
-
 			const descriptionInput = screen.getByLabelText(/edit description/i);
 			const newDescription = 'Updated Description';
+			await userEvent.clear(titleInput);
+			await userEvent.type(titleInput, newTitle);
 			await userEvent.clear(descriptionInput);
 			await userEvent.type(descriptionInput, newDescription);
 
