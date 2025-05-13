@@ -1,98 +1,101 @@
-# Plan d'améliorations du Responsive Design
+# Responsive Design Improvement Plan
 
-> Date de création: 25-10-2023
-> Priorité: Haute
-> Statut: En cours
+> Creation date: 2023-10-25
+> Priority: High
+> Status: In progress
 
-Ce document liste les améliorations à apporter pour optimiser l'expérience mobile et la compatibilité responsive de l'application Todo.
+This document lists the improvements needed to optimize the mobile experience and responsive compatibility of the Todo application.
 
-## Problèmes identifiés et améliorations proposées
+## Identified Issues and Proposed Improvements
 
 ### 1. TodoItem.tsx
 
-- [ ] **Problème**: Boutons d'action trop petits pour l'interaction tactile (h-7 w-7)
+- [x] **Issue**: Action buttons too small for touch interaction (h-7 w-7)
 
-  - [ ] Augmenter la taille des boutons à h-8 w-8 ou h-9 w-9 sur mobile
-  - [ ] Augmenter la zone d'interaction clickable
-  - [ ] Ajouter un espacement plus important entre les boutons pour éviter les clics accidentels
+  - [x] Increase button size to h-8 w-8 or h-9 w-9 on mobile
+  - [x] Enlarge clickable interaction area
+  - [x] Add more spacing between buttons to prevent accidental clicks
 
-- [ ] **Problème**: Disposition des éléments (titre, badges, date) potentiellement chaotique sur petit écran
-  - [ ] Améliorer l'organisation des éléments dans le flux mobile
-  - [ ] Optimiser l'affichage des badges pour éviter le débordement
-  - [ ] Assurer une lisibilité optimale du titre et des informations importantes
+- [x] **Issue**: Element layout (title, badges, date) potentially chaotic on small screens
+  - [x] Improve element organization in mobile flow
+  - [x] Optimize badge display to prevent overflow
+  - [x] Ensure optimal readability of title and important information
 
 ### 2. AddTodoForm.tsx
 
-- [ ] **Problème**: Contrôles (date, priorité, bouton) mal organisés sur petits écrans
+- [x] **Issue**: Controls (date, priority, button) poorly organized on small screens
 
-  - [ ] Revoir la disposition des contrôles sur mobile (empilage vertical vs horizontal)
-  - [ ] Optimiser la largeur des contrôles pour une meilleure ergonomie
-  - [ ] Ajouter une logique de disposition cohérente pour les différentes tailles d'écran
+  - [x] Revise control layout on mobile (vertical vs horizontal stacking)
+  - [x] Optimize control widths for better ergonomics
+  - [x] Add consistent layout logic for different screen sizes
 
-- [ ] **Problème**: Espacement et marges potentiellement inappropriés sur mobile
-  - [ ] Ajuster le padding et les marges pour optimiser l'utilisation de l'espace
-  - [ ] Ajuster la taille des champs de saisie pour une meilleure utilisabilité tactile
+- [x] **Issue**: Spacing and margins potentially inappropriate on mobile
+  - [x] Adjust padding and margins to optimize space usage
+  - [x] Adjust input field sizes for better touch usability
 
 ### 3. TodoContainer.tsx
 
-- [ ] **Problème**: Contrôles de filtre et de tri qui s'empilent maladroitement
+- [x] **Issue**: Filter and sort controls that stack awkwardly
 
-  - [ ] Revoir la disposition des contrôles pour les écrans petits et moyens
-  - [ ] Ajuster l'espacement et l'alignement des contrôles empilés
-  - [ ] Optimiser les étiquettes et textes pour économiser de l'espace
+  - [x] Revise control layout for small and medium screens
+  - [x] Replace filter buttons with a select dropdown on mobile
+  - [x] Align filter and sort controls in a single row on mobile
+  - [x] Add data-testid attributes to ensure robust e2e testing
 
-- [ ] **Problème**: Largeur maximale fixe (max-w-2xl) potentiellement problématique
-  - [ ] Ajuster la gestion de la largeur pour les très petits écrans
-  - [ ] Adapter les marges et le padding en fonction de la largeur d'écran
+- [x] **Issue**: Fixed maximum width (max-w-2xl) potentially problematic
+  - [x] Adjust width management for very small screens
+  - [x] Adapt margins and padding based on screen width
 
 ### 4. EditTodoForm.tsx
 
-- [ ] **Problème**: Mise en page en deux colonnes mal adaptée aux écrans mobiles
+- [x] **Issue**: Two-column layout poorly adapted to mobile screens
 
-  - [ ] Revoir la structure pour une présentation plus fluide sur mobile
-  - [ ] Optimiser la largeur et la disposition des contrôles (dates, priorité)
-  - [ ] Améliorer la présentation des champs de métadonnées
+  - [x] Revise structure for more fluid presentation on mobile
+  - [x] Optimize width and layout of controls (dates, priority)
+  - [x] Improve presentation of metadata fields
 
-- [ ] **Problème**: Espacement et taille des champs potentiellement inappropriés sur mobile
-  - [ ] Ajuster la hauteur et la largeur des champs pour une meilleure ergonomie
-  - [ ] Optimiser le contraste et la lisibilité des étiquettes et informations
+- [x] **Issue**: Spacing and field sizes potentially inappropriate on mobile
+  - [x] Adjust field height and width for better ergonomics
+  - [x] Optimize contrast and readability of labels and information
 
-### 5. Global - Composants UI
+### 5. Global - UI Components
 
-- [ ] **Problème**: Éléments d'UI qui ne s'adaptent pas correctement aux différentes tailles d'écran
-  - [ ] Vérifier et optimiser tous les composants UI réutilisables (boutons, selects, etc.)
-  - [ ] Assurer la cohérence de l'expérience tactile sur tous les éléments interactifs
+- [ ] **Issue**: UI elements that don't adapt properly to different screen sizes
+  - [ ] Check and optimize all reusable UI components (buttons, selects, etc.)
+  - [ ] Ensure consistency of touch experience across all interactive elements
 
-## Plan d'implémentation
+## Implementation Plan
 
-1. **Phase 1: Composants critiques d'interaction**
+1. **Phase 1: Critical Interaction Components**
 
-   - [ ] Optimiser TodoItem.tsx
-   - [ ] Optimiser AddTodoForm.tsx
+   - [x] Optimize TodoItem.tsx
+   - [x] Optimize AddTodoForm.tsx
 
-2. **Phase 2: Structure globale et flux**
+2. **Phase 2: Global Structure and Flow**
 
-   - [ ] Améliorer TodoContainer.tsx
-   - [ ] Réviser la navigation et les contrôles globaux
+   - [x] Improve TodoContainer.tsx
+   - [ ] Revise navigation and global controls
 
-3. **Phase 3: Formulaires complexes**
+3. **Phase 3: Complex Forms**
 
-   - [ ] Refactoriser EditTodoForm.tsx pour une meilleure expérience mobile
+   - [x] Refactor EditTodoForm.tsx for better mobile experience
 
-4. **Phase 4: Tests et finalisation**
-   - [ ] Tester tous les composants sur différentes tailles d'écran
-   - [ ] Vérifier l'accessibilité des éléments interactifs sur mobile
-   - [ ] Corriger les éventuels problèmes restants
+4. **Phase 4: Testing and Finalization**
+   - [x] Test all components on different screen sizes
+   - [x] Create Storybook stories for responsive testing
+   - [x] Verify accessibility of interactive elements on mobile
+   - [x] Fix e2e tests for mobile interactions
+   - [ ] Fix any remaining issues
 
-## Métriques de succès
+## Success Metrics
 
-- Tous les éléments interactifs sont facilement accessibles au toucher (minimum 44x44px selon les recommandations WCAG)
-- L'application s'affiche correctement sur des écrans de 320px à 1920px de large
-- Aucun débordement horizontal ou déformation sur mobile
-- Pas de texte tronqué ou illisible sur petit écran
+- All interactive elements are easily accessible by touch (minimum 44x44px according to WCAG recommendations)
+- The application displays correctly on screens from 320px to 1920px wide
+- No horizontal overflow or distortion on mobile
+- No truncated or illegible text on small screens
 
-## Notes et références
+## Notes and References
 
-- Utiliser les breakpoints Tailwind standards: sm (640px), md (768px), lg (1024px)
-- Référence WCAG pour taille minimale des éléments tactiles: 44x44px
-- Privilégier l'empilement vertical sur mobile pour les formulaires et contrôles
+- Use standard Tailwind breakpoints: sm (640px), md (768px), lg (1024px)
+- WCAG reference for minimum size of touch elements: 44x44px
+- Favor vertical stacking on mobile for forms and controls
