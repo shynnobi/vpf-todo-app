@@ -199,7 +199,36 @@ describe('TodoItem Component', () => {
 			expect(mockToggle).toHaveBeenCalledWith('1');
 		});
 
-		it('should call onDelete with the correct id when delete button is clicked', () => {
+		it('should open a confirmation dialog when delete button is clicked', async () => {
+			// Given: The component is rendered
+			render(
+				<TodoItem
+					todo={mockIncompleteTodo}
+					onToggle={() => {}}
+					onDelete={() => {}}
+					onSave={() => {}}
+					isEditing={false}
+					onSetEditing={() => {}}
+				/>
+			);
+
+			// When: The delete button is clicked
+			const deleteButton = screen.getByTestId('delete-todo-trigger');
+			fireEvent.click(deleteButton);
+
+			// Then: The confirmation dialog should be visible
+			const dialogTitle = await screen.findByText('Are you sure?');
+			expect(dialogTitle).toBeInTheDocument();
+
+			const dialogDescription = screen.getByText(/This will permanently delete the task/i);
+			expect(dialogDescription).toBeInTheDocument();
+
+			// And: The dialog should have cancel and confirm buttons
+			expect(screen.getByText('Cancel')).toBeInTheDocument();
+			expect(screen.getByText('Delete')).toBeInTheDocument();
+		});
+
+		it('should call onDelete with the correct id when confirmation button is clicked', async () => {
 			// Given: A spy function and the component is rendered
 			const mockDelete = vi.fn();
 			render(
@@ -213,12 +242,42 @@ describe('TodoItem Component', () => {
 				/>
 			);
 
-			// When: The delete button is clicked
-			const deleteButton = screen.getByRole('button', { name: /delete todo: incomplete task/i });
+			// When: The delete button is clicked to open the dialog
+			const deleteButton = screen.getByTestId('delete-todo-trigger');
 			fireEvent.click(deleteButton);
+
+			// And: The confirm delete button is clicked
+			const confirmButton = await screen.findByTestId('confirm-delete-todo');
+			fireEvent.click(confirmButton);
 
 			// Then: onDelete should be called with the todo id
 			expect(mockDelete).toHaveBeenCalledWith('1');
+		});
+
+		it('should not call onDelete when cancel button is clicked', async () => {
+			// Given: A spy function and the component is rendered
+			const mockDelete = vi.fn();
+			render(
+				<TodoItem
+					todo={mockIncompleteTodo}
+					onToggle={() => {}}
+					onDelete={mockDelete}
+					onSave={() => {}}
+					isEditing={false}
+					onSetEditing={() => {}}
+				/>
+			);
+
+			// When: The delete button is clicked to open the dialog
+			const deleteButton = screen.getByTestId('delete-todo-trigger');
+			fireEvent.click(deleteButton);
+
+			// And: The cancel button is clicked
+			const cancelButton = await screen.findByText('Cancel');
+			fireEvent.click(cancelButton);
+
+			// Then: onDelete should not be called
+			expect(mockDelete).not.toHaveBeenCalled();
 		});
 	});
 

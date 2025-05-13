@@ -2,6 +2,17 @@ import { Pencil, Trash } from 'lucide-react';
 
 import { EditTodoForm } from './EditTodoForm';
 
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -40,7 +51,7 @@ const getPriorityBadgeClasses = (priority: PriorityLevel | null): string | null 
  * - Display todo title, priority badge, and due date
  * - Toggle completion status with checkbox
  * - Edit todo with inline form
- * - Delete todo
+ * - Delete todo with confirmation dialog
  * - Visual indicators for completed todos
  *
  * @param todo - The todo item to display
@@ -163,18 +174,37 @@ export function TodoItem({
 							>
 								<Pencil className="h-4 w-4" />
 							</Button>
-							<Button
-								variant="ghost"
-								size="icon"
-								onClick={e => {
-									e.stopPropagation();
-									handleDelete();
-								}}
-								aria-label={`Delete todo: ${todo.title}`}
-								className="h-7 w-7 text-muted-foreground hover:text-red-600 cursor-pointer"
-							>
-								<Trash className="h-4 w-4" />
-							</Button>
+
+							{/* Delete Button with Confirmation Dialog */}
+							<AlertDialog>
+								<AlertDialogTrigger asChild>
+									<Button
+										variant="ghost"
+										size="icon"
+										onClick={e => e.stopPropagation()}
+										aria-label={`Delete todo: ${todo.title}`}
+										className="h-7 w-7 text-muted-foreground hover:text-red-600 cursor-pointer"
+										data-testid="delete-todo-trigger"
+									>
+										<Trash className="h-4 w-4" />
+									</Button>
+								</AlertDialogTrigger>
+								<AlertDialogContent>
+									<AlertDialogHeader>
+										<AlertDialogTitle>Are you sure?</AlertDialogTitle>
+										<AlertDialogDescription>
+											This will permanently delete the task "{todo.title}". This action cannot be
+											undone.
+										</AlertDialogDescription>
+									</AlertDialogHeader>
+									<AlertDialogFooter>
+										<AlertDialogCancel>Cancel</AlertDialogCancel>
+										<AlertDialogAction onClick={handleDelete} data-testid="confirm-delete-todo">
+											Delete
+										</AlertDialogAction>
+									</AlertDialogFooter>
+								</AlertDialogContent>
+							</AlertDialog>
 						</div>
 					</div>
 				</li>
