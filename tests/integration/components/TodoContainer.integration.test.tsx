@@ -185,9 +185,18 @@ describe('TodoContainer Component - Integration Tests', () => {
 			expect(screen.getByText('1 tasks total')).toBeInTheDocument();
 
 			// When: The delete button is clicked
-			const deleteButton = screen.getByRole('button', { name: /delete todo: todo to delete/i });
+			const deleteButton = screen.getByTestId('delete-todo-trigger');
 			await act(async () => {
 				fireEvent.click(deleteButton);
+			});
+
+			// Then: The confirmation dialog should appear
+			const confirmButton = await screen.findByTestId('confirm-delete-todo');
+			expect(confirmButton).toBeInTheDocument();
+
+			// When: The confirm button is clicked
+			await act(async () => {
+				fireEvent.click(confirmButton);
 			});
 
 			// Then: The todo should be removed
@@ -224,19 +233,23 @@ describe('TodoContainer Component - Integration Tests', () => {
 			expect(screen.getByText('2 tasks total')).toBeInTheDocument();
 
 			// When: The delete button for the second todo is clicked
-			const deleteButtons = screen.getAllByRole('button', { name: /delete todo/i });
-			// Find the delete button for "Delete this todo"
-			const deleteButtonForSecondTodo = deleteButtons.find(button =>
-				button.getAttribute('aria-label')?.includes('Delete this todo')
+			// Find the delete button within the li containing "Delete this todo"
+			const secondTodoItem = screen.getByText('Delete this todo').closest('li');
+			const deleteButtonForSecondTodo = within(secondTodoItem as HTMLElement).getByTestId(
+				'delete-todo-trigger'
 			);
 
-			// Then: Verify the button exists before clicking it
-			expect(deleteButtonForSecondTodo).toBeDefined();
-			if (deleteButtonForSecondTodo) {
-				await act(async () => {
-					fireEvent.click(deleteButtonForSecondTodo);
-				});
-			}
+			await act(async () => {
+				fireEvent.click(deleteButtonForSecondTodo);
+			});
+
+			// Then: The confirmation dialog should appear
+			const confirmButton = await screen.findByTestId('confirm-delete-todo');
+
+			// When: The confirm button is clicked
+			await act(async () => {
+				fireEvent.click(confirmButton);
+			});
 
 			// Then: Only the second todo should be removed
 			expect(screen.getByText('Keep this todo')).toBeInTheDocument();
@@ -322,9 +335,15 @@ describe('TodoContainer Component - Integration Tests', () => {
 		});
 
 		// When: Deleting the todo
-		const deleteButton = await screen.findByRole('button', { name: /delete/i });
+		const deleteButton = await screen.findByTestId('delete-todo-trigger');
 		await act(async () => {
 			fireEvent.click(deleteButton);
+		});
+
+		// And: Confirming deletion
+		const confirmButton = await screen.findByTestId('confirm-delete-todo');
+		await act(async () => {
+			fireEvent.click(confirmButton);
 		});
 
 		// Then: The todo should be removed

@@ -120,7 +120,7 @@ describe('TodoList Component', () => {
 			expect(mockToggleTodo).toHaveBeenCalledWith('1');
 		});
 
-		it('should call onDeleteTodo with correct id when a delete button is clicked', () => {
+		it('should open confirmation dialog when delete button is clicked, and call onDeleteTodo when confirmed', async () => {
 			// Given: A spy function and the component is rendered
 			const mockDeleteTodo = vi.fn();
 			render(
@@ -134,9 +134,17 @@ describe('TodoList Component', () => {
 				/>
 			);
 
-			// When: A todo's delete button is clicked
-			const deleteButtons = screen.getAllByRole('button', { name: /delete todo/i });
+			// When: A todo's delete button is clicked to open the dialog
+			const deleteButtons = screen.getAllByTestId('delete-todo-trigger');
 			fireEvent.click(deleteButtons[0]);
+
+			// Then: The confirmation dialog should be visible
+			const dialogTitle = await screen.findByText('Are you sure?');
+			expect(dialogTitle).toBeInTheDocument();
+
+			// When: The confirm button is clicked
+			const confirmButton = screen.getByTestId('confirm-delete-todo');
+			fireEvent.click(confirmButton);
 
 			// Then: onDeleteTodo should be called with the correct todo id
 			expect(mockDeleteTodo).toHaveBeenCalledWith('1');
