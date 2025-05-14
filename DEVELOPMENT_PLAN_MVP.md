@@ -178,10 +178,14 @@
 
 **Branch: `enhance/accessibility`**
 
-- [ ] A11Y-1: Verify keyboard navigation throughout the application
-- [ ] A11Y-2: Ensure proper ARIA attributes across components
-- [ ] A11Y-3: Test and improve screen reader compatibility
-- [ ] A11Y-4: Create PR `enhance/accessibility` → `dev`
+- [x] A11Y-1: Verify keyboard navigation throughout the application
+- [x] A11Y-2: Ensure proper ARIA attributes across components
+- [x] A11Y-3: Test and improve screen reader compatibility
+- [x] A11Y-4: Create PR `enhance/accessibility` → `dev`
+- [x] A11Y-5: Add SkipLink component for keyboard users to bypass navigation
+- [x] A11Y-6: Implement main landmark in App component
+- [x] A11Y-7: Create comprehensive accessibility tests with axe-core
+- [x] A11Y-8: Add proper tabIndex, focus indicators, and keyboard event handlers
 
 **Production Ready Version (v1.0.0)**
 
