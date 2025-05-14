@@ -12,8 +12,12 @@ This document outlines the accessibility features implemented in the Todo applic
 
 - **Skip Link**: Allows keyboard users to bypass navigation and jump directly to main content (WCAG 2.4.1)
 - **Focus Management**: Visible focus indicators on all interactive elements
-- **Keyboard Operability**: All functionality is available using keyboard alone (WCAG 2.1.1)
+- **Tab Navigation**: Sequential focus navigation through all interactive elements
+- **Enter/Space Keys**: All buttons, checkboxes, and interactive elements can be activated
+- **Arrow Keys**: Used for date picker navigation and dropdown selections
+- **Escape Key**: Closes dialogs and cancels editing modes
 - **Logical Tab Order**: Components receive focus in a logical order that preserves meaning (WCAG 2.4.3)
+- **Full Keyboard Operability**: All functionality is operable through a keyboard without requiring specific timings (WCAG 2.1.1)
 
 ### ARIA Attributes
 
