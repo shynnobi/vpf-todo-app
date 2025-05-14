@@ -3,14 +3,15 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock the DueDatePicker component to simplify testing
-vi.mock('@/components/DueDatePicker', () => ({
-	DueDatePicker: ({ onChange, value }: { onChange: (date?: Date) => void; value?: Date }) => (
-		<div data-testid="mock-date-picker">
+// Mock the NewDueDatePicker component to simplify testing
+vi.mock('@/components/NewDueDatePicker', () => ({
+	NewDueDatePicker: ({ onChange, value }: { onChange: (date?: Date) => void; value?: Date }) => (
+		<div data-testid="mocked-new-due-date-picker">
 			<button onClick={() => onChange(new Date('2025-05-13T00:00:00Z'))} data-testid="select-date">
 				Select Date
 			</button>
-			<span>{value ? 'Has date' : 'No date'}</span>
+			{/* Display something based on value to ensure it's usable by the test if needed */}
+			<span>{value ? value.toISOString() : 'No date'}</span>
 		</div>
 	),
 }));
@@ -378,7 +379,7 @@ describe('TodoItem Component', () => {
 			await userEvent.type(descriptionInput, newDescription);
 
 			// Use the mocked date picker to set a date
-			const mockDatePicker = screen.getByTestId('mock-date-picker');
+			const mockDatePicker = screen.getByTestId('mocked-new-due-date-picker');
 			const selectDateButton = within(mockDatePicker).getByTestId('select-date');
 			await userEvent.click(selectDateButton);
 
@@ -393,7 +394,7 @@ describe('TodoItem Component', () => {
 			await userEvent.click(saveButton);
 
 			// Then: onSave should be called with the correct id and updated fields
-			expect(mockHandlers.onSave).toHaveBeenCalledWith(
+			expect(mockHandlers.onSave).toHaveBeenLastCalledWith(
 				mockIncompleteTodo.id,
 				expect.objectContaining({
 					title: newTitle,
