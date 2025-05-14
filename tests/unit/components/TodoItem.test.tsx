@@ -336,10 +336,18 @@ describe('TodoItem Component', () => {
 				);
 			};
 			render(<Wrapper />);
-			const editButton = screen.getByLabelText(/edit todo/i);
+			const editButtons = screen.getAllByLabelText(/edit todo/i);
+			const editButton = editButtons.find(
+				el => el.tagName === 'BUTTON' && el.classList.contains('h-7')
+			);
+			expect(editButton).toBeInTheDocument();
 
 			// When: The edit button is clicked
-			await userEvent.click(editButton);
+			if (editButton) {
+				await userEvent.click(editButton);
+			} else {
+				throw new Error('Edit button not found');
+			}
 
 			// Then: The edit form should be displayed
 			expect(screen.getByRole('textbox', { name: /edit title/i })).toBeInTheDocument();

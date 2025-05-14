@@ -35,6 +35,7 @@ A feature-rich To-Do application built with modern web technologies, designed fo
   - Sort by multiple criteria (created date, priority, due date)
 - 📱 **Responsive Design**: Optimized for both desktop and mobile experiences
 - 🌓 **Dark/Light Theme**: Seamless theme switching with system preference detection
+- ♿ **Accessibility**: WCAG 2.1 compliant with keyboard navigation, ARIA attributes, and screen reader support
 - 🧪 **Comprehensive Testing**: Unit tests with [Vitest](https://vitest.dev/) and E2E tests with [Playwright](https://playwright.dev/)
 - 📦 **State Management**: Efficient state handling with [Zustand](https://zustand-demo.pmnd.rs/)
 - 🚀 **Data Fetching**: Optimized API interactions with [TanStack Query](https://tanstack.com/query)
@@ -81,6 +82,7 @@ After starting the application, you can:
 - [Architecture](docs/architecture.md) - Project structure and organization
 - [Development Environment](docs/development.md) - Development tools and workflow
 - [Configuration](docs/configuration.md) - Overview of configuration files and options
+- [Accessibility](docs/accessibility.md) - Accessibility features and compliance
 - [Changelog](CHANGELOG.md) - Version history and updates
 
 ## 🧪 Testing

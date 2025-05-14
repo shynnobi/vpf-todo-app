@@ -54,19 +54,28 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 				value={title}
 				onChange={e => setTitle(e.target.value)}
 				placeholder="What's on your mind?"
-				className="flex h-10 w-full rounded-md border-2 border-amber-200 dark:border-blue-300 bg-background dark:bg-gray-900 px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+				className="flex h-10 w-full rounded-md border-2 border-amber-200 dark:border-blue-300 bg-background dark:bg-gray-900 px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
 				aria-label="Todo title"
+				aria-required="true"
+				autoFocus
+				id="new-todo-title"
 			/>
 
-			<div className="flex flex-wrap gap-2 w-full justify-end">
+			<div className="flex flex-wrap gap-2 w-full justify-end" aria-label="Additional options">
 				<NewDueDatePicker value={dueDate} onChange={handleDateChange} />
 				<PriorityPicker
 					value={priority}
 					onPriorityChange={handlePrioritySelect}
 					ariaLabel="Select priority for new task"
 				/>
-				<Button type="submit" variant="default" className="flex items-center gap-1 cursor-pointer">
-					<Plus className="h-4 w-4" /> <span className="mr-1">Add</span>
+				<Button
+					type="submit"
+					variant="default"
+					className="flex items-center gap-1 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+					aria-label="Add new todo"
+					disabled={!title.trim()}
+				>
+					<Plus className="h-4 w-4" aria-hidden="true" /> <span className="mr-1">Add</span>
 				</Button>
 			</div>
 		</form>
