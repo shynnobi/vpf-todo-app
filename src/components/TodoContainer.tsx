@@ -52,6 +52,11 @@ export function TodoContainer() {
 		[todos]
 	);
 
+	const sortDirectionLabel =
+		sortConfig.direction === 'asc'
+			? 'Sort in ascending order (A to Z)'
+			: 'Sort in descending order (Z to A)';
+
 	return (
 		<div className="max-w-2xl mx-auto p-2 sm:p-4 mt-10">
 			{/* <h1 className="text-2xl font-bold text-center mb-6">Todo App</h1> */}
@@ -62,6 +67,7 @@ export function TodoContainer() {
 			<div
 				className="my-4 flex flex-row gap-2 w-full sm:hidden"
 				aria-label="Filter and sort controls (mobile)"
+				role="group"
 			>
 				{/* Filter select dropdown */}
 				<Select
@@ -70,7 +76,7 @@ export function TodoContainer() {
 					data-testid="mobile-filter-select"
 				>
 					<SelectTrigger
-						className="flex-1 min-w-0"
+						className="flex-1 min-w-0 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
 						aria-label="Filter todos"
 						data-testid="mobile-filter-trigger"
 					>
@@ -94,7 +100,10 @@ export function TodoContainer() {
 					value={sortConfig.criterion}
 					onValueChange={(value: SortCriterion) => setSortConfig(value)}
 				>
-					<SelectTrigger className="flex-1 min-w-0" aria-label="Sort by">
+					<SelectTrigger
+						className="flex-1 min-w-0 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+						aria-label="Sort by"
+					>
 						<SelectValue placeholder="Sort by..." />
 					</SelectTrigger>
 					<SelectContent>
@@ -103,7 +112,7 @@ export function TodoContainer() {
 							return (
 								<SelectItem key={option.value} value={option.value} className="cursor-pointer">
 									<div className="flex items-center gap-2">
-										<Icon className="h-4 w-4" />
+										<Icon className="h-4 w-4" aria-hidden="true" />
 										<span>{option.label}</span>
 									</div>
 								</SelectItem>
@@ -116,13 +125,14 @@ export function TodoContainer() {
 					variant="outline"
 					size="icon"
 					onClick={toggleSortDirection}
-					aria-label="Change sort direction"
-					className="cursor-pointer flex-shrink-0"
+					aria-label={sortDirectionLabel}
+					aria-pressed={sortConfig.direction === 'asc'}
+					className="cursor-pointer flex-shrink-0 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
 				>
 					{sortConfig.direction === 'asc' ? (
-						<SortAsc className="h-4 w-4" data-testid="SortAsc" />
+						<SortAsc className="h-4 w-4" data-testid="SortAsc" aria-hidden="true" />
 					) : (
-						<SortDesc className="h-4 w-4" data-testid="SortDesc" />
+						<SortDesc className="h-4 w-4" data-testid="SortDesc" aria-hidden="true" />
 					)}
 				</Button>
 			</div>
@@ -131,6 +141,7 @@ export function TodoContainer() {
 			<div
 				className="my-4 hidden sm:flex flex-col sm:flex-row sm:gap-3 sm:justify-between sm:items-end"
 				aria-label="Filter and sort controls (desktop)"
+				role="group"
 			>
 				{/* Status Filter */}
 				<div className="flex flex-col w-full sm:w-auto">
@@ -142,13 +153,17 @@ export function TodoContainer() {
 
 				<div className="flex flex-col w-full sm:w-auto">
 					<p className="text-sm text-gray-500 mb-1 hidden sm:block">Sort by</p>
-					<div className="flex flex-row items-center gap-2 w-full sm:w-auto">
+					<div
+						className="flex flex-row items-center gap-2 w-full sm:w-auto"
+						role="group"
+						aria-label="Sort options"
+					>
 						<Select
 							value={sortConfig.criterion}
 							onValueChange={(value: SortCriterion) => setSortConfig(value)}
 						>
 							<SelectTrigger
-								className="flex-1 min-w-0 sm:w-[180px] [&>svg]:hidden cursor-pointer"
+								className="flex-1 min-w-0 sm:w-[180px] [&>svg]:hidden cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
 								aria-label="Sort by"
 							>
 								<SelectValue placeholder="Sort by..." />
@@ -159,7 +174,7 @@ export function TodoContainer() {
 									return (
 										<SelectItem key={option.value} value={option.value} className="cursor-pointer">
 											<div className="flex items-center gap-2">
-												<Icon className="h-4 w-4" />
+												<Icon className="h-4 w-4" aria-hidden="true" />
 												<span>{option.label}</span>
 											</div>
 										</SelectItem>
@@ -171,13 +186,14 @@ export function TodoContainer() {
 							variant="outline"
 							size="icon"
 							onClick={toggleSortDirection}
-							aria-label="Change sort direction"
-							className="cursor-pointer flex-shrink-0"
+							aria-label={sortDirectionLabel}
+							aria-pressed={sortConfig.direction === 'asc'}
+							className="cursor-pointer flex-shrink-0 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
 						>
 							{sortConfig.direction === 'asc' ? (
-								<SortAsc className="h-4 w-4" data-testid="SortAsc" />
+								<SortAsc className="h-4 w-4" data-testid="SortAsc" aria-hidden="true" />
 							) : (
-								<SortDesc className="h-4 w-4" data-testid="SortDesc" />
+								<SortDesc className="h-4 w-4" data-testid="SortDesc" aria-hidden="true" />
 							)}
 						</Button>
 					</div>
@@ -196,7 +212,7 @@ export function TodoContainer() {
 
 			{/* Footer Count */}
 			<hr className="my-2" />
-			<p className="text-center text-sm text-gray-500 mt-4">
+			<p className="text-center text-sm text-gray-500 mt-4" aria-live="polite">
 				{counts[FilterType.All]} tasks total
 				{filter !== FilterType.All && ` (${filteredAndSortedTodos.length} shown)`}
 			</p>

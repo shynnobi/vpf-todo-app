@@ -119,7 +119,7 @@ export function TodoItem({
 				</li>
 			) : (
 				<li
-					className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0 hover:bg-slate-50 hover:border-blue-100 hover:shadow-sm transition-all duration-150 rounded-xl group cursor-pointer"
+					className="py-2 flex flex-col gap-1 border-b border-gray-100 last:border-0 hover:bg-slate-50 hover:border-blue-100 hover:shadow-sm transition-all duration-150 rounded-xl group"
 					aria-labelledby={`todo-title-${todo.id}`}
 					role="listitem"
 					data-testid={`todo-item-${todo.id}`}
@@ -135,9 +135,21 @@ export function TodoItem({
 							}}
 							aria-labelledby={`todo-title-${todo.id}`}
 							onClick={e => e.stopPropagation()}
-							className="cursor-pointer"
+							className="cursor-pointer focus:ring-2 focus:ring-blue-500"
+							aria-label={`Mark "${todo.title}" as ${todo.completed ? 'incomplete' : 'complete'}`}
 						/>
-						<div className="flex-1 flex flex-col text-sm py-1 cursor-pointer" onClick={handleEdit}>
+						<div
+							className="flex-1 flex flex-col text-sm py-1 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-md px-2"
+							onClick={handleEdit}
+							tabIndex={0}
+							role="button"
+							aria-label={`Edit todo: ${todo.title}`}
+							onKeyDown={e => {
+								if (e.key === 'Enter' || e.key === ' ') {
+									handleEdit();
+								}
+							}}
+						>
 							<div className="flex items-center gap-2 flex-wrap">
 								<span
 									id={`todo-title-${todo.id}`}
@@ -170,7 +182,7 @@ export function TodoItem({
 									handleEdit();
 								}}
 								aria-label={`Edit todo: ${todo.title}`}
-								className="h-7 w-7 text-muted-foreground hover:text-blue-600 cursor-pointer"
+								className="h-7 w-7 text-muted-foreground hover:text-blue-600 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
 							>
 								<Pencil className="h-4 w-4" />
 							</Button>
@@ -183,7 +195,7 @@ export function TodoItem({
 										size="icon"
 										onClick={e => e.stopPropagation()}
 										aria-label={`Delete todo: ${todo.title}`}
-										className="h-7 w-7 text-muted-foreground hover:text-red-600 cursor-pointer"
+										className="h-7 w-7 text-muted-foreground hover:text-red-600 cursor-pointer focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
 										data-testid="delete-todo-trigger"
 									>
 										<Trash className="h-4 w-4" />

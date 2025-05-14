@@ -596,7 +596,7 @@ describe('TodoContainer Component - Integration Tests', () => {
 
 			// And: Sort direction button should be present
 			const sortDirectionButton =
-				within(controlsContainer).getByLabelText(/change sort direction/i);
+				within(controlsContainer).getByLabelText(/sort in descending order/i);
 			expect(sortDirectionButton).toBeInTheDocument();
 
 			// And: Default direction should be descending (newer first)
