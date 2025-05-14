@@ -189,6 +189,6 @@
 
 **Production Ready Version (v1.0.0)**
 
-- [ ] PROD-1: Verify documentation and accessibility PRs are merged
+- [x] PROD-1: Verify documentation and accessibility PRs are merged (PR #48 to dev, PR #49 dev to main merged).
 - [ ] PROD-2: Final round of testing across all levels
 - [ ] PROD-3: Create tag `v1.0.0`
