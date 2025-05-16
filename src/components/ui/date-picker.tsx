@@ -1,44 +1,30 @@
 'use client';
 
 import * as React from 'react';
-// import { format } from 'date-fns'; // No longer needed directly
 import { CalendarIcon, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { formatDate } from '@/utils/dateUtils'; // Import project's formatDate
+import { formatDate } from '@/utils/dateUtils';
 
-// Define props for the controlled component
 interface DatePickerProps {
 	value?: Date;
 	onChange: (date?: Date) => void;
-	placeholder?: string; // Optional placeholder
-	// We can add other DayPickerProps here if we want to pass them down to the internal Calendar
-	// e.g. fromYear, toYear, captionLayout, etc.
-	// For now, let's keep it simple and assume Luca's Calendar component handles these well by default
-	// or that they can be passed via its own props if this DatePicker becomes a simple wrapper.
+	placeholder?: string;
 }
 
-export default function DatePicker({
-	value,
-	onChange,
-	placeholder = 'Due date', // Default placeholder updated for consistency
-	// other props like fromYear, toYear, etc. could be destructured here if passed down
-}: DatePickerProps) {
-	// const [date, setDate] = React.useState<Date>() // Remove internal state
-
-	// The Popover open state can still be managed internally if not needed outside
+export default function DatePicker({ value, onChange, placeholder = 'Due date' }: DatePickerProps) {
 	const [isOpen, setIsOpen] = React.useState(false);
 
 	const handleSelect = (selectedDate?: Date) => {
 		onChange(selectedDate);
-		setIsOpen(false); // Close popover on select
+		setIsOpen(false);
 	};
 
 	const handleClear = (e: React.MouseEvent<HTMLSpanElement>) => {
-		e.stopPropagation(); // Prevent PopoverTrigger from re-opening
+		e.stopPropagation();
 		onChange(undefined);
 	};
 

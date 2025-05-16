@@ -19,9 +19,6 @@ interface PriorityPickerProps {
 	className?: string;
 }
 
-/**
- * A reusable dropdown component for selecting a task priority level.
- */
 export const PriorityPicker: React.FC<PriorityPickerProps> = ({
 	value,
 	onPriorityChange,

@@ -2,10 +2,9 @@ import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { formatISO, isValid, parseISO } from 'date-fns';
 import { Calendar, CalendarPlus, History, Save, Tag, X } from 'lucide-react';
 
-import { NewDueDatePicker } from './NewDueDatePicker';
-
+import { PriorityPicker } from '@/components/PriorityPicker';
 import { Button } from '@/components/ui/button';
-import { PriorityPicker } from '@/components/ui/PriorityPicker';
+import DatePicker from '@/components/ui/date-picker';
 import { PriorityLevel, Todo } from '@/types/todoTypes';
 import { formatDate } from '@/utils/dateUtils';
 
@@ -136,10 +135,11 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 								Due Date
 							</label>
 							<div className="w-full">
-								<NewDueDatePicker
+								<DatePicker
 									key={editedDueDate ? editedDueDate.toISOString() : 'no-date'}
 									value={editedDueDate}
 									onChange={handleDateChange}
+									placeholder="Due date"
 								/>
 							</div>
 						</div>

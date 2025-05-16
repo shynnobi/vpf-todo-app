@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { Plus } from 'lucide-react';
 
-import { NewDueDatePicker } from './NewDueDatePicker';
-
+import { PriorityPicker } from '@/components/PriorityPicker';
 import { Button } from '@/components/ui/button';
-import { PriorityPicker } from '@/components/ui/PriorityPicker';
+import DatePicker from '@/components/ui/date-picker';
 import { AddTodoFormProps, CreateTodoParams, PriorityLevel } from '@/types/todoTypes';
 
 /**
@@ -62,7 +61,7 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 			/>
 
 			<div className="flex flex-wrap gap-2 w-full justify-end" aria-label="Additional options">
-				<NewDueDatePicker value={dueDate} onChange={handleDateChange} />
+				<DatePicker value={dueDate} onChange={handleDateChange} placeholder="Due date" />
 				<PriorityPicker
 					value={priority}
 					onPriorityChange={handlePrioritySelect}
