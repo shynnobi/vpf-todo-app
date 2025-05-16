@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { formatISO, isValid, parseISO } from 'date-fns';
-import { Calendar, CalendarPlus, History, Save, Tag, X } from 'lucide-react';
+import { Calendar, CalendarPlus, Flame, History, Save, X } from 'lucide-react';
 
 import { PriorityPicker } from '@/components/PriorityPicker';
 import { Button } from '@/components/ui/button';
@@ -34,15 +34,10 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 	// Auto-resize title textarea
 	const adjustTextareaHeight = (textarea: HTMLTextAreaElement | null) => {
 		if (!textarea) return;
-
-		// Reset height to get the correct scrollHeight
 		textarea.style.height = 'auto';
-
-		// Set the height to match content
 		textarea.style.height = `${textarea.scrollHeight}px`;
 	};
 
-	// Adjust heights on initial render and when content changes
 	useEffect(() => {
 		adjustTextareaHeight(titleTextareaRef.current);
 	}, [editedTitle]);
@@ -74,16 +69,16 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 	return (
 		<form
 			onSubmit={handleSubmit}
-			className="flex flex-col w-full border rounded-md bg-background shadow-sm"
+			className="flex flex-col w-full border rounded-md bg-white dark:bg-slate-800 dark:border-slate-700 shadow-sm"
 			data-testid="edit-todo-form"
 		>
 			{/* Main Content Area */}
 			<div className="flex flex-col w-full">
-				{/* Title Input - replaced with auto-resizing textarea */}
-				<div className="p-4 border-b border-gray-200">
+				{/* Title Input */}
+				<div className="p-4 border-b border-gray-200 dark:border-slate-700">
 					<label
 						htmlFor={`edit-title-${initialData.id}`}
-						className="block text-sm font-medium text-gray-700 mb-1"
+						className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1"
 					>
 						Title
 					</label>
@@ -94,10 +89,9 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 						onChange={handleTitleChange}
 						rows={1}
 						aria-label="Edit title"
-						className="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary resize-none overflow-hidden min-h-[44px]"
+						className="w-full text-sm border border-gray-300 dark:border-slate-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary resize-none overflow-hidden min-h-[44px] dark:bg-slate-700 dark:text-slate-200 dark:placeholder:text-slate-400"
 						autoFocus
 						onKeyDown={e => {
-							// Prevent Enter from creating new lines in title
 							if (e.key === 'Enter' && !e.shiftKey) {
 								e.preventDefault();
 							}
@@ -106,10 +100,10 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 				</div>
 
 				{/* Description Textarea */}
-				<div className="p-4 border-b border-gray-200">
+				<div className="p-4 border-b border-gray-200 dark:border-slate-700">
 					<label
 						htmlFor={`edit-desc-${initialData.id}`}
-						className="block text-sm font-medium text-gray-700 mb-1"
+						className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1"
 					>
 						Description
 					</label>
@@ -120,48 +114,70 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 						placeholder="Add a description..."
 						rows={5}
 						aria-label="Edit description"
-						className="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary min-h-[120px]"
+						className="w-full text-sm border border-gray-300 dark:border-slate-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary min-h-[120px] dark:bg-slate-700 dark:text-slate-200 dark:placeholder:text-slate-400"
 					/>
 				</div>
 
 				{/* Controls Section - Metadata */}
-				<div className="p-4 bg-gray-50 space-y-5">
+				<div className="p-4 bg-slate-100 dark:bg-slate-900 space-y-5">
 					{/* Due Date and Priority in a flex container on medium+ screens */}
 					<div className="flex flex-col sm:flex-row sm:gap-4">
 						{/* Due Date Picker */}
 						<div className="mb-5 sm:mb-0 sm:flex-1">
-							<label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+							<label className="flex items-center text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
 								<Calendar className="h-4 w-4 mr-1" />
 								Due Date
 							</label>
-							<div className="w-full">
+							<div className="flex items-end">
 								<DatePicker
 									key={editedDueDate ? editedDueDate.toISOString() : 'no-date'}
 									value={editedDueDate}
 									onChange={handleDateChange}
 									placeholder="Due date"
+									className={editedDueDate ? 'rounded-r-none' : ''}
 								/>
+								{editedDueDate && (
+									<Button
+										size="icon"
+										aria-label="Clear due date"
+										onClick={() => setEditedDueDate(undefined)}
+										className="h-9 w-9 p-2 rounded-l-none  bg-black text-white hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-pointer"
+									>
+										<X className="h-4 w-4" />
+									</Button>
+								)}
 							</div>
 						</div>
 
 						{/* Priority Dropdown */}
 						<div className="sm:flex-1">
-							<label className="flex items-center text-sm font-medium text-gray-700 mb-2">
-								<Tag className="h-4 w-4 mr-1" />
+							<label className="flex items-center text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+								<Flame className="h-4 w-4 mr-1" />
 								Priority
 							</label>
-							<div className="w-full">
+							<div className="flex items-end">
 								<PriorityPicker
 									value={editedPriority}
 									onPriorityChange={handlePrioritySelect}
 									ariaLabel="Select priority for this task"
+									className={editedPriority !== null ? 'rounded-r-none' : ''}
 								/>
+								{editedPriority !== null && (
+									<Button
+										size="icon"
+										aria-label="Clear priority"
+										onClick={() => setEditedPriority(null)}
+										className="h-9 w-9 p-2 rounded-l-none bg-black text-white hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-pointer"
+									>
+										<X className="h-4 w-4" />
+									</Button>
+								)}
 							</div>
 						</div>
 					</div>
 
 					{/* Creation and Modified Date Info */}
-					<div className="pt-4 border-t border-gray-200 flex flex-col sm:flex-row sm:gap-4">
+					<div className="pt-4 border-t border-gray-200 dark:border-slate-700 flex flex-col sm:flex-row sm:gap-4">
 						{/* Creation Date (Read-only) */}
 						<div className="mb-2 sm:mb-0">
 							<label className="flex items-center text-xs font-medium text-muted-foreground mb-1">
@@ -190,12 +206,12 @@ export function EditTodoForm({ initialData, onSave, onCancel }: EditTodoFormProp
 			</div>
 
 			{/* Footer with Actions */}
-			<div className="border-t border-gray-200 p-4 bg-gray-50 flex justify-end gap-3">
+			<div className="border-t border-gray-200 dark:border-slate-700 p-4 bg-slate-100 dark:bg-slate-900 flex justify-end gap-3">
 				<Button
 					type="button"
 					variant="ghost"
 					onClick={onCancel}
-					className="h-10 px-4 cursor-pointer text-gray-600"
+					className="h-10 px-4 cursor-pointer text-gray-600 dark:text-slate-400"
 				>
 					<X className="mr-1 h-4 w-4" /> Cancel
 				</Button>
