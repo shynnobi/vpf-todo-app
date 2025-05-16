@@ -24,6 +24,10 @@
 				"bradlc.vscode-tailwindcss",
 				"vitest.explorer",
 				"github.vscode-github-actions",
+				"bierner.markdown-mermaid",
+				"bierner.markdown-preview-github-styles",
+				"bierner.markdown-emoji",
+				"bierner.markdown-checkbox",
 				"bierner.markdown-preview-mermaid-support"
 			],
 			"settings": {
