@@ -3,11 +3,11 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import { describe, expect, it } from 'vitest';
 
 import { AddTodoForm } from '@/components/AddTodoForm';
-import { NewDueDatePicker } from '@/components/NewDueDatePicker';
 import { SkipLink } from '@/components/SkipLink';
 import { TodoFilter } from '@/components/TodoFilter';
 import { TodoItem } from '@/components/TodoItem';
 import { TodoList } from '@/components/TodoList';
+import DatePicker from '@/components/ui/date-picker';
 import { Todo, TodoFilter as FilterType } from '@/types/todoTypes';
 
 // Custom matcher declaration for TypeScript
@@ -180,7 +180,7 @@ describe('Accessibility Tests', () => {
 
 	it('DatePicker should have proper ARIA attributes', async () => {
 		const date = new Date('2023-05-15');
-		render(<NewDueDatePicker value={date} onChange={() => {}} />);
+		render(<DatePicker value={date} onChange={() => {}} placeholder="Due date" />);
 
 		// Check for the date picker button - use a more specific query to avoid matching multiple buttons
 		const datePickerButton = screen.getByLabelText(/selected date: /i);

@@ -50,7 +50,7 @@ export function TodoFilter({ currentFilter, onFilterChange, counts }: TodoFilter
 					'flex flex-col sm:flex-row items-center gap-1 sm:gap-2 px-4 py-2 rounded-md text-xs sm:text-sm ' +
 					(isPressed
 						? 'bg-blue-500 text-white cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-300 focus-visible:ring-offset-2 focus-visible:outline-none'
-						: 'bg-gray-200 text-gray-700 hover:bg-gray-300 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none');
+						: 'bg-gray-200 text-gray-700 hover:bg-gray-300 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700');
 
 				return (
 					<button

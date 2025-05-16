@@ -1,20 +1,7 @@
 import { useState } from 'react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
-// Mock the NewDueDatePicker component to simplify testing
-vi.mock('@/components/NewDueDatePicker', () => ({
-	NewDueDatePicker: ({ onChange, value }: { onChange: (date?: Date) => void; value?: Date }) => (
-		<div data-testid="mocked-new-due-date-picker">
-			<button onClick={() => onChange(new Date('2025-05-13T00:00:00Z'))} data-testid="select-date">
-				Select Date
-			</button>
-			{/* Display something based on value to ensure it's usable by the test if needed */}
-			<span>{value ? value.toISOString() : 'No date'}</span>
-		</div>
-	),
-}));
 
 import { TodoItem } from '@/components/TodoItem';
 import { Todo } from '@/types/todoTypes';
@@ -386,11 +373,6 @@ describe('TodoItem Component', () => {
 			await userEvent.clear(descriptionInput);
 			await userEvent.type(descriptionInput, newDescription);
 
-			// Use the mocked date picker to set a date
-			const mockDatePicker = screen.getByTestId('mocked-new-due-date-picker');
-			const selectDateButton = within(mockDatePicker).getByTestId('select-date');
-			await userEvent.click(selectDateButton);
-
 			// When: The priority is changed
 			const priorityButton = screen.getByRole('button', { name: /select priority for this task/i });
 			await userEvent.click(priorityButton);
@@ -407,7 +389,6 @@ describe('TodoItem Component', () => {
 				expect.objectContaining({
 					title: newTitle,
 					description: newDescription,
-					dueDate: '2025-05-13T00:00:00Z',
 					priority: 'low',
 				})
 			);

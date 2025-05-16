@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
-import { Plus } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 
-import { NewDueDatePicker } from './NewDueDatePicker';
-
+import { PriorityPicker } from '@/components/PriorityPicker';
 import { Button } from '@/components/ui/button';
-import { PriorityPicker } from '@/components/ui/PriorityPicker';
+import DatePicker from '@/components/ui/date-picker';
 import { AddTodoFormProps, CreateTodoParams, PriorityLevel } from '@/types/todoTypes';
 
 /**
@@ -34,14 +33,6 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 		setDueDate(undefined);
 	};
 
-	const handlePrioritySelect = (selectedPriority: PriorityLevel | null) => {
-		setPriority(selectedPriority);
-	};
-
-	const handleDateChange = (date?: Date) => {
-		setDueDate(date);
-	};
-
 	return (
 		<form
 			onSubmit={handleSubmit}
@@ -61,17 +52,53 @@ export function AddTodoForm({ onAddTodo }: AddTodoFormProps) {
 				id="new-todo-title"
 			/>
 
-			<div className="flex flex-wrap gap-2 w-full justify-end" aria-label="Additional options">
-				<NewDueDatePicker value={dueDate} onChange={handleDateChange} />
-				<PriorityPicker
-					value={priority}
-					onPriorityChange={handlePrioritySelect}
-					ariaLabel="Select priority for new task"
-				/>
+			<div
+				className="flex flex-wrap gap-2 w-full justify-end items-end"
+				aria-label="Additional options"
+			>
+				<div className="flex items-end">
+					<DatePicker
+						value={dueDate}
+						onChange={setDueDate}
+						placeholder="Due date"
+						className={dueDate ? 'rounded-r-none' : ''}
+					/>
+					{dueDate && (
+						<Button
+							size="icon"
+							aria-label="Clear due date"
+							onClick={() => setDueDate(undefined)}
+							className="h-9 w-9 p-2 rounded-l-none bg-yellow-600 text-white hover:bg-yellow-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-pointer dark:bg-blue-500 dark:hover:bg-blue-400"
+						>
+							<X className="h-4 w-4" />
+						</Button>
+					)}
+				</div>
+
+				<div className="flex items-end">
+					<PriorityPicker
+						value={priority}
+						onPriorityChange={setPriority}
+						ariaLabel="Select priority for new task"
+						placeholderLabel="Priority"
+						className={priority !== null ? 'rounded-r-none' : ''}
+					/>
+					{priority !== null && (
+						<Button
+							size="icon"
+							aria-label="Clear priority"
+							onClick={() => setPriority(null)}
+							className="h-9 w-9 p-2 rounded-l-none bg-yellow-600 text-white hover:bg-yellow-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-pointer dark:bg-blue-500 dark:hover:bg-blue-400"
+						>
+							<X className="h-4 w-4" />
+						</Button>
+					)}
+				</div>
+
 				<Button
 					type="submit"
 					variant="default"
-					className="flex items-center gap-1 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+					className="flex items-center gap-1 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 self-end"
 					aria-label="Add new todo"
 					disabled={!title.trim()}
 				>
